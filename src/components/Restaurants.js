@@ -5,7 +5,7 @@ import axios from "axios";
 const API = process.env.REACT_APP_API_URL;
 
 export const Restaurants = () => {
-    const [places, setPlaces] = useState(() => "");
+    const [restaurants, setRestaurants] = useState(() => "");
     const [loading, setLoading] = useState(() => true);
 
     useEffect(() => {
@@ -13,20 +13,21 @@ export const Restaurants = () => {
             .get(`${API}/restaurants`)
             .then((response) => {
                 console.log(response.data.restaurants);
-                setPlaces(response.data.restaurants);
+                setRestaurants(response.data.restaurants);
                 setLoading(false);
             })
             .catch((err) => console.log(err));
-    }, [])
+    }, []);
+
+   
 
     return (
         <div>
-            {!loading && places.map((e) => {
+            {!loading && restaurants.map((e) => {
                 return (
-                    <>
+                    <div id={e.name}>
                         {e.name}
-                        <br />
-                    </>
+                    </div>
                 )    
             })}
             <Outlet />
