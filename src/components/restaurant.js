@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
 
-const Restaurant = () => {
+export const Restaurant = () => {
     return (
         <>
             <h1>RESTAURANT</h1>
@@ -10,4 +10,3 @@ const Restaurant = () => {
     )
 }
 
-export { Restaurant };

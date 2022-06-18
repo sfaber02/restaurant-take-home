@@ -3,8 +3,9 @@ import { Routes, Route} from 'react-router-dom';
 
 import './style.css';
 
-import { Restaurants } from './components/restaurants';
-import { Restaurant } from './components/restaurant';
+import { Restaurants } from './components/Restaurants';
+import { Restaurant } from './components/Restaurant';
+
 
 
 const App = () => {
