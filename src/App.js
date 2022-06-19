@@ -1,10 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { Container } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
-
 import { Navigation } from "./components/Navigation";
+import { Home } from "./components/Home";
 import { Restaurants } from "./components/Restaurants";
 import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
@@ -13,10 +14,22 @@ import { Reservations } from "./components/Reservations";
 import { Reservation } from "./components/Reservation";
 import { Error } from "./components/Error";
 
+const API = process.env.REACT_APP_API_URL;
+
 export const App = () => {
-    const Home = () => {
-        return <h1>HI</h1>;
-    };
+    
+    const [restaurants, setRestaurants] = useState(() => "");
+    const [loading, setLoading] = useState(() => true);
+
+    useEffect(() => {
+        axios
+            .get(`${API}/restaurants`)
+            .then((response) => {
+                setRestaurants(response.data.restaurants);
+                setLoading(false);
+            })
+            .catch((err) => console.log(err));
+    }, []);
 
     return (
         <main>
@@ -37,4 +50,3 @@ export const App = () => {
         </main>
     );
 };
-

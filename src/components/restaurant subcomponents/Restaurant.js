@@ -1,6 +1,8 @@
 import React from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 
+import "../../styles/restaurant.css"
+
 
 export const Restaurant = () => {
     const { id } = useParams();
