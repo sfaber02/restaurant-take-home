@@ -11,7 +11,7 @@ export const Navbar = () => {
             <div>Restaurantly</div>
             <div onClick={() => navigate("/restaurants")}>Restaurants</div>
             <div onClick={() => navigate("/reservations")}>Reservations</div>
-            <div>Sign In</div>
+            <div onClick={() => navigate('/newRestaurant')}>New Restaurant</div>
             <div>Sign Up</div>
         </div>
     );

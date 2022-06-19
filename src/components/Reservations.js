@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+import { ReservationCard } from "./reservations subcomponents/ReservationCard";
+
 const API = process.env.REACT_APP_API_URL;
 
 export const Reservations = () => {
@@ -17,9 +19,12 @@ export const Reservations = () => {
     return (
         <div>
             {!loading &&
-                reservations.map((e) => {
-                    return <div id={e.id}>{e.id}</div>;
-                })}
+                reservations.map((e) => 
+                <ReservationCard 
+                    key={e.id}
+                    info={e}
+                />
+                )}
         </div>
     );
 };

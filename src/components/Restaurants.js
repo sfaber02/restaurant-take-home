@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { RestaurantCard } from "./RestaurantCard";
+import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
 
 const API = process.env.REACT_APP_API_URL;
 

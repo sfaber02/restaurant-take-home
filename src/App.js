@@ -1,11 +1,11 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
-import "./style.css";
+
 
 import { Navbar } from "./components/Navbar";
 import { Restaurants } from "./components/Restaurants";
-import { Restaurant } from "./components/Restaurant";
+import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
 import { NewReservation } from "./components/NewReservation";
 import { Reservations } from "./components/Reservations";

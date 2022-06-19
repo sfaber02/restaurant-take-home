@@ -17,9 +17,6 @@ export const Restaurant = () => {
         tables,
     } = info.state;
 
-    console.log(id);
-    console.log(info);
-
     return (
         <>
             <div className="restaurantInfo">
