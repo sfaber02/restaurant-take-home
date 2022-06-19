@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
 
 import "../../styles/restaurantCard.css";
@@ -9,8 +9,16 @@ import graphics from "../../assets/Graphics/Graphics.js";
 export const RestaurantCard = ({ info, handleShow }) => {
     const { id, name, description, price, location, cuisine } = info;
 
+    const navigate = useNavigate();
+
+    const handleClick = (e) => {
+        console.log (id);
+        handleShow();
+        navigate(`${id}`);
+    }
+
     return (
-        <Card>
+        <Card onClick={handleClick} id={id}>
             <Card.Img
                 variant="top"
                 src={graphics[Math.floor(Math.random() * graphics.length)]}
@@ -32,7 +40,6 @@ export const RestaurantCard = ({ info, handleShow }) => {
                 </Col>
                 <Col>
                     <Link to={`${id}`} state={info} onClick={handleShow}>
-                        {" "}
                         More Info
                     </Link>
                 </Col>
