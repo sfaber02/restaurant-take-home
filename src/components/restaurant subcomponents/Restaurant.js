@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 
+
 export const Restaurant = () => {
     const { id } = useParams();
     const info = useLocation();
@@ -31,7 +32,6 @@ export const Restaurant = () => {
                 <p>{diningRestriction}</p>
                 <p>Tables</p>
             </div>
-            <Link to="/restaurants">Back</Link>
         </>
     );
 };

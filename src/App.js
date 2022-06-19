@@ -1,9 +1,10 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 
+import "bootstrap/dist/css/bootstrap.min.css";
 
 
-import { Navbar } from "./components/Navbar";
+import { Navigation } from "./components/Navigation";
 import { Restaurants } from "./components/Restaurants";
 import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
@@ -19,7 +20,7 @@ export const App = () => {
 
     return (
         <main>
-            <Navbar />
+            <Navigation />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="restaurants" element={<Restaurants />}>
