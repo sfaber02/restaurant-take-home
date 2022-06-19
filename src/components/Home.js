@@ -5,9 +5,12 @@ import graphics from '../assets/Graphics/Graphics.js';
 
 import "../styles/home.css"
 
+/**
+ * LANDING PAGE
+ * @param {array} an array of restaurants
+ * @returns a carousel view of random restaurants 
+ */
 export const Home = ({ restaurants }) => {
-
-
 
     return (
         <Carousel fade>

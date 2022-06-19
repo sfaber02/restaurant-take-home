@@ -1,18 +1,26 @@
 import React from "react";
 
 import { Link, useNavigate } from "react-router-dom";
-import { Card, ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
+import { Card, Row, Col } from "react-bootstrap";
 
 import "../../styles/restaurantCard.css";
-import graphics from "../../assets/Graphics/Graphics.js";
 
+/**
+ * 
+ * @param {object} info for a single restaurant 
+ * @param {object} function from restaurants component to trigger modal display 
+ * @returns a single restaurant card with limited info to be displayed
+ * in the all restaurants view
+ */
 export const RestaurantCard = ({ info, handleShow }) => {
     const { id, name, description, price, location, cuisine, graphic } = info;
 
     const navigate = useNavigate();
 
-    const handleClick = (e) => {
-        console.log (id);
+    /** Click handler for user clicks on card will navigate to
+     * dynamic restaurant route for a more detailed view of a single restaurant
+     */
+    const handleClick = () => {
         handleShow();
         navigate(`${id}`);
     }

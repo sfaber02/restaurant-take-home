@@ -5,6 +5,10 @@ import { ReservationCard } from "./reservations subcomponents/ReservationCard";
 
 const API = process.env.REACT_APP_API_URL;
 
+/**
+ * All reservations component
+ * @returns all reservations
+ */
 export const Reservations = () => {
     const [reservations, setReservations] = useState();
     const [loading, setLoading] = useState(true);

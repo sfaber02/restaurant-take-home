@@ -3,34 +3,33 @@ import { useParams, useLocation, Link } from "react-router-dom";
 import { Card, Row, Col } from "react-bootstrap";
 
 import "../../styles/restaurant.css";
-import graphics from "../../assets/Graphics/Graphics";
 
+/**
+ * 
+ * @param {array} all restaurant info 
+ * @returns a card to be displayed in the modal for when the user clicks
+ * on a restaurant in the restaurants component
+ */
 export const Restaurant = ({ restaurants }) => {
+    //stores current restaurant to be displayed in card
     const [current, setCurrent] = useState(null);
+    //id of restaurant from link clicked in restaurants component
     const { id } = useParams();
 
-    console.log(restaurants);
-    console.log(id);
-
+    
+    /**
+     * search through all restaurant to find restaurant that matches
+     * id from route params, set current state accordingly
+     */
     useEffect(() => {
         setCurrent(restaurants.filter((e) => e.id === id)[0]);
-        console.log("1");
     }, [id]);
 
-    // const info = useLocation();
-    // const {
-    //     name,
-    //     description,
-    //     phoneNumber,
-    //     openingTime,
-    //     closingTime,
-    //     location,
-    //     cuisine,
-    //     price,
-    //     diningRestriction,
-    //     tables,
-    // } = info.state;
-
+   /**
+    * return a single card for the restaurant user clicked on
+    * which displays all info about that restaurantn as well as
+    * links to close the modal or make a reservation
+    */
     return (
         <>
             {current && (
@@ -65,21 +64,4 @@ export const Restaurant = ({ restaurants }) => {
             )}
         </>
     );
-
-    // return (
-    //     <>
-    //         <div className="restaurantInfo">
-    //             <p>{name}</p>
-    //             <p>{description}</p>
-    //             <p>{phoneNumber}</p>
-    //             <p>{openingTime}</p>
-    //             <p>{closingTime}</p>
-    //             <p>{location}</p>
-    //             <p>{cuisine}</p>
-    //             <p>{price}</p>
-    //             <p>{diningRestriction}</p>
-    //             <p>Tables</p>
-    //         </div>
-    //     </>
-    // );
 };

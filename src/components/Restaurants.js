@@ -48,14 +48,4 @@ export const Restaurants = ({ restaurants }) => {
     );
 };
 
-/* 
-{restaurants.map((e) => (
-                <RestaurantCard
-                    key={e.id}
-                    info={e}
-                    handleShow={handleShow}
-                    handleClose={handleClose}
-                />
-            ))}
 
-*/

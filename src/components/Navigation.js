@@ -4,15 +4,21 @@ import { Navbar, Container, Nav, Form, FormControl, Button } from "react-bootstr
 
 import '../styles/nav.css';
 
-
+/**
+ * navbar used to navigate to various parts of the webpage
+ * also contains search bar to search for restaurant
+ * @returns navBar
+ */
 export const Navigation = () => {
     const navigate = useNavigate();
 
+    /** handles submit event on search form */
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(e.target[0].value);
     }
 
+    /** handles click event on search button */
     const handleClick = (e) => {
         e.preventDefault();
         console.log(e.target.form[0].value);
@@ -30,6 +36,12 @@ export const Navigation = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto my-2 my-lg-0">
+                        <Nav.Link
+                            onClick={() => navigate("/")}
+                            className="text-light"
+                        >
+                            Home
+                        </Nav.Link>
                         <Nav.Link
                             onClick={() => navigate("/restaurants")}
                             className="text-light"

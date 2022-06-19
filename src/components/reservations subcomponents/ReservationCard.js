@@ -1,5 +1,10 @@
 import React from "react";
 
+/**
+ * 
+ * @param {object} info on a single reservation
+ * @returns a reservation card for the reservations component
+ */
 export const ReservationCard = ({ info }) => {
     const {
         id,

@@ -1,3 +1,8 @@
+
+/**
+ * Some nice foody filler images to kick it up a notch
+ * BAM! (I'll see myself out...)
+ */
 const graphics = [
     require('./1.jpg'),
     require('./2.jpg'),

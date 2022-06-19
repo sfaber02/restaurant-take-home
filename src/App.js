@@ -3,9 +3,15 @@ import { Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Container, Spinner } from "react-bootstrap";
 
+/**
+ * React bootstrap import and image import
+ */
 import "bootstrap/dist/css/bootstrap.min.css";
 import graphics from "./assets/Graphics/Graphics";
 
+/**
+ * Compnonent imports for Routes
+ */
 import { Navigation } from "./components/Navigation";
 import { Home } from "./components/Home";
 import { Restaurants } from "./components/Restaurants";
@@ -19,11 +25,20 @@ import { Error } from "./components/Error";
 const API = process.env.REACT_APP_API_URL;
 
 export const App = () => {
+    /**
+     * States to store all restaurants from initial API call
+     * and to determine if api has completed yet
+     */
     const [restaurants, setRestaurants] = useState(() => "");
     const [loading, setLoading] = useState(() => true);
 
     const navigate = useNavigate();
 
+    /**
+     * Initial fetch done on page load, fetches all restaurant info from backend
+     * and assigns a static graphic to each restaurant
+     * then sets loading state to false and restaurant state to fetched data
+     */
     useEffect(() => {
         axios
             .get(`${API}/restaurants`)
@@ -41,6 +56,11 @@ export const App = () => {
             .catch((err) => navigate("/error"));
     }, []);
 
+    /**
+     * Renders loading animation if fetch is still happening
+     * otherwise renders navbar and home route until user navigates 
+     * to a different route
+     */
     return (
         <>
             {loading ? (

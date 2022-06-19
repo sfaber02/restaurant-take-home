@@ -3,8 +3,13 @@ import axios from "axios";
 
 const API = process.env.REACT_APP_API_URL;
 
+/**
+ * component to add a new restaurant
+ * @returns a form to add a new restaurant to DB
+ */
 export const NewRestaurant = () => {
 
+    /** handles form submit */
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(e.target.name.value);
