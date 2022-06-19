@@ -7,7 +7,7 @@ import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
 
 import "../styles/restaurants.css";
 
-export const Restaurants = () => {
+export const Restaurants = ({ restaurants }) => {
     const [show, setShow] = useState(false);
 
     const navigate = useNavigate();
@@ -20,15 +20,14 @@ export const Restaurants = () => {
 
     return (
         <Container className="border border-warning">
-            {
-                restaurants.map((e) => (
-                    <RestaurantCard
-                        key={e.id}
-                        info={e}
-                        handleShow={handleShow}
-                        handleClose={handleClose}
-                    />
-                ))}
+            {restaurants.map((e) => (
+                <RestaurantCard
+                    key={e.id}
+                    info={e}
+                    handleShow={handleShow}
+                    handleClose={handleClose}
+                />
+            ))}
             <Modal
                 show={show}
                 onHide={handleClose}

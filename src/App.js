@@ -1,5 +1,6 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { Container } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -17,9 +18,10 @@ import { Error } from "./components/Error";
 const API = process.env.REACT_APP_API_URL;
 
 export const App = () => {
-    
     const [restaurants, setRestaurants] = useState(() => "");
     const [loading, setLoading] = useState(() => true);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios
@@ -28,25 +30,45 @@ export const App = () => {
                 setRestaurants(response.data.restaurants);
                 setLoading(false);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => navigate("/error"));
     }, []);
 
     return (
-        <main>
-            <Navigation />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="restaurants" element={<Restaurants />}>
-                    <Route path=":id" element={<Restaurant />} />
-                </Route>
-                <Route path="/newRestaurant" element={<NewRestaurant />} />
-                <Route path="/newReservation" element={<NewReservation />} />
-                <Route path="/reservations" element={<Reservations />}>
-                    <Route path=":id" element={<Reservation />} />
-                </Route>
-                <Route path="/error/:err" element={<Error />} />
-                <Route path="/error" element={<Error />} />
-            </Routes>
-        </main>
+        <>
+            {loading ? (
+                <h1>Loading</h1>
+            ) : (
+                <main>
+                    <Navigation />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="restaurants"
+                            element={<Restaurants restaurants={restaurants} />}
+                        >
+                            <Route
+                                path=":id"
+                                element={
+                                    <Restaurant restaurants={restaurants} />
+                                }
+                            />
+                        </Route>
+                        <Route
+                            path="/newRestaurant"
+                            element={<NewRestaurant />}
+                        />
+                        <Route
+                            path="/newReservation"
+                            element={<NewReservation />}
+                        />
+                        <Route path="/reservations" element={<Reservations />}>
+                            <Route path=":id" element={<Reservation />} />
+                        </Route>
+                        <Route path="/error/:err" element={<Error />} />
+                        <Route path="/error" element={<Error />} />
+                    </Routes>
+                </main>
+            )}
+        </>
     );
 };
