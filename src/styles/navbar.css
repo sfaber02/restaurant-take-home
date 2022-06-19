@@ -1,0 +1,12 @@
+
+.navBarContainer {
+    background-color: blue;
+    color: white;
+    height: 75px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navBarContainer div {
+    margin: auto;
+}

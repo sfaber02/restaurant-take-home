@@ -1,15 +1,40 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 
 export const Restaurant = () => {
+    const { id } = useParams();
+    const info = useLocation();
+    const {
+        name,
+        description,
+        phoneNumber,
+        openingTime,
+        closingTime,
+        location,
+        cuisine,
+        price,
+        diningRestriction,
+        tables,
+    } = info.state;
+
+    console.log(id);
+    console.log(info);
+
     return (
         <>
-        <div>
-            <h1>RESTAURANT</h1>
-
-        </div>
+            <div className="restaurantInfo">
+                <p>{name}</p>
+                <p>{description}</p>
+                <p>{phoneNumber}</p>
+                <p>{openingTime}</p>
+                <p>{closingTime}</p>
+                <p>{location}</p>
+                <p>{cuisine}</p>
+                <p>{price}</p>
+                <p>{diningRestriction}</p>
+                <p>Tables</p>
+            </div>
             <Link to="/restaurants">Back</Link>
         </>
-    )
-}
-
+    );
+};
