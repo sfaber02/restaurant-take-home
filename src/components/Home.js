@@ -1,20 +1,23 @@
 import React from "react";
 
 import { Carousel } from "react-bootstrap";
+import graphics from '../assets/Graphics/Graphics.js';
+
+import "../styles/home.css"
 
 export const Home = ({ restaurants }) => {
 
 
-    
+
     return (
         <Carousel fade>
             <Carousel.Item>
                 <img
-                    className="d-block w-100"
-                    src="holder.js/800x400?text=First slide&bg=373940"
+                    className="d-block w-100 carouselImg"
+                    src={graphics[Math.floor(Math.random() * graphics.length)]}
                     alt="First slide"
                 />
-                <Carousel.Caption>
+                <Carousel.Caption className="carouselCaption">
                     <h3>First slide label</h3>
                     <p>
                         Nulla vitae elit libero, a pharetra augue mollis
@@ -24,8 +27,8 @@ export const Home = ({ restaurants }) => {
             </Carousel.Item>
             <Carousel.Item>
                 <img
-                    className="d-block w-100"
-                    src="holder.js/800x400?text=Second slide&bg=282c34"
+                    className="d-block w-100 carouselImg"
+                    src={graphics[Math.floor(Math.random() * graphics.length)]}
                     alt="Second slide"
                 />
 
@@ -38,8 +41,8 @@ export const Home = ({ restaurants }) => {
             </Carousel.Item>
             <Carousel.Item>
                 <img
-                    className="d-block w-100"
-                    src="holder.js/800x400?text=Third slide&bg=20232a"
+                    className="d-block w-100 carouselImg"
+                    src={graphics[Math.floor(Math.random() * graphics.length)]}
                     alt="Third slide"
                 />
 

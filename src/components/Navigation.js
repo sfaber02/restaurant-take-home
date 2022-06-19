@@ -1,12 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Navbar, Container, Nav } from "react-bootstrap";
+import { Navbar, Container, Nav, Form, FormControl, Button } from "react-bootstrap";
 
 import '../styles/nav.css';
 
 
 export const Navigation = () => {
     const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(e.target[0].value);
+    }
+
+    const handleClick = (e) => {
+        e.preventDefault();
+        console.log(e.target.form[0].value);
+    }
 
     return (
         <Navbar
@@ -19,7 +29,7 @@ export const Navigation = () => {
             <Container>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav>
+                    <Nav className="me-auto my-2 my-lg-0">
                         <Nav.Link
                             onClick={() => navigate("/restaurants")}
                             className="text-light"
@@ -39,6 +49,15 @@ export const Navigation = () => {
                             New Restaurant
                         </Nav.Link>
                     </Nav>
+                    <Form className="d-flex" onSubmit={handleSubmit}>
+                        <FormControl
+                            type="search"
+                            placeholder="Search Restaurants"
+                            className="me-2"
+                            aria-label="Search"
+                        />
+                        <Button variant="outline-success" onClick={handleClick}>Search</Button>
+                    </Form>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
