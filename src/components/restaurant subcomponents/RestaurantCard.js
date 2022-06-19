@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "../../styles/restaurantCard.css"
 
-export const RestaurantCard = ({ info, handleShow, handleClose }) => {
+export const RestaurantCard = ({ info, handleShow }) => {
     const { id, name, description } = info;
 
     return (

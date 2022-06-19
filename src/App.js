@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -36,12 +36,28 @@ export const App = () => {
     return (
         <>
             {loading ? (
-                <h1>Loading</h1>
+                <Container className="d-flex justify-content-center">
+                    <Spinner animation="grow" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                    <Spinner animation="grow" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                    <Spinner animation="grow" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                    <Spinner animation="grow" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </Container>
             ) : (
                 <main>
                     <Navigation />
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/"
+                            element={<Home restaurants={restaurants} />}
+                        />
                         <Route
                             path="restaurants"
                             element={<Restaurants restaurants={restaurants} />}
