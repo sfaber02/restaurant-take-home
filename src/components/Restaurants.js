@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { Modal, Button, Container } from "react-bootstrap";
+import { Modal, Button, Container, Row } from "react-bootstrap";
 
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
 
@@ -19,15 +18,17 @@ export const Restaurants = ({ restaurants }) => {
     };
 
     return (
-        <Container className="border border-warning">
-            {restaurants.map((e) => (
-                <RestaurantCard
-                    key={e.id}
-                    info={e}
-                    handleShow={handleShow}
-                    handleClose={handleClose}
-                />
-            ))}
+        <Container>
+            <Row xs={1} md={3} className="g-4">
+                {restaurants.map((e) => (
+                    <RestaurantCard
+                        key={e.id}
+                        info={e}
+                        handleShow={handleShow}
+                        handleClose={handleClose}
+                    />
+                ))}
+            </Row>
             <Modal
                 show={show}
                 onHide={handleClose}
@@ -46,3 +47,15 @@ export const Restaurants = ({ restaurants }) => {
         </Container>
     );
 };
+
+/* 
+{restaurants.map((e) => (
+                <RestaurantCard
+                    key={e.id}
+                    info={e}
+                    handleShow={handleShow}
+                    handleClose={handleClose}
+                />
+            ))}
+
+*/
