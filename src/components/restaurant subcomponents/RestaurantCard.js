@@ -7,7 +7,7 @@ import "../../styles/restaurantCard.css";
 import graphics from "../../assets/Graphics/Graphics.js";
 
 export const RestaurantCard = ({ info, handleShow }) => {
-    const { id, name, description, price, location, cuisine } = info;
+    const { id, name, description, price, location, cuisine, graphic } = info;
 
     const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ export const RestaurantCard = ({ info, handleShow }) => {
         <Card onClick={handleClick} id={id}>
             <Card.Img
                 variant="top"
-                src={graphics[Math.floor(Math.random() * graphics.length)]}
+                src={graphic}
             />
             <Card.Body>
                 <Card.Title>{name}</Card.Title>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { Container, Spinner } from "react-bootstrap";
 
 import "bootstrap/dist/css/bootstrap.min.css";
+import graphics from "./assets/Graphics/Graphics";
 
 import { Navigation } from "./components/Navigation";
 import { Home } from "./components/Home";
@@ -27,7 +28,14 @@ export const App = () => {
         axios
             .get(`${API}/restaurants`)
             .then((response) => {
-                setRestaurants(response.data.restaurants);
+                let tempData = response.data.restaurants;
+                let index = 0;
+                for (let restaurant of tempData) {
+                    if (index >= graphics.length - 1) index = 0;
+                    restaurant.graphic = graphics[index];
+                    index++;
+                }
+                setRestaurants(tempData);
                 setLoading(false);
             })
             .catch((err) => navigate("/error"));

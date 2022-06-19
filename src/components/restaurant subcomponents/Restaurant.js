@@ -1,28 +1,21 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useLocation, Link } from "react-router-dom";
 import { Card, Row, Col } from "react-bootstrap";
 
-
 import "../../styles/restaurant.css";
 import graphics from "../../assets/Graphics/Graphics";
-
 
 export const Restaurant = ({ restaurants }) => {
     const [current, setCurrent] = useState(null);
     const { id } = useParams();
 
+    console.log(restaurants);
+    console.log(id);
 
-    console.log (restaurants);
-    console.log (id);
-
-
-    
     useEffect(() => {
         setCurrent(restaurants.filter((e) => e.id === id)[0]);
-        console.log('1')
-    }, [id])
-
-
+        console.log("1");
+    }, [id]);
 
     // const info = useLocation();
     // const {
@@ -38,28 +31,23 @@ export const Restaurant = ({ restaurants }) => {
     //     tables,
     // } = info.state;
 
-
     return (
         <>
             {current && (
-                <Card  id={current.id}>
-                    <Card.Img
-                        variant="top"
-                        src={
-                            graphics[
-                                Math.floor(Math.random() * graphics.length)
-                            ]
-                        }
-                    />
+                <Card id={current.id}>
+                    <Card.Img variant="top" src={current.graphic} />
                     <Card.Body>
                         <Card.Title>{current.name}</Card.Title>
-                        <Card.Text className="cardText">{
-                            current.description}</Card.Text>
+                        <Card.Text className="cardText">
+                            {current.description}
+                        </Card.Text>
                     </Card.Body>
 
                     <Row className="border">
                         <Col>
-                            <Card.Text className="cardText">{current.price}</Card.Text>
+                            <Card.Text className="cardText">
+                                {current.price}
+                            </Card.Text>
                         </Col>
                         <Col>
                             <Card.Text className="cardText">
