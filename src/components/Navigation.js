@@ -18,6 +18,7 @@ export const Navigation = ({handleSearch}) => {
         // console.log(e.target[0].value);
         handleSearch(e.target[0].value);
         e.target[0].value = '';
+        navigate("/restaurants");
     }
 
     /** handles click event on search button */
@@ -26,6 +27,7 @@ export const Navigation = ({handleSearch}) => {
         // console.log(e.target.form[0].value);
         handleSearch(e.target.form[0].value);
         e.target.form[0].value = '';
+        navigate('/restaurants');
     }
 
     return (
