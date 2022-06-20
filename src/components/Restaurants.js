@@ -16,7 +16,7 @@ import "../styles/restaurants.css";
  * or a list of restaurants that match search and/ or filter
  *
  */
-export const Restaurants = ({ restaurants, query }) => {
+export const Restaurants = ({ restaurants, query, handleSearch }) => {
     /**
      * show - state to display modal of more detailed restaurant info
      * displayList - state which stores current list of restaurants to be displayed based
@@ -130,7 +130,7 @@ export const Restaurants = ({ restaurants, query }) => {
         <>
             {displayList && (
                 <Container>
-                    <FilterBar filterHash={filterHash} />
+                    <FilterBar filterHash={filterHash} handleSearch={handleSearch} />
                     <Row xs={1} md={3} className="g-4">
                         {displayList.map((e) => (
                             <RestaurantCard

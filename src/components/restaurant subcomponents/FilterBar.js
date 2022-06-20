@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Form, FormControl, Container } from "react-bootstrap";
+import { Navigate } from "react-router-dom";
 
-export const FilterBar = ({ filterHash }) => {
-    console.log(filterHash);
+export const FilterBar = ({ filterHash, handleSearch }) => {
+
     const [filters, setFilters] = useState();
 
     /**
@@ -44,6 +45,11 @@ export const FilterBar = ({ filterHash }) => {
         }
     }, [filterHash]);
 
+    const handleChange = (e) => {
+        console.log(e.target.value.split(''));
+        handleSearch(e.target.value);
+    }
+
     return (
         <Navbar
             bg="dark"
@@ -55,34 +61,46 @@ export const FilterBar = ({ filterHash }) => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Container>
                 {filters && filters.cuisine.length > 0 && (
-                    <Form.Select>
+                    <Form.Select onChange={handleChange}>
                         <option>Cuisine</option>
                         {filters.cuisine.map((e) => (
-                            <option value={e[0]}>{`${e[0]}(${e[1]})`}</option>
+                            <option
+                                key={`${e[0]}${e[1]}`}
+                                value={e[0]}
+                            >{`${e[0]}(${e[1]})`}</option>
                         ))}
                     </Form.Select>
                 )}
                 {filters && filters.location.length > 0 && (
-                    <Form.Select>
+                    <Form.Select onChange={handleChange}>
                         <option>Location</option>
                         {filters.location.map((e) => (
-                            <option value={e[0]}>{`${e[0]}(${e[1]})`}</option>
+                            <option
+                                key={`${e[0]}${e[1]}`}
+                                value={e[0]}
+                            >{`${e[0]}(${e[1]})`}</option>
                         ))}
                     </Form.Select>
                 )}
                 {filters && filters.price.length > 0 && (
-                    <Form.Select>
+                    <Form.Select onChange={handleChange}>
                         <option>Price</option>
                         {filters.price.map((e) => (
-                            <option value={e[0]}>{`${e[0]}(${e[1]})`}</option>
+                            <option
+                                key={`${e[0]}${e[1]}`}
+                                value={e[0]}
+                            >{`${e[0]}(${e[1]})`}</option>
                         ))}
                     </Form.Select>
                 )}
                 {filters && filters.diningRestriction.length > 0 && (
-                    <Form.Select>
+                    <Form.Select onChange={handleChange}>
                         <option>Restrictions</option>
                         {filters.diningRestriction.map((e) => (
-                            <option value={e[0]}>{`${e[0]}(${e[1]})`}</option>
+                            <option
+                                key={`${e[0]}${e[1]}`}
+                                value={e[0]}
+                            >{`${e[0]}(${e[1]})`}</option>
                         ))}
                     </Form.Select>
                 )}

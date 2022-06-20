@@ -95,7 +95,7 @@ export const App = () => {
                         />
                         <Route
                             path="restaurants"
-                            element={<Restaurants restaurants={restaurants} query={query}/>}
+                            element={<Restaurants restaurants={restaurants} query={query} handleSearch={handleSearch} />}
                         >
                             <Route
                                 path=":id"

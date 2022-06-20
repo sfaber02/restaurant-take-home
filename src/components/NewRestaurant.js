@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 
+import { Form, FormControl, Container, Row, Col } from "react-bootstrap";
+
 const API = process.env.REACT_APP_API_URL;
 
 /**
@@ -45,7 +47,91 @@ export const NewRestaurant = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <Container className="w-25 p-3">
+            <Form>
+                <Form.Group className="mb-3 mt-3" controlId="formGroupEmail">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Enter Restaurant Name"
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formGroupPassword">
+                    <Form.Label>Description</Form.Label>
+                    <Form.Control
+                        as="textarea"
+                        rows="4"
+                        placeholder="Restaurant Description"
+                        required
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Price</Form.Label>
+                    <Form.Select>
+                        <option value="$">$</option>
+                        <option value="$$">$$</option>
+                        <option value="$$$">$$$</option>
+                        <option value="$$$$">$$$$</option>
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Location</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Location"
+                        required
+                    ></Form.Control>
+                </Form.Group>
+                <Row>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Opening Time</Form.Label>
+                            <Form.Control type="time"></Form.Control>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group>
+                            <Form.Label>Closing Time</Form.Label>
+                            <Form.Control type="time"></Form.Control>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Form.Group>
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Phone Number (optional)"
+                    ></Form.Control>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Dining Restrictions (optional)</Form.Label>
+                    <Form.Select>
+                        <option></option>
+                        <option value="Takeout Only">Takeout Only</option>
+                        <option value="Delivery Only">Delivery Only</option>
+                    </Form.Select>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Tables</Form.Label>
+                    <Row>
+                        <Col>
+                            <Form.Control type="number"></Form.Control>
+
+                        </Col>
+                        <Col></Col>
+                        <Col></Col>
+                    </Row>
+                </Form.Group>
+            </Form>
+        </Container>
+    );
+};
+
+
+/*
+
+ <form onSubmit={handleSubmit}>
             <label htmlFor="name">Name: </label>
             <input name="name" type="text" />
             <label htmlFor="description">Description: </label>
@@ -66,5 +152,5 @@ export const NewRestaurant = () => {
             <input name="diningRestriction" type="text" />
             <input type="submit" />
         </form>
-    );
-};
+
+        */
