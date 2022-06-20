@@ -30,7 +30,7 @@ export const Navigation = ({handleSearch}) => {
 
     return (
         <Navbar
-            bg="dark"
+            bg="light"
             variant="light"
             expand="lg"
             sticky="top"
@@ -42,7 +42,7 @@ export const Navigation = ({handleSearch}) => {
                     <Nav className="me-auto my-2 my-lg-0">
                         <Nav.Link
                             onClick={() => navigate("/")}
-                            className="text-light"
+                            className="text-dark"
                         >
                             Home
                         </Nav.Link>
@@ -51,19 +51,19 @@ export const Navigation = ({handleSearch}) => {
                                 handleSearch('');
                                 navigate("/restaurants")
                             }}
-                            className="text-light"
+                            className="text-dark"
                         >
                             Restaurants
                         </Nav.Link>
                         <Nav.Link
                             onClick={() => navigate("/reservations")}
-                            className="text-light"
+                            className="text-dark"
                         >
                             Reservations
                         </Nav.Link>
                         <Nav.Link
                             onClick={() => navigate("/newRestaurant")}
-                            className="text-light"
+                            className="text-dark"
                         >
                             New Restaurant
                         </Nav.Link>

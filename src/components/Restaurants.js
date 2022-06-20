@@ -1,29 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Modal, Button, Container, Row } from "react-bootstrap";
+import { Modal, Button, Container, Row} from "react-bootstrap";
 import axios from "axios";
 
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
+import { FilterBar } from "./restaurant subcomponents/FilterBar";
 
 import "../styles/restaurants.css";
 
 /**
- * 
+ *
  * @param {array} array of all restaurants
- * @param {string} input from search 
+ * @param {string} input from search
  * @returns a list of all restaurants if no search of filters are present
  * or a list of restaurants that match search and/ or filter
- * 
+ *
  */
 export const Restaurants = ({ restaurants, query }) => {
-
     /**
      * show - state to display modal of more detailed restaurant info
-     * displayList - state which stores current list of restaurants to be displayed based 
+     * displayList - state which stores current list of restaurants to be displayed based
      *  on search/filters
      */
     const [show, setShow] = useState(false);
     const [displayList, setDisplayList] = useState();
+    const [filterHash, setFilterHash] = useState();
 
     const navigate = useNavigate();
 
@@ -54,7 +55,7 @@ export const Restaurants = ({ restaurants, query }) => {
 
             axios(config)
                 .then((response) => {
-                    const ids = response.data.restaurants.map(e => e.id);
+                    const ids = response.data.restaurants.map((e) => e.id);
                     let tempList = [];
                     for (let id of ids) {
                         for (let restaurant of restaurants) {
@@ -63,7 +64,7 @@ export const Restaurants = ({ restaurants, query }) => {
                             }
                         }
                     }
-                   setDisplayList(tempList);
+                    setDisplayList(tempList);
                 })
                 .catch((error) => {
                     console.log(error);
@@ -73,10 +74,63 @@ export const Restaurants = ({ restaurants, query }) => {
         }
     }, [query]);
 
+    /**
+     * Create a hash table of all filterable fields and their counts
+     * based off what is currently being displayed.
+     * This will ultimately narrow things down to the point where all filters will
+     * need to be reset, because the hash will update the display list
+     * not ideal but we'll call this v1.  maybe add a search results state?
+     */
+    useEffect(() => {
+        if (displayList) {
+            let tempHash = {
+                cuisine: {},
+                location: {},
+                price: {},
+                diningRestriction: {},
+            };
+            for (let restaurant of displayList) {
+                let {cuisine, location, price, diningRestriction} = restaurant;
+                
+                //hash cuisine
+                if (!tempHash.cuisine[cuisine]) {
+                    tempHash.cuisine[cuisine] = 1;
+                } else {
+                    tempHash.cuisine[cuisine]++;
+                }
+                
+                //hash location
+                if (!tempHash.location[location]) {
+                    tempHash.location[location] = 1;
+                } else {
+                    tempHash.location[location]++;
+                }
+
+                //hash price
+                if (!tempHash.price[price]) {
+                    tempHash.price[price] = 1;
+                } else {
+                    tempHash.price[price]++;
+                }
+
+                //hash dining restriction if not null
+                if (!tempHash.diningRestriction[diningRestriction] && diningRestriction) {
+                    tempHash.diningRestriction[diningRestriction] = 1;
+                } else if (diningRestriction){
+                    tempHash.diningRestriction[diningRestriction]++;
+                }
+            }
+
+            //finally set the newly created hash as state
+            setFilterHash(tempHash);
+        }
+    }, [displayList])
+
     return (
         <>
             {displayList && (
                 <Container>
+                    <FilterBar filterHash={filterHash} />
                     <Row xs={1} md={3} className="g-4">
                         {displayList.map((e) => (
                             <RestaurantCard
