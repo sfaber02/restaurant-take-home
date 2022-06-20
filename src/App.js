@@ -31,6 +31,7 @@ export const App = () => {
      */
     const [restaurants, setRestaurants] = useState(() => "");
     const [loading, setLoading] = useState(() => true);
+    const [query, setQuery] = useState('');
 
     const navigate = useNavigate();
 
@@ -56,6 +57,12 @@ export const App = () => {
             .catch((err) => navigate("/error"));
     }, []);
 
+    
+    const handleSearch = (query) => {
+        console.log(query);
+        setQuery(query);
+    }
+
     /**
      * Renders loading animation if fetch is still happening
      * otherwise renders navbar and home route until user navigates 
@@ -80,7 +87,7 @@ export const App = () => {
                 </Container>
             ) : (
                 <main>
-                    <Navigation />
+                    <Navigation handleSearch={handleSearch} />
                     <Routes>
                         <Route
                             path="/"
@@ -88,7 +95,7 @@ export const App = () => {
                         />
                         <Route
                             path="restaurants"
-                            element={<Restaurants restaurants={restaurants} />}
+                            element={<Restaurants restaurants={restaurants} query={query}/>}
                         >
                             <Route
                                 path=":id"

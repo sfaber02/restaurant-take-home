@@ -9,19 +9,23 @@ import '../styles/nav.css';
  * also contains search bar to search for restaurant
  * @returns navBar
  */
-export const Navigation = () => {
+export const Navigation = ({handleSearch}) => {
     const navigate = useNavigate();
 
     /** handles submit event on search form */
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e.target[0].value);
+        // console.log(e.target[0].value);
+        handleSearch(e.target[0].value);
+        e.target[0].value = '';
     }
 
     /** handles click event on search button */
     const handleClick = (e) => {
         e.preventDefault();
-        console.log(e.target.form[0].value);
+        // console.log(e.target.form[0].value);
+        handleSearch(e.target.form[0].value);
+        e.target.form[0].value = '';
     }
 
     return (
@@ -33,7 +37,7 @@ export const Navigation = () => {
             className="border"
         >
             <Container>
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto my-2 my-lg-0">
                         <Nav.Link
@@ -43,7 +47,10 @@ export const Navigation = () => {
                             Home
                         </Nav.Link>
                         <Nav.Link
-                            onClick={() => navigate("/restaurants")}
+                            onClick={() => {
+                                handleSearch('');
+                                navigate("/restaurants")
+                            }}
                             className="text-light"
                         >
                             Restaurants
