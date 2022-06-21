@@ -8,6 +8,7 @@ import { Container, Spinner } from "react-bootstrap";
  */
 import "bootstrap/dist/css/bootstrap.min.css";
 import graphics from "./assets/Graphics/Graphics";
+import smallGraphics from "./assets/Graphics/Small/smallGraphics";
 
 /**
  * Compnonent imports for Routes
@@ -47,8 +48,8 @@ export const App = () => {
                 let tempData = response.data.restaurants;
                 let index = 0;
                 for (let restaurant of tempData) {
-                    if (index >= graphics.length - 1) index = 0;
-                    restaurant.graphic = graphics[index];
+                    if (index >= smallGraphics.length - 1) index = 0;
+                    restaurant.graphic = smallGraphics[index];
                     index++;
                 }
                 setRestaurants(tempData);

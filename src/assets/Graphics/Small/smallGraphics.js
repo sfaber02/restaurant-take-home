@@ -2,7 +2,7 @@
  * Some nice foody filler images to kick it up a notch
  * BAM! (I'll see myself out...)
  */
-const graphics = [
+const smallGraphics = [
     require("./1.jpg"),
     require("./2.jpg"),
     require("./3.jpg"),
@@ -31,4 +31,4 @@ const graphics = [
     require("./26.jpg"),
 ];
 
-export default graphics;
+export default smallGraphics;
