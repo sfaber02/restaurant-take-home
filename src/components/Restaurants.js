@@ -16,7 +16,7 @@ import "../styles/restaurants.css";
  * or a list of restaurants that match search and/ or filter
  *
  */
-export const Restaurants = ({ restaurants, query, handleSearch }) => {
+export const Restaurants = ({ restaurants, query }) => {
     /**
      * show - state to display modal of more detailed restaurant info
      * displayList - state which stores current list of restaurants to be displayed based
@@ -25,6 +25,7 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
     const [show, setShow] = useState(false);
     const [displayList, setDisplayList] = useState();
     const [filterHash, setFilterHash] = useState();
+    const [filter, setFilter] = useState({});
 
     const navigate = useNavigate();
 
@@ -36,6 +37,17 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
         setShow(false);
         navigate("/restaurants");
     };
+
+    //responds to filter selections made in filter bar
+    const handleFilter = (filter, type) => {
+       setFilter({filter, type});
+    };
+
+    //resets filter bar when reset button is clicked
+    const handleReset = () => {
+        setFilter('');
+        setDisplayList(restaurants);
+    }
 
     /**
      * runs on component load and when search query changes
@@ -130,13 +142,25 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
         }
     }, [displayList]);
 
+    // filter display list based on user's filter selection
+    useEffect(() => {
+        if (filter && displayList) {
+            setDisplayList(prev => {
+                return (
+                    prev.filter(e => e[filter.type] === filter.filter ? true : false)
+                );
+            })
+        }
+    }, [filter])
+
     return (
         <>
             {displayList && (
                 <Container>
                     <FilterBar
                         filterHash={filterHash}
-                        handleSearch={handleSearch}
+                        handleFilter={handleFilter}
+                        handleReset={handleReset}
                     />
                     <Row
                         xs={1}

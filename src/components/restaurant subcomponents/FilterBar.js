@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Form, FormControl, Container } from "react-bootstrap";
+import { Navbar, Form, Container, Button } from "react-bootstrap";
 import { Navigate } from "react-router-dom";
 
-export const FilterBar = ({ filterHash, handleSearch }) => {
+export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
 
     const [filters, setFilters] = useState();
 
@@ -45,10 +45,8 @@ export const FilterBar = ({ filterHash, handleSearch }) => {
         }
     }, [filterHash]);
 
-    const handleChange = (e) => {
-        console.log(e.target.value.split(''));
-        handleSearch(e.target.value);
-    }
+    //responds to changes made in the filter bar selections
+    const handleChange = (e) => handleFilter(e.target.value, e.target.id);
 
     return (
         <Navbar
@@ -61,8 +59,8 @@ export const FilterBar = ({ filterHash, handleSearch }) => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Container>
                 {filters && filters.cuisine.length > 0 && (
-                    <Form.Select onChange={handleChange}>
-                        <option>Cuisine</option>
+                    <Form.Select onChange={handleChange} id="cuisine">
+                        <option disabled selected>Cuisine</option>
                         {filters.cuisine.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -72,8 +70,8 @@ export const FilterBar = ({ filterHash, handleSearch }) => {
                     </Form.Select>
                 )}
                 {filters && filters.location.length > 0 && (
-                    <Form.Select onChange={handleChange}>
-                        <option>Location</option>
+                    <Form.Select onChange={handleChange} id="location">
+                        <option disabled selected>Location</option>
                         {filters.location.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -83,8 +81,8 @@ export const FilterBar = ({ filterHash, handleSearch }) => {
                     </Form.Select>
                 )}
                 {filters && filters.price.length > 0 && (
-                    <Form.Select onChange={handleChange}>
-                        <option>Price</option>
+                    <Form.Select onChange={handleChange} id="price">
+                        <option disabled selected>Price</option>
                         {filters.price.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -94,8 +92,8 @@ export const FilterBar = ({ filterHash, handleSearch }) => {
                     </Form.Select>
                 )}
                 {filters && filters.diningRestriction.length > 0 && (
-                    <Form.Select onChange={handleChange}>
-                        <option>Restrictions</option>
+                    <Form.Select onChange={handleChange} id="diningRestriction">
+                        <option disabled selected>Restrictions</option>
                         {filters.diningRestriction.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -104,6 +102,7 @@ export const FilterBar = ({ filterHash, handleSearch }) => {
                         ))}
                     </Form.Select>
                 )}
+                {filters && <Button onClick={handleReset}>Reset</Button>}
                 {/* <Navbar.Collapse id="responsive-navbar-nav"></Navbar.Collapse> */}
             </Container>
         </Navbar>
