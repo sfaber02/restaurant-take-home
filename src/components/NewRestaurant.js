@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -23,6 +24,7 @@ export const NewRestaurant = () => {
      * state for current form input ->
      * {
      * name:
+     * cuisine
      * description:
      * price:
      * location:
@@ -38,6 +40,8 @@ export const NewRestaurant = () => {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
+    const navigate = useNavigate();
+
     const setField = (field, value) => {
         setForm((prev) => {
             return {
@@ -52,13 +56,15 @@ export const NewRestaurant = () => {
                 return {
                     ...prev,
                     [field]: null,
-                }
+                };
             });
     };
 
     const findErrors = () => {
+        //destructure form input for validation
         const {
             name,
+            cuisine,
             description,
             price,
             location,
@@ -74,48 +80,90 @@ export const NewRestaurant = () => {
         const newErrors = {};
 
         //name errors
-        if (!name || name==='') {
-            newErrors.name = 'Cannot be blank!';
+        if (!name || name === "") {
+            newErrors.name = "Cannot be blank!";
         } else if (name.length > 50) {
-            newErrors.name = 'Name is too long!';
+            newErrors.name = "Name is too long!";
+        }
+
+        //cuisine errors
+        if (!cuisine || cuisine === "") {
+            newErrors.cuisine = "Cannot be blank!";
+        } else if (name.length > 50) {
+            newErrors.cuisine = "Cuisine type is too long!";
         }
 
         //description errors
-        if (!description || description === '') {
-            newErrors.description = 'Cannot be blank!';
+        if (!description || description === "") {
+            newErrors.description = "Cannot be blank!";
         } else if (description.length > 1500) {
-            newErrors.description = "Character limit exceded! 1500 chararacters max";
+            newErrors.description =
+                "Character limit exceded! 1500 chararacters max";
         }
 
-        //price errors 
+        //price errors
         if (!price) {
-            newErrors.price = 'Must choose a price';
+            newErrors.price = "Must choose a price";
         }
 
         //location errors
-         if (!location || location === "") {
-             newErrors.location = "Cannot be blank!";
-         } else if (location.length > 75) {
-             newErrors.location = "Location is too long!";
-         }
+        if (!location || location === "") {
+            newErrors.location = "Cannot be blank!";
+        } else if (location.length > 75) {
+            newErrors.location = "Location is too long!";
+        }
 
-         // open / close time errors
-         if (!openingTime) {
-             newErrors.openingTime = "Cannot be blank!";
-         }
-         if (!closingTime) {
-             newErrors.closingTime = "Cannot be blank!";
-         }
+        // open / close time errors
+        if (!openingTime) {
+            newErrors.openingTime = "Cannot be blank!";
+        }
+        if (!closingTime) {
+            newErrors.closingTime = "Cannot be blank!";
+        }
 
+        //phone number errors
+        if (!phoneNumber || phoneNumber === "") {
+            newErrors.phoneNumber = "Cannot be blank!";
+        } else {
+            //pull all digits out of user's input and check if there's 10 digits
+            let nums = [];
+            for (let c of phoneNumber) {
+                if (/[0-9]/.test(c)) {
+                    nums.push(c);
+                }
+            }
+            if (nums.length !== 10) {
+                newErrors.phoneNumber = "Must be a 10-digit phone number!"
+            } else {
+                //if phone number is legit set form state to valid phone number format for post
+                setForm((prev) => {
+                    return {
+                        ...prev,
+                        phoneNumber: nums.join('')
+                    }
+                })
+            }
+        }
 
+        // table error checking
+        if (twoPerson && twoPerson < 0) {
+            newErrors.twoPerson = "Invalid # of tables";
+        }
+        if (fourPerson && fourPerson < 0) {
+            newErrors.fourPerson = "Invalid # of tables";
+        }
+        if (eightPerson && eightPerson < 0) {
+            newErrors.eightPerson = "Invalid # of tables";
+        }
 
-         return newErrors;
+        return newErrors;
     };
 
     /** handles form submit **/
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(e);
+        let body;
 
         //check submission for errors
         const newErrors = findErrors();
@@ -124,43 +172,83 @@ export const NewRestaurant = () => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            alert('ITs LEGIT');
+            //destructure form input
+            const {
+                name,
+                cuisine,
+                description,
+                price,
+                location,
+                openingTime,
+                closingTime,
+                phoneNumber,
+                diningRestriction,
+                twoPerson,
+                fourPerson,
+                eightPerson,
+            } = form;
+
+            console.log(openingTime, closingTime, twoPerson, diningRestriction);
+
+            //generate a temp object for tables if any were inputted
+            let tempTables;
+            if (twoPerson || fourPerson || eightPerson) {
+                tempTables = {
+                    ...(twoPerson
+                        ? { twoPersonTables: Number(twoPerson) }
+                        : { twoPersonTables: 0 }),
+                    ...(fourPerson
+                        ? { fourPersonTables: Number(fourPerson) }
+                        : { fourPersonTables: 0 }),
+                    ...(eightPerson
+                        ? { eightPersonTables: Number(eightPerson) }
+                        : { eightPersonTables: 0 }),
+                };
+            } else {
+                tempTables = null;
+            }
+
+            //stringify valid user inputs into body for post
+            body = JSON.stringify({
+                name,
+                cuisine,
+                description,
+                price,
+                location,
+                openingTime: openingTime + ":00",
+                closingTime: closingTime + ":00",
+                ...(phoneNumber ? { phoneNumber } : { phoneNumber: null }),
+                ...(diningRestriction && { diningRestriction }),
+                tables: tempTables,
+            });
+
+            console.log(body);
         }
 
-        // const body = JSON.stringify({
-        //     name: e.target.name.value,
-        //     description: e.target.description.value,
-        //     phoneNumber: e.target.phoneNumber.value,
-        //     openingTime: e.target.openingTime.value,
-        //     closingTime: e.target.closingTime.value,
-        //     price: e.target.price.value,
-        //     cuisine: e.target.cuisine.value,
-        //     location: e.target.location.value,
-        //     diningRestriction: e.target.diningRestriction.value,
-        // });
+        const config = {
+            method: "post",
+            url: `${API}/restaurants`,
+            headers: {
+                "Content-Type": "application/json",
+            },
+            data: body,
+        };
 
-        // const config = {
-        //     method: "post",
-        //     url: `${API}/restaurants`,
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     data: body,
-        // };
-
-        // axios(config)
-        //     .then(function (response) {
-        //         console.log(JSON.stringify(response.data));
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
+        //post new restaurant and navigate back to restaurants page
+        axios(config)
+            .then(function (response) {
+                console.log(JSON.stringify(response.data));
+                navigate("/restaurants");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
     };
 
     return (
         <Container fluid className="formContainer mb-4">
             <Form>
-                <Form.Group className="mb-3 mt-3" controlId="formGroupEmail">
+                <Form.Group className="mb-3 mt-3">
                     <Form.Label>Name</Form.Label>
                     <FormControl
                         type="text"
@@ -172,7 +260,19 @@ export const NewRestaurant = () => {
                         {errors.name}
                     </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group className="mb-3" controlId="formGroupPassword">
+                <Form.Group className="mb-3 mt-3">
+                    <Form.Label>Cuisine</Form.Label>
+                    <FormControl
+                        type="text"
+                        placeholder="Enter Cuisine Type"
+                        onChange={(e) => setField("cuisine", e.target.value)}
+                        isInvalid={!!errors.cuisine}
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.cuisine}
+                    </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
                     <FormControl
                         as="textarea"
@@ -250,20 +350,24 @@ export const NewRestaurant = () => {
                 <Form.Group>
                     <Form.Label>Phone Number</Form.Label>
                     <FormControl
-                    // as="input"
+                        // as="input"
                         type="tel"
                         pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         placeholder="Phone Number (optional)"
                         onChange={(e) =>
                             setField("phoneNumber", e.target.value)
                         }
+                        isInvalid={!!errors.phoneNumber}
                     />
+                    <Form.Control.Feedback type="invalid">
+                        {errors.phoneNumber}
+                    </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Dining Restrictions (optional)</Form.Label>
                     <Form.Select
                         onChange={(e) =>
-                            setField("diningRestrictions", e.target.value)
+                            setField("diningRestriction", e.target.value)
                         }
                     >
                         <option disabled selected></option>
@@ -271,8 +375,8 @@ export const NewRestaurant = () => {
                         <option value="Delivery Only">Delivery Only</option>
                     </Form.Select>
                 </Form.Group>
-                <Form.Group>
-                    <Form.Label>Tables</Form.Label>
+                <Form.Group className="mt-2">
+                    <Form.Label>Tables (optional)</Form.Label>
                     <Row>
                         <Col>
                             <Form.Label>2-Person</Form.Label>
@@ -281,7 +385,11 @@ export const NewRestaurant = () => {
                                 onChange={(e) =>
                                     setField("twoPerson", e.target.value)
                                 }
+                                isInvalid={!!errors.twoPerson}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.twoPerson}
+                            </Form.Control.Feedback>
                         </Col>
                         <Col>
                             <Form.Label>4-Person</Form.Label>
@@ -291,7 +399,11 @@ export const NewRestaurant = () => {
                                 onChange={(e) =>
                                     setField("fourPerson", e.target.value)
                                 }
+                                isInvalid={!!errors.fourPerson}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.fourPerson}
+                            </Form.Control.Feedback>
                         </Col>
                         <Col>
                             <Form.Label>8-Person</Form.Label>
@@ -301,7 +413,11 @@ export const NewRestaurant = () => {
                                 onChange={(e) =>
                                     setField("eightPerson", e.target.value)
                                 }
+                                isInvalid={!!errors.eightPerson}
                             />
+                            <Form.Control.Feedback type="invalid">
+                                {errors.eightPerson}
+                            </Form.Control.Feedback>
                         </Col>
                     </Row>
                 </Form.Group>
