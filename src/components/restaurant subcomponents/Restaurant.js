@@ -59,7 +59,7 @@ export const Restaurant = ({ restaurants }) => {
                             </Card.Text>
                         </Col>
                     </Row>
-                    <Card.Body></Card.Body>
+                    <Card.Footer></Card.Footer>
                 </Card>
             )}
         </>

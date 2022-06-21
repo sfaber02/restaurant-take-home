@@ -41,7 +41,8 @@ export const NewRestaurant = () => {
     const [errors, setErrors] = useState({});
 
     const navigate = useNavigate();
-
+    
+    //update form state as user inputs information
     const setField = (field, value) => {
         setForm((prev) => {
             return {
@@ -60,6 +61,7 @@ export const NewRestaurant = () => {
             });
     };
 
+    //on form submit check all fields for valid inputs
     const findErrors = () => {
         //destructure form input for validation
         const {
@@ -188,8 +190,6 @@ export const NewRestaurant = () => {
                 eightPerson,
             } = form;
 
-            console.log(openingTime, closingTime, twoPerson, diningRestriction);
-
             //generate a temp object for tables if any were inputted
             let tempTables;
             if (twoPerson || fourPerson || eightPerson) {
@@ -221,8 +221,6 @@ export const NewRestaurant = () => {
                 ...(diningRestriction && { diningRestriction }),
                 tables: tempTables,
             });
-
-            console.log(body);
         }
 
         const config = {
@@ -236,11 +234,11 @@ export const NewRestaurant = () => {
 
         //post new restaurant and navigate back to restaurants page
         axios(config)
-            .then(function (response) {
+            .then(response => {
                 console.log(JSON.stringify(response.data));
                 navigate("/restaurants");
             })
-            .catch(function (error) {
+            .catch(error => {
                 console.log(error);
             });
     };
@@ -353,7 +351,7 @@ export const NewRestaurant = () => {
                         // as="input"
                         type="tel"
                         pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                        placeholder="Phone Number (optional)"
+                        placeholder="Phone Number"
                         onChange={(e) =>
                             setField("phoneNumber", e.target.value)
                         }
