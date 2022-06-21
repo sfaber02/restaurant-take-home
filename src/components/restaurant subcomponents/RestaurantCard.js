@@ -26,7 +26,7 @@ export const RestaurantCard = ({ info, handleShow }) => {
     }
 
     return (
-        <Card onClick={handleClick} id={id}>
+        <Card onClick={handleClick} id={id} className="h-100">
             <Card.Img
                 variant="top"
                 src={graphic}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Modal, Button, Container, Row} from "react-bootstrap";
+import { Modal, Button, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
@@ -90,15 +90,16 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
                 diningRestriction: {},
             };
             for (let restaurant of displayList) {
-                let {cuisine, location, price, diningRestriction} = restaurant;
-                
+                let { cuisine, location, price, diningRestriction } =
+                    restaurant;
+
                 //hash cuisine
                 if (!tempHash.cuisine[cuisine]) {
                     tempHash.cuisine[cuisine] = 1;
                 } else {
                     tempHash.cuisine[cuisine]++;
                 }
-                
+
                 //hash location
                 if (!tempHash.location[location]) {
                     tempHash.location[location] = 1;
@@ -114,9 +115,12 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
                 }
 
                 //hash dining restriction if not null
-                if (!tempHash.diningRestriction[diningRestriction] && diningRestriction) {
+                if (
+                    !tempHash.diningRestriction[diningRestriction] &&
+                    diningRestriction
+                ) {
                     tempHash.diningRestriction[diningRestriction] = 1;
-                } else if (diningRestriction){
+                } else if (diningRestriction) {
                     tempHash.diningRestriction[diningRestriction]++;
                 }
             }
@@ -124,21 +128,31 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
             //finally set the newly created hash as state
             setFilterHash(tempHash);
         }
-    }, [displayList])
+    }, [displayList]);
 
     return (
         <>
             {displayList && (
-                <Container>
-                    <FilterBar filterHash={filterHash} handleSearch={handleSearch} />
-                    <Row xs={1} md={3} className="g-4">
+                <Container className="border">
+                    <FilterBar
+                        filterHash={filterHash}
+                        handleSearch={handleSearch}
+                    />
+                    <Row
+                        xs={1}
+                        md={2}
+                        lg={3}
+                        className="g-0"
+                    >
                         {displayList.map((e) => (
-                            <RestaurantCard
-                                key={e.id}
-                                info={e}
-                                handleShow={handleShow}
-                                handleClose={handleClose}
-                            />
+                            <Col className="p-1">
+                                <RestaurantCard
+                                    key={e.id}
+                                    info={e}
+                                    handleShow={handleShow}
+                                    handleClose={handleClose}
+                                />
+                            </Col>
                         ))}
                     </Row>
                     <Modal
