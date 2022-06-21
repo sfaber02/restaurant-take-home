@@ -133,7 +133,7 @@ export const Restaurants = ({ restaurants, query, handleSearch }) => {
     return (
         <>
             {displayList && (
-                <Container className="border">
+                <Container>
                     <FilterBar
                         filterHash={filterHash}
                         handleSearch={handleSearch}

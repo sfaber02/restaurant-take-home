@@ -26,33 +26,65 @@ export const RestaurantCard = ({ info, handleShow }) => {
     }
 
     return (
-        <Card onClick={handleClick} id={id} className="h-100">
+        <Card onClick={handleClick} id={id} className="h-100 border">
             <Card.Img
+                style={{ objectFit: "cover" }}
+                className="h-50"
                 variant="top"
                 src={graphic}
             />
+
+            <Card.Header>
+                <Row xs={2}>
+                    <Card.Title>
+                        {name}
+                    </Card.Title>
+                    <Card.Text
+                        style={{ textAlign: "right" }}
+                    >
+                        {location}
+                    </Card.Text>
+                </Row>
+            </Card.Header>
+
             <Card.Body>
-                <Card.Title>{name}</Card.Title>
-                <Card.Text className="cardText">{`${description.split('.')[0]}.`}</Card.Text>
+                <Card.Text className="cardText">{`${
+                    description.split(".")[0]
+                }.`}</Card.Text>
             </Card.Body>
 
-            <Row className="border">
-                <Col>
-                    <Card.Text className="cardText">{price}</Card.Text>
-                </Col>
-                <Col>
-                    <Card.Text className="cardText">{cuisine}</Card.Text>
-                </Col>
-                <Col>
-                    <Card.Text className="cardText">{location}</Card.Text>
-                </Col>
-                <Col>
-                    <Link to={`${id}`} state={info} onClick={handleShow}>
-                        More Info
-                    </Link>
-                </Col>
-            </Row>
-            <Card.Body></Card.Body>
+            <Card.Footer>
+                <Row >
+                    <Col>
+                        <Card.Text
+                            style={{ textAlign: "left" }}
+                        >
+                            {price}
+                        </Card.Text>
+                    </Col>
+                    <Col>
+                        <Card.Text
+                            className="cardText"
+                            style={{ textAlign: "center" }}
+                        >
+                            {cuisine}
+                        </Card.Text>
+                    </Col>
+                    <Col className="d-flex justify-content-end">
+                        {/* <Card.Text className="border border-warning"> */}
+                            <Link
+                                to={`${id}`}
+                                state={info}
+                                onClick={handleShow}
+                            >
+                                More Info
+                            </Link>
+                        {/* </Card.Text> */}
+                    </Col>
+                </Row>
+            </Card.Footer>
+
+            {/* <Card.Body className="border border-warning"></Card.Body> */}
         </Card>
     );
 };
