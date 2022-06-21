@@ -1,7 +1,8 @@
 # RESTAURANTICUS
 
 ### TODO
-- format restaurant cards
 - all reservation stuff
 - fix search and filter
-- make smaller images for card view
+- center loading animation
+- fix carousel giant image explosion
+- build out restaurant card with links for delete, edit, reservation, etc
