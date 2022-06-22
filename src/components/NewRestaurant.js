@@ -221,26 +221,26 @@ export const NewRestaurant = () => {
                 ...(diningRestriction && { diningRestriction }),
                 tables: tempTables,
             });
+            const config = {
+                method: "post",
+                url: `${API}/restaurants`,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: body,
+            };
+    
+            //post new restaurant and navigate back to restaurants page
+            axios(config)
+                .then(response => {
+                    console.log(JSON.stringify(response.data));
+                    navigate("/restaurants");
+                })
+                .catch(error => {
+                    console.log(error);
+                });
         }
 
-        const config = {
-            method: "post",
-            url: `${API}/restaurants`,
-            headers: {
-                "Content-Type": "application/json",
-            },
-            data: body,
-        };
-
-        //post new restaurant and navigate back to restaurants page
-        axios(config)
-            .then(response => {
-                console.log(JSON.stringify(response.data));
-                navigate("/restaurants");
-            })
-            .catch(error => {
-                console.log(error);
-            });
     };
 
     return (

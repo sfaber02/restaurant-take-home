@@ -22,7 +22,6 @@ export const Restaurant = ({ restaurants }) => {
 
     // handleClose function to close modal passed from restaurants component
     const handleClose = useOutletContext();
-    
 
     /**
      * search through all restaurant to find restaurant that matches
@@ -65,9 +64,9 @@ export const Restaurant = ({ restaurants }) => {
             method: "delete",
             url: `${API}/restaurants/${id}`,
         };
-        
+
         axios(config)
-        .then((response) => {
+            .then((response) => {
                 console.log(JSON.stringify(response.data));
                 handleClose();
             })
@@ -76,10 +75,13 @@ export const Restaurant = ({ restaurants }) => {
             });
     };
 
-    //cancel delete 
+    //cancel delete
     const goBackClick = () => {
         setDeleteWarning(false);
     };
+
+    //handle edit click
+    const handleEditClick = (e) => {};
 
     /**
      * return a single card for the restaurant user clicked on
@@ -135,20 +137,27 @@ export const Restaurant = ({ restaurants }) => {
                                         </Card.Text>
                                     </Col>
                                 </Row>
-                                <Container className="border mt-3">
+                                {current.diningRestriction && (
+                                    <Card.Text>
+                                        <strong>Restrictions: {"   "}</strong>
+                                        {current.diningRestriction}
+                                    </Card.Text>
+                                )}
+                                <Card.Footer className="border border-secondary">
                                     <Card.Text className="cardText">
-                                        <strong>Description:{'   '}</strong>
                                         {current.description}
                                     </Card.Text>
-                                </Container>
+                                </Card.Footer>
                             </Tab>
                             <Tab eventKey="reservations" title="Reservations">
                                 HALLO
                             </Tab>
                             <Tab eventKey="admin" title="Admin">
                                 <Row xs={2} md={2}>
-                                    <Col className="border border-warning">
-                                        <Button>Edit</Button>
+                                    <Col>
+                                        <Button onClick={handleEditClick}>
+                                            Edit
+                                        </Button>
                                     </Col>
                                     <Col style={{ textAlign: "right" }}>
                                         {!deleteWarning ? (
@@ -179,25 +188,6 @@ export const Restaurant = ({ restaurants }) => {
                             </Tab>
                         </Tabs>
                     </Card.Body>
-                    {/* <Card.Footer>
-                        <Row className="border">
-                            <Col>
-                                <Card.Text className="cardText">
-                                    {current.price}
-                                </Card.Text>
-                            </Col>
-                            <Col>
-                                <Card.Text className="cardText">
-                                    {current.cuisine}
-                                </Card.Text>
-                            </Col>
-                            <Col>
-                                <Card.Text className="cardText">
-                                    {current.location}
-                                </Card.Text>
-                            </Col>
-                        </Row>
-                    </Card.Footer> */}
                 </Card>
             )}
         </>
