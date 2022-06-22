@@ -20,7 +20,6 @@ const timeFormatter = (time) => {
 };
 
 
-
 /**
  *
  * @param {string} a string of 10 digits
@@ -43,7 +42,7 @@ const phoneNumberValidator = (phone) => {
             nums.push(c);
         }
     }
-    
+
     return nums.length === 10 ? nums : false;
 }
 

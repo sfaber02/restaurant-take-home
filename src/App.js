@@ -118,9 +118,9 @@ export const App = () => {
                             path="/newReservation"
                             element={<NewReservation />}
                         />
-                        <Route path="/reservations" element={<Reservations />}>
+                        {/* <Route path="/reservations" element={<Reservations />}>
                             <Route path=":id" element={<Reservation />} />
-                        </Route>
+                        </Route> */}
                         <Route path="/error/:err" element={<Error />} />
                         <Route path="/error" element={<Error />} />
                     </Routes>

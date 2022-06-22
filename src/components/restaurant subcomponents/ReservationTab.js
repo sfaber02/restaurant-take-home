@@ -3,6 +3,8 @@ import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 
 import { NewReservation } from "./NewReservation";
 
+import { timeFormatter, phoneNumberFormatter } from "../../helper-functions/helpers";
+
 export const ReservationTab = ({ id, current }) => {
     console.log(current);
 
@@ -17,7 +19,7 @@ export const ReservationTab = ({ id, current }) => {
                                 current.reservations.map((e) => {
                                     return (
                                         <>
-                                            <Card className="border border-info mb-3 p-3">
+                                            <Card key={e.id} className="border border-info mb-3 p-3">
                                                 <Card.Header>
                                                     <strong>Time:</strong>
                                                     {"  "}
@@ -51,7 +53,9 @@ export const ReservationTab = ({ id, current }) => {
                                                         </Card.Text>
                                                     </Col>
                                                 </Row>
-                                                <Button className="mt-4">Edit</Button>
+                                                <Button className="mt-4">
+                                                    Edit
+                                                </Button>
                                             </Card>
                                         </>
                                     );
@@ -63,31 +67,11 @@ export const ReservationTab = ({ id, current }) => {
                     </Card>
                 </Tab>
                 <Tab eventKey="makeRes" title="Make a Reservation">
-                                <NewReservation />
+                    <NewReservation current={current} />
                 </Tab>
             </Tabs>
         </>
     );
 };
 
-const timeFormatter = (time) => {
-    // extract date from time string
-    const tempDate = new Date(time);
-    const date = tempDate.toDateString();
 
-    //extract hours from time string
-    time = time.split("T")[1];
-    let hours = time.split(":")[0];
-    const amPm = hours > 12 ? "PM" : "AM";
-    hours = hours > 12 ? hours - 12 : hours;
-
-    //extract minutes from time string
-    let minutes = time.split(":")[1];
-
-    return `${date} ${hours}:${minutes}${amPm}`;
-};
-
-//format phone number for info section
-const phoneNumberFormatter = (phone) => {
-    return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
-};

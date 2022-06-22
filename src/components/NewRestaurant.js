@@ -13,6 +13,12 @@ import {
 
 import "../styles/newRestaurant.css";
 
+const {
+    phoneNumberFormatter,
+    phoneNumberValidator,
+} = require("../helper-functions/helpers.js");
+
+
 const API = process.env.REACT_APP_API_URL;
 
 /**
@@ -41,7 +47,7 @@ export const NewRestaurant = () => {
     const [errors, setErrors] = useState({});
 
     const navigate = useNavigate();
-    
+
     //update form state as user inputs information
     const setField = (field, value) => {
         setForm((prev) => {
@@ -127,23 +133,17 @@ export const NewRestaurant = () => {
         if (!phoneNumber || phoneNumber === "") {
             newErrors.phoneNumber = "Cannot be blank!";
         } else {
-            //pull all digits out of user's input and check if there's 10 digits
-            let nums = [];
-            for (let c of phoneNumber) {
-                if (/[0-9]/.test(c)) {
-                    nums.push(c);
-                }
-            }
-            if (nums.length !== 10) {
-                newErrors.phoneNumber = "Must be a 10-digit phone number!"
+            let phone = phoneNumberValidator(phoneNumber)
+            if (!phone) {
+                newErrors.phoneNumber = "Must be a 10-digit phone number!";
             } else {
                 //if phone number is legit set form state to valid phone number format for post
                 setForm((prev) => {
                     return {
                         ...prev,
-                        phoneNumber: nums.join('')
-                    }
-                })
+                        phoneNumber: phone.join(""),
+                    };
+                });
             }
         }
 
@@ -229,18 +229,17 @@ export const NewRestaurant = () => {
                 },
                 data: body,
             };
-    
+
             //post new restaurant and navigate back to restaurants page
             axios(config)
-                .then(response => {
+                .then((response) => {
                     console.log(JSON.stringify(response.data));
                     navigate("/restaurants");
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error);
                 });
         }
-
     };
 
     return (

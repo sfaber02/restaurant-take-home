@@ -11,9 +11,11 @@ import {
     Col,
 } from "react-bootstrap";
 
+const { phoneNumberValidator } = require("../../helper-functions/helpers.js");
+
 const API = process.env.REACT_APP_API_URL;
 
-export const NewReservation = () => {
+export const NewReservation = ({ current }) => {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -38,9 +40,72 @@ export const NewReservation = () => {
             });
     };
 
-    const findErrors = () => {};
+    const findErrors = () => {
+        const { firstName, lastName, phoneNumber, email, time, numGuests } =
+            form;
 
-    const handleSubmit = () => {};
+        console.log(firstName, lastName, phoneNumber, email, time, numGuests);
+
+        const newErrors = {};
+
+        //name errors
+        if (!firstName || firstName === "") {
+            newErrors.firstName = "Cannot be blank!";
+        } else if (firstName.length > 50) {
+            newErrors.firstName = "Name is too long!";
+        }
+        if (!lastName || lastName === "") {
+            newErrors.lastName = "Cannot be blank!";
+        } else if (lastName.length > 50) {
+            newErrors.lastName = "Name is too long!";
+        }
+
+        //phone number errors
+        if (!phoneNumber || phoneNumber === "") {
+            newErrors.phoneNumber = "Cannot be blank!";
+        } else {
+            let result = phoneNumberValidator(phoneNumber);
+            if (!result) {
+                newErrors.phoneNumber = "Invalid Phone Number";
+            } else {
+                //if phone number is legit set form state to valid phone number format for post
+                setForm((prev) => {
+                    return {
+                        ...prev,
+                        phoneNumber: result.join(""),
+                    };
+                });
+            }
+        }
+
+        //number of guests errors
+        if (!numGuests || numGuests === "") {
+            newErrors.numGuests = "Cannot be Blank!";
+        } else if (numGuests <= 0) {
+            newErrors.numGuests = "Guests be greater than 0!";
+        }
+        
+        //email errors
+
+
+
+        return newErrors;
+    };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("handle submit");
+        const newErrors = findErrors();
+
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            const { firstName, lastName, phoneNumber, email, time, numGuests } =
+                form;
+
+            
+        }
+    };
 
     return (
         <Container fluid className="formContainer mb-4">
@@ -135,37 +200,33 @@ export const NewReservation = () => {
                         type="number"
                         placeholder="Number of Guests"
                         onChange={(e) => setField("numGuests", e.target.value)}
-                        isInvalid={!!errors.location}
+                        isInvalid={!!errors.numGuests}
                     ></FormControl>
                     <Form.Control.Feedback type="invalid">
                         {errors.numGuests}
                     </Form.Control.Feedback>
                 </Form.Group>
-                
+
                 {/* RESERVATION TIME INPUT  */}
                 <Form.Group>
                     <Form.Label>Time</Form.Label>
                     <FormControl
                         type="time"
-                        onChange={(e) =>
-                            setField("time", e.target.value)
-                        }
+                        onChange={(e) => setField("time", e.target.value)}
                         isInvalid={!!errors.time}
                     ></FormControl>
                     <Form.Control.Feedback type="invalid">
                         {errors.time}
                     </Form.Control.Feedback>
                 </Form.Group>
-                
+
                 {/* DATE INPUT  */}
                 <Form.Group>
                     <Form.Label>Date</Form.Label>
                     <FormControl
                         type="date"
                         min={getTodaysDate()}
-                        onChange={(e) =>
-                            setField("date", e.target.value)
-                        }
+                        onChange={(e) => setField("date", e.target.value)}
                         isInvalid={!!errors.date}
                     ></FormControl>
                     <Form.Control.Feedback type="invalid">
@@ -187,14 +248,14 @@ export const NewReservation = () => {
     );
 };
 
-
+//get todays date in correct format to set min values in date picker
 const getTodaysDate = () => {
-  const today = new Date();
-  const day = today.getDate();
-  let month = today.getMonth() + 1;
-  const year = today.getFullYear();
+    const today = new Date();
+    const day = today.getDate();
+    let month = today.getMonth() + 1;
+    const year = today.getFullYear();
 
-  if (month < 10) month = "0" + month;
+    if (month < 10) month = "0" + month;
 
-  return (`${year}-${month}-${day}`);
-}
+    return `${year}-${month}-${day}`;
+};

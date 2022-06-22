@@ -7,6 +7,8 @@ import { ReservationTab } from "./ReservationTab";
 
 import "../../styles/restaurant.css";
 
+const {phoneNumberFormatter} =  require('../../helper-functions/helpers.js');
+
 const API = process.env.REACT_APP_API_URL;
 
 /**
@@ -19,6 +21,7 @@ export const Restaurant = ({ restaurants }) => {
     //stores current restaurant to be displayed in card
     const [current, setCurrent] = useState(null);
     const [deleteWarning, setDeleteWarning] = useState(false);
+
     //id of restaurant from link clicked in restaurants component
     const { id } = useParams();
 
@@ -65,7 +68,7 @@ export const Restaurant = ({ restaurants }) => {
 
     /**
      * return a single card for the restaurant user clicked on
-     * which displays all info about that restaurantn as well as
+     * which displays all info about that restaurantn in a modal as well as
      * links to close the modal or make a reservation
      */
     return (
@@ -177,12 +180,9 @@ export const Restaurant = ({ restaurants }) => {
     );
 };
 
-//format phone number for info section
-const phoneNumberFormatter = (phone) => {
-    return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
-};
 
 //format open / close times for info section
+//ADD THIS TO HELPER FUNCTIONS
 const hoursFormatter = (open, close) => {
     open = open.split(":");
     close = close.split(":");

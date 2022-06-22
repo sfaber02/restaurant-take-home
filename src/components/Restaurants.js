@@ -170,7 +170,7 @@ export const Restaurants = ({ restaurants, query }) => {
                     />
                     <Row xs={1} md={2} lg={3} className="g-0">
                         {displayList.map((e) => (
-                            <Col className="p-1">
+                            <Col className="p-1" key={e.id}>
                                 <RestaurantCard
                                     key={e.id}
                                     info={e}
