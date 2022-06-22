@@ -21,7 +21,7 @@ export const RestaurantCard = ({ info, handleShow }) => {
      * dynamic restaurant route for a more detailed view of a single restaurant
      */
     const handleClick = () => {
-        handleShow();
+        handleShow(info);
         navigate(`${id}`);
     }
 

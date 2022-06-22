@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Modal, Button, Container, Row, Col } from "react-bootstrap";
+import { Modal, Button, Container, Row, Col, CloseButton } from "react-bootstrap";
 import axios from "axios";
 
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
@@ -23,6 +23,7 @@ export const Restaurants = ({ restaurants, query }) => {
      *  on search/filters
      */
     const [show, setShow] = useState(false);
+    const [modalTitle, setModalTitle] = useState();
     const [displayList, setDisplayList] = useState();
     const [filterHash, setFilterHash] = useState();
     const [filter, setFilter] = useState({});
@@ -32,7 +33,11 @@ export const Restaurants = ({ restaurants, query }) => {
     /**
      * handlers to show/ hide modal
      */
-    const handleShow = () => setShow(true);
+    const handleShow = (info) => {
+        setShow(true);
+        console.log (info);
+        setModalTitle(info.name);
+    }
     const handleClose = () => {
         setShow(false);
         navigate("/restaurants");
@@ -162,12 +167,7 @@ export const Restaurants = ({ restaurants, query }) => {
                         handleFilter={handleFilter}
                         handleReset={handleReset}
                     />
-                    <Row
-                        xs={1}
-                        md={2}
-                        lg={3}
-                        className="g-0"
-                    >
+                    <Row xs={1} md={2} lg={3} className="g-0">
                         {displayList.map((e) => (
                             <Col className="p-1">
                                 <RestaurantCard
@@ -185,14 +185,12 @@ export const Restaurants = ({ restaurants, query }) => {
                         contentClassName="restaurantModal"
                         centered
                     >
-                        <Modal.Body>
-                            <Outlet />
+                        <Modal.Header closeButton>
+                            <Modal.Title>{modalTitle}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body className="mt-0 p-0">
+                            <Outlet context={handleClose} />
                         </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="danger" onClick={handleClose}>
-                                Close
-                            </Button>
-                        </Modal.Footer>
                     </Modal>
                 </Container>
             )}

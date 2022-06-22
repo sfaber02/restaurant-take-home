@@ -4,10 +4,9 @@ import axios from "axios";
 import { Container, Spinner } from "react-bootstrap";
 
 /**
- * React bootstrap import and image import
+ * bootstrap import and image import
  */
 import "bootstrap/dist/css/bootstrap.min.css";
-import graphics from "./assets/Graphics/Graphics";
 import smallGraphics from "./assets/Graphics/Small/smallGraphics";
 
 /**
