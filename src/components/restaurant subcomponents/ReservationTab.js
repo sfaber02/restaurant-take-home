@@ -1,12 +1,15 @@
 import React from "react";
 import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 
+import { NewReservation } from "./NewReservation";
+
 export const ReservationTab = ({ id, current }) => {
     console.log(current);
 
     return (
         <>
             <Tabs>
+                {/* VIEW CURRENT RESERVATION TABS */}
                 <Tab eventKey="current" title="Current Reservations">
                     <Card>
                         <Card.Body>
@@ -59,7 +62,9 @@ export const ReservationTab = ({ id, current }) => {
                         </Card.Body>
                     </Card>
                 </Tab>
-                <Tab eventKey="makeRes" title="Make a Reservation"></Tab>
+                <Tab eventKey="makeRes" title="Make a Reservation">
+                                <NewReservation />
+                </Tab>
             </Tabs>
         </>
     );
