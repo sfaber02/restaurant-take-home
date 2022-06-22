@@ -6,6 +6,7 @@ import axios from "axios";
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
 import { FilterBar } from "./restaurant subcomponents/FilterBar";
 
+
 import "../styles/restaurants.css";
 
 /**

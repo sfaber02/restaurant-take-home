@@ -250,6 +250,7 @@ export const NewRestaurant = () => {
                     <Form.Label>Name</Form.Label>
                     <FormControl
                         type="text"
+                        value={form.name}
                         placeholder="Enter Restaurant Name"
                         onChange={(e) => setField("name", e.target.value)}
                         isInvalid={!!errors.name}
