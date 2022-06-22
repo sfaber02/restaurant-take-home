@@ -3,6 +3,8 @@ import { useParams, useOutletContext } from "react-router-dom";
 import { Card, Row, Col, Tabs, Tab, Container, Button } from "react-bootstrap";
 import axios from "axios";
 
+import { ReservationTab } from "./ReservationTab";
+
 import "../../styles/restaurant.css";
 
 const API = process.env.REACT_APP_API_URL;
@@ -30,28 +32,6 @@ export const Restaurant = ({ restaurants }) => {
     useEffect(() => {
         setCurrent(restaurants.filter((e) => e.id === id)[0]);
     }, [id]);
-
-    //format phone number for info section
-    const phoneNumberFormatter = (phone) => {
-        return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
-    };
-
-    //format open / close times for info section
-    const hoursFormatter = (open, close) => {
-        open = open.split(":");
-        close = close.split(":");
-        console.log(open);
-        let openHours =
-            open[0] > 12
-                ? `${open[0] - 12}:${open[1]}PM`
-                : `${open[0]}:${open[1]}AM`;
-        let closeHours =
-            close[0] > 12
-                ? `${close[0] - 12}:${close[1]}PM`
-                : `${close[0]}:${close[1]}AM`;
-
-        return `${openHours} - ${closeHours}`;
-    };
 
     //delete click handler
     const handleDeleteClick = (e) => {
@@ -103,6 +83,7 @@ export const Restaurant = ({ restaurants }) => {
                             id="uncontrolled-tab-example"
                             className="mb-3"
                         >
+                            {/* INFO TAB */}
                             <Tab eventKey="info" title="Info">
                                 <Row xs={1} md={2}>
                                     <Col>
@@ -149,9 +130,11 @@ export const Restaurant = ({ restaurants }) => {
                                     </Card.Text>
                                 </Card.Footer>
                             </Tab>
+                            {/* RESERVATIONS TAB  */}
                             <Tab eventKey="reservations" title="Reservations">
-                                HALLO
+                                <ReservationTab id={id} current={current} />
                             </Tab>
+                            {/* ADMIN TAB */}
                             <Tab eventKey="admin" title="Admin">
                                 <Row xs={2} md={2}>
                                     <Col>
@@ -192,4 +175,26 @@ export const Restaurant = ({ restaurants }) => {
             )}
         </>
     );
+};
+
+//format phone number for info section
+const phoneNumberFormatter = (phone) => {
+    return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
+};
+
+//format open / close times for info section
+const hoursFormatter = (open, close) => {
+    open = open.split(":");
+    close = close.split(":");
+    console.log(open);
+    let openHours =
+        open[0] > 12
+            ? `${open[0] - 12}:${open[1]}PM`
+            : `${open[0]}:${open[1]}AM`;
+    let closeHours =
+        close[0] > 12
+            ? `${close[0] - 12}:${close[1]}PM`
+            : `${close[0]}:${close[1]}AM`;
+
+    return `${openHours} - ${closeHours}`;
 };
