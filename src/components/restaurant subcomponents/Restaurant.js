@@ -190,7 +190,6 @@ export const Restaurant = ({ restaurants }) => {
 const hoursFormatter = (open, close) => {
     open = open.split(":");
     close = close.split(":");
-    console.log(open);
     let openHours =
         open[0] > 12
             ? `${open[0] - 12}:${open[1]}PM`

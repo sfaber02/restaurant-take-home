@@ -36,7 +36,6 @@ export const Restaurants = ({ restaurants, query }) => {
      */
     const handleShow = (info) => {
         setShow(true);
-        console.log (info);
         setModalTitle(info.name);
     }
     const handleClose = () => {

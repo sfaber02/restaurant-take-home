@@ -18,7 +18,6 @@ const {
     phoneNumberValidator,
 } = require("../helper-functions/helpers.js");
 
-
 const API = process.env.REACT_APP_API_URL;
 
 /**
@@ -59,49 +58,50 @@ export const NewRestaurant = ({ restaurants }) => {
     /**
      * if there there is an id from landing on this page via the edit restaurant button
      * prefill form with current restaurant info for editing
-     * 
-    **/
-   useEffect(() => {
-    if (id) {
-        //set edit mode will change button text and post / patch verb  on submit
-        setEditMode(true);
+     *
+     **/
+    useEffect(() => {
+        if (id) {
+            //set edit mode will change button text and post / patch verb  on submit
+            setEditMode(true);
 
-        //find current restaurant in all restaurants object and store as ref
-        originalRestaurantData.current = restaurants.filter(e => e.id === id)[0];
-        
-        //destructure current restaurant data to be displayed in form
-        const {
-            name,
-            description,
-            phoneNumber, 
-            openingTime,
-            closingTime,
-            location,
-            cuisine,
-            price,
-            diningRestriction,
-            tables,
-        } = originalRestaurantData.current;
+            //find current restaurant in all restaurants object and store as ref
+            originalRestaurantData.current = restaurants.filter(
+                (e) => e.id === id
+            )[0];
 
-        
-        //set form to current restaurant data
-        setForm({
-            name,
-            cuisine,
-            description,
-            price,
-            location,
-            openingTime,
-            closingTime,
-            phoneNumber,
-            diningRestriction,
-            ...(tables && {twoPerson: tables.twoPersonTables}),
-            ...(tables && {fourPerson: tables.fourPersonTables}),
-            ...(tables && {eightPerson: tables.eightPersonTables}),
-        })
-    }
-   }, [id]);
-    
+            //destructure current restaurant data to be displayed in form
+            const {
+                name,
+                description,
+                phoneNumber,
+                openingTime,
+                closingTime,
+                location,
+                cuisine,
+                price,
+                diningRestriction,
+                tables,
+            } = originalRestaurantData.current;
+
+            //set form to current restaurant data
+            setForm({
+                name,
+                cuisine,
+                description,
+                price,
+                location,
+                openingTime,
+                closingTime,
+                phoneNumber,
+                diningRestriction,
+                ...(tables && { twoPerson: tables.twoPersonTables }),
+                ...(tables && { fourPerson: tables.fourPersonTables }),
+                ...(tables && { eightPerson: tables.eightPersonTables }),
+            });
+        }
+    }, [id]);
+
     //update form state as user inputs information
     const setField = (field, value) => {
         setForm((prev) => {
@@ -187,7 +187,7 @@ export const NewRestaurant = ({ restaurants }) => {
         if (!phoneNumber || phoneNumber === "") {
             newErrors.phoneNumber = "Cannot be blank!";
         } else {
-            let phone = phoneNumberValidator(phoneNumber)
+            let phone = phoneNumberValidator(phoneNumber);
             if (!phone) {
                 newErrors.phoneNumber = "Must be a 10-digit phone number!";
             } else {
@@ -219,8 +219,6 @@ export const NewRestaurant = ({ restaurants }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-       
-
         //check submission for errors
         const newErrors = findErrors();
 
@@ -228,7 +226,7 @@ export const NewRestaurant = ({ restaurants }) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            //destructure form input
+            //if form passed validation destructure form input
             const {
                 name,
                 cuisine,
@@ -285,7 +283,7 @@ export const NewRestaurant = ({ restaurants }) => {
                     },
                     data: body,
                 };
-    
+
                 //post new restaurant and navigate back to restaurants page
                 axios(config)
                     .then((response) => {
@@ -296,10 +294,34 @@ export const NewRestaurant = ({ restaurants }) => {
                         console.log(error);
                     });
             } else {
-                //if we are editing a restaurant check to see which fields to patch
-                
-            }
+                //compare current inputs to original inputs for changes
+                const patchOb = objectComparer(
+                    form,
+                    originalRestaurantData.current,
+                    tempTables
+                );
 
+                console.log(patchOb);
+
+                const data = JSON.stringify(patchOb);
+
+                var config = {
+                    method: "patch",
+                    url: `${API}/restaurants/${id}`,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: data,
+                };
+
+                axios(config)
+                    .then((response) => {
+                        console.log(JSON.stringify(response.data));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         }
     };
 
@@ -515,10 +537,69 @@ export const NewRestaurant = ({ restaurants }) => {
                         type="submit"
                         onClick={handleSubmit}
                     >
-                        {editMode? "Submit Edit" :"Submit"}
+                        {editMode ? "Submit Edit" : "Submit"}
                     </Button>
                 </Form.Group>
             </Form>
         </Container>
     );
+};
+
+
+
+
+
+/**
+ * compares the current inputs to the original state and outputs
+ * an object with just the changes for patching
+ *
+ * @param {object} inputs new state of inputs
+ * @param {object} original state of inputs
+ * @param {object} tables object of current table inputs
+ */
+const objectComparer = (inputs, original, tables) => {
+    console.log("1");
+    //if we are editing a restaurant check to see which fields to patch
+    let patchOb = {};
+
+    //compare form state to originalRestaurantDate ref
+    //if form state is different add to patch ob
+    for (let key in inputs) {
+        console.log("2");
+        //skip the tables twoPerson, fourPerson, eightPerson Objects but check all other objects
+        if (!(key.slice(key.length - 3) === "son")) {
+            console.log("3");
+            if (inputs[key] !== original[key]) {
+                console.log("4");
+                patchOb[key] = inputs[key];
+            }
+        }
+    }
+    console.log(patchOb);
+
+    //check if any table counts have been inputted
+    if (tables) {
+        //loop through tables object to find differences
+        for (let key in tables) {
+            console.log(
+                tables[key],
+                original.tables[key]
+            );
+            if (
+                tables[key] !== original.tables[key]
+            ) {
+                console.log(patchOb);
+                if (!patchOb["tables"]) {
+                    console.log("5");
+                    patchOb["tables"] = {};
+                    patchOb.tables[key] = tables[key];
+                } else {
+                    console.log("6");
+                    patchOb["tables"][key] = tables[key];
+                }
+            }
+        }
+    }
+
+    return patchOb
 };

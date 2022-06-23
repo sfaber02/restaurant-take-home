@@ -6,7 +6,6 @@ import { NewReservation } from "./NewReservation";
 const { timeFormatter, phoneNumberFormatter } = require("../../helper-functions/helpers");
 
 export const ReservationTab = ({ id, current }) => {
-    console.log(current);
 
     return (
         <>
