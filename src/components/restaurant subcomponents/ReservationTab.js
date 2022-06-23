@@ -3,10 +3,12 @@ import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 
 import { NewReservation } from "./NewReservation";
 
-const { timeFormatter, phoneNumberFormatter } = require("../../helper-functions/helpers");
+const {
+    timeFormatter,
+    phoneNumberFormatter,
+} = require("../../helper-functions/helpers");
 
 export const ReservationTab = ({ id, current }) => {
-
     return (
         <>
             <Tabs>
@@ -17,46 +19,43 @@ export const ReservationTab = ({ id, current }) => {
                             {current.reservations[0] ? (
                                 current.reservations.map((e) => {
                                     return (
-                                        <>
-                                            <Card key={e.id} className="border border-info mb-3 p-3">
-                                                <Card.Header>
-                                                    <strong>Time:</strong>
-                                                    {"  "}
-                                                    {timeFormatter(e.time)}
-                                                </Card.Header>
-                                                <Card.Body></Card.Body>
-                                                <Card.Text>
-                                                    <strong>Name:</strong>
-                                                    {"  "}
-                                                    {`${e.firstName} ${e.lastName}`}
-                                                </Card.Text>
-                                                <Row xs={1} md={2}>
-                                                    <Col>
-                                                        <Card.Text>
-                                                            <strong>
-                                                                Phone:
-                                                            </strong>
-                                                            {"  "}
-                                                            {phoneNumberFormatter(
-                                                                e.phoneNumber
-                                                            )}
-                                                        </Card.Text>
-                                                    </Col>
-                                                    <Col>
-                                                        <Card.Text>
-                                                            <strong>
-                                                                Guests:
-                                                            </strong>
-                                                            {"  "}
-                                                            {e.numGuests}
-                                                        </Card.Text>
-                                                    </Col>
-                                                </Row>
-                                                <Button className="mt-4">
-                                                    Edit
-                                                </Button>
-                                            </Card>
-                                        </>
+                                        <Card
+                                            key={e.id}
+                                            className="border border-info mb-3 p-3"
+                                        >
+                                            <Card.Header>
+                                                <strong>Time:</strong>
+                                                {"  "}
+                                                {timeFormatter(e.time)}
+                                            </Card.Header>
+                                            <Card.Body></Card.Body>
+                                            <Card.Text>
+                                                <strong>Name:</strong>
+                                                {"  "}
+                                                {`${e.firstName} ${e.lastName}`}
+                                            </Card.Text>
+                                            <Row xs={1} md={2}>
+                                                <Col>
+                                                    <Card.Text>
+                                                        <strong>Phone:</strong>
+                                                        {"  "}
+                                                        {phoneNumberFormatter(
+                                                            e.phoneNumber
+                                                        )}
+                                                    </Card.Text>
+                                                </Col>
+                                                <Col>
+                                                    <Card.Text>
+                                                        <strong>Guests:</strong>
+                                                        {"  "}
+                                                        {e.numGuests}
+                                                    </Card.Text>
+                                                </Col>
+                                            </Row>
+                                            <Button className="mt-4">
+                                                Edit
+                                            </Button>
+                                        </Card>
                                     );
                                 })
                             ) : (
@@ -72,5 +71,3 @@ export const ReservationTab = ({ id, current }) => {
         </>
     );
 };
-
-

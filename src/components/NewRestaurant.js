@@ -14,7 +14,6 @@ import {
 import "../styles/newRestaurant.css";
 
 const {
-    phoneNumberFormatter,
     phoneNumberValidator,
 } = require("../helper-functions/helpers.js");
 
@@ -34,7 +33,7 @@ export const NewRestaurant = ({ restaurants }) => {
             name: "",
             cuisine: "",
             description: "",
-            price: "",
+            price: "DEFAULT",
             location: "",
             openingTime: "",
             closingTime: "",
@@ -102,7 +101,7 @@ export const NewRestaurant = ({ restaurants }) => {
                 ...(tables && { eightPerson: tables.eightPersonTables }),
             });
         }
-    }, [id]);
+    }, [id, restaurants]);
 
     //update form state as user inputs information
     const setField = (field, value) => {
@@ -135,7 +134,6 @@ export const NewRestaurant = ({ restaurants }) => {
             openingTime,
             closingTime,
             phoneNumber,
-            diningRestrictions,
             twoPerson,
             fourPerson,
             eightPerson,
@@ -385,7 +383,6 @@ export const NewRestaurant = ({ restaurants }) => {
                         isInvalid={!!errors.price}
                         value={form.price}
                         onChange={(e) => setField("price", e.target.value)}
-                        defaultValue={"DEFAULT"}
                     >
                         <option disabled value="DEFAULT"></option>
                         <option value="$">$</option>
@@ -472,7 +469,6 @@ export const NewRestaurant = ({ restaurants }) => {
                     <Form.Label>Dining Restrictions (optional)</Form.Label>
                     <Form.Select
                         value={form.diningRestriction}
-                        defaultValue={"DEFAULT"}
                         onChange={(e) =>
                             setField("diningRestriction", e.target.value)
                         }

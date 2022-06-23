@@ -56,8 +56,6 @@ export const NewReservation = ({ current, id }) => {
             numGuests,
         } = form;
 
-        console.log(firstName, lastName, phoneNumber, email, time, numGuests);
-
         const newErrors = {};
 
         //name errors
@@ -117,7 +115,6 @@ export const NewReservation = ({ current, id }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("handle submit");
         const newErrors = findErrors();
 
         if (Object.keys(newErrors).length > 0) {
