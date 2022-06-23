@@ -12,13 +12,12 @@ import "../styles/home.css";
  * @returns a carousel view of random restaurants
  */
 export const Home = ({ restaurants }) => {
-    console.log(bigGraphics);
     return (
         <Container className="border border-warning mw-100 p-5">
             <Carousel fade >
                 {restaurants.map(e => {
                     return (
-                        <Carousel.Item className="border border-danger">
+                        <Carousel.Item className="border border-danger" key={e.id}>
                             <img
                                 style={{
                                     maxHeight: "100vh",

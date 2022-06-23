@@ -58,12 +58,6 @@ export const Navigation = ({handleSearch}) => {
                             Restaurants
                         </Nav.Link>
                         <Nav.Link
-                            onClick={() => navigate("/reservations")}
-                            className="text-dark"
-                        >
-                            Reservations
-                        </Nav.Link>
-                        <Nav.Link
                             onClick={() => navigate("/newRestaurant")}
                             className="text-dark"
                         >

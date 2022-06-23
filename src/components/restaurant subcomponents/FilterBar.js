@@ -59,8 +59,14 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Container>
                 {filters && filters.cuisine.length > 0 && (
-                    <Form.Select onChange={handleChange} id="cuisine">
-                        <option disabled selected>Cuisine</option>
+                    <Form.Select
+                        onChange={handleChange}
+                        id="cuisine"
+                        defaultValue={"DEFAULT"}
+                    >
+                        <option disabled value="DEFAULT">
+                            Cuisine
+                        </option>
                         {filters.cuisine.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -70,8 +76,14 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                     </Form.Select>
                 )}
                 {filters && filters.location.length > 0 && (
-                    <Form.Select onChange={handleChange} id="location">
-                        <option disabled selected>Location</option>
+                    <Form.Select
+                        onChange={handleChange}
+                        id="location"
+                        defaultValue={"DEFAULT"}
+                    >
+                        <option disabled value="DEFAULT">
+                            Location
+                        </option>
                         {filters.location.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -81,8 +93,14 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                     </Form.Select>
                 )}
                 {filters && filters.price.length > 0 && (
-                    <Form.Select onChange={handleChange} id="price">
-                        <option disabled selected>Price</option>
+                    <Form.Select
+                        onChange={handleChange}
+                        id="price"
+                        defaultValue={"DEFAULT"}
+                    >
+                        <option disabled value="DEFAULT">
+                            Price
+                        </option>
                         {filters.price.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}
@@ -92,8 +110,14 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                     </Form.Select>
                 )}
                 {filters && filters.diningRestriction.length > 0 && (
-                    <Form.Select onChange={handleChange} id="diningRestriction">
-                        <option disabled selected>Restrictions</option>
+                    <Form.Select
+                        onChange={handleChange}
+                        id="diningRestriction"
+                        defaultValue={"DEFAULT"}
+                    >
+                        <option disabled value="DEFAULT">
+                            Restrictions
+                        </option>
                         {filters.diningRestriction.map((e) => (
                             <option
                                 key={`${e[0]}${e[1]}`}

@@ -28,28 +28,30 @@ export const NewRestaurant = ({ restaurants }) => {
     //id from route if we landed here from the edit restaurant button
     const { id } = useParams();
 
-    /**
-     * state for current form input ->
-     * {
-     * name:
-     * cuisine
-     * description:
-     * price:
-     * location:
-     * openingTime
-     * closingTime
-     * phoneNumber
-     * diningRestrictons
-     * twoPerson
-     * fourPerson
-     * eightPerson
-     * }
-     */
-    const [form, setForm] = useState({});
+    //initialize form state to empty values
+    const [form, setForm] = useState(() => {
+        return ({
+            name: "",
+            cuisine: "",
+            description: "",
+            price: "",
+            location: "",
+            openingTime: "",
+            closingTime: "",
+            phoneNumber: "",
+            diningRestriction: "DEFAULT",
+            twoPerson: "",
+            fourPerson: "",
+            eightPerson: "",
+        })
+    });
+
     //state to hold errors from from bad user inputs
     const [errors, setErrors] = useState({});
+    
     //state for edit / new restaurant mode
     const [editMode, setEditMode] = useState(false);
+    
     // ref to hold original restaurant info for editing
     const originalRestaurantData = useRef();
 
@@ -383,8 +385,9 @@ export const NewRestaurant = ({ restaurants }) => {
                         isInvalid={!!errors.price}
                         value={form.price}
                         onChange={(e) => setField("price", e.target.value)}
+                        defaultValue={"DEFAULT"}
                     >
-                        <option disabled selected></option>
+                        <option disabled value="DEFAULT"></option>
                         <option value="$">$</option>
                         <option value="$$">$$</option>
                         <option value="$$$">$$$</option>
@@ -469,11 +472,12 @@ export const NewRestaurant = ({ restaurants }) => {
                     <Form.Label>Dining Restrictions (optional)</Form.Label>
                     <Form.Select
                         value={form.diningRestriction}
+                        defaultValue={"DEFAULT"}
                         onChange={(e) =>
                             setField("diningRestriction", e.target.value)
                         }
                     >
-                        <option disabled selected></option>
+                        <option disabled value="DEFAULT"></option>
                         <option value="Takeout Only">Takeout Only</option>
                         <option value="Delivery Only">Delivery Only</option>
                     </Form.Select>
