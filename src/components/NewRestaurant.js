@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -22,10 +22,13 @@ const {
 const API = process.env.REACT_APP_API_URL;
 
 /**
- * component to add a new restaurant
- * @returns a form to add a new restaurant to DB
+ * component to add or edit a restaurant
+ * @returns a form to add/edit a restaurant
  */
-export const NewRestaurant = () => {
+export const NewRestaurant = ({ restaurants }) => {
+    //id from route if we landed here from the edit restaurant button
+    const { id } = useParams();
+
     /**
      * state for current form input ->
      * {
@@ -44,10 +47,61 @@ export const NewRestaurant = () => {
      * }
      */
     const [form, setForm] = useState({});
+    //state to hold errors from from bad user inputs
     const [errors, setErrors] = useState({});
+    //state for edit / new restaurant mode
+    const [editMode, setEditMode] = useState(false);
+    // ref to hold original restaurant info for editing
+    const originalRestaurantData = useRef();
 
     const navigate = useNavigate();
 
+    /**
+     * if there there is an id from landing on this page via the edit restaurant button
+     * prefill form with current restaurant info for editing
+     * 
+    **/
+   useEffect(() => {
+    if (id) {
+        //set edit mode will change button text and post / patch verb  on submit
+        setEditMode(true);
+
+        //find current restaurant in all restaurants object and store as ref
+        originalRestaurantData.current = restaurants.filter(e => e.id === id)[0];
+        
+        //destructure current restaurant data to be displayed in form
+        const {
+            name,
+            description,
+            phoneNumber, 
+            openingTime,
+            closingTime,
+            location,
+            cuisine,
+            price,
+            diningRestriction,
+            tables,
+        } = originalRestaurantData.current;
+
+        
+        //set form to current restaurant data
+        setForm({
+            name,
+            cuisine,
+            description,
+            price,
+            location,
+            openingTime,
+            closingTime,
+            phoneNumber,
+            diningRestriction,
+            ...(tables && {twoPerson: tables.twoPersonTables}),
+            ...(tables && {fourPerson: tables.fourPersonTables}),
+            ...(tables && {eightPerson: tables.eightPersonTables}),
+        })
+    }
+   }, [id]);
+    
     //update form state as user inputs information
     const setField = (field, value) => {
         setForm((prev) => {
@@ -164,8 +218,8 @@ export const NewRestaurant = () => {
     /** handles form submit **/
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(e);
-        let body;
+
+       
 
         //check submission for errors
         const newErrors = findErrors();
@@ -208,43 +262,51 @@ export const NewRestaurant = () => {
                 tempTables = null;
             }
 
-            //stringify valid user inputs into body for post
-            body = JSON.stringify({
-                name,
-                cuisine,
-                description,
-                price,
-                location,
-                openingTime: openingTime + ":00",
-                closingTime: closingTime + ":00",
-                ...(phoneNumber ? { phoneNumber } : { phoneNumber: null }),
-                ...(diningRestriction && { diningRestriction }),
-                tables: tempTables,
-            });
-            const config = {
-                method: "post",
-                url: `${API}/restaurants`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: body,
-            };
-
-            //post new restaurant and navigate back to restaurants page
-            axios(config)
-                .then((response) => {
-                    console.log(JSON.stringify(response.data));
-                    navigate("/restaurants");
-                })
-                .catch((error) => {
-                    console.log(error);
+            //if we are posting a new restaurant
+            if (!editMode) {
+                //stringify valid user inputs into body for post
+                const body = JSON.stringify({
+                    name,
+                    cuisine,
+                    description,
+                    price,
+                    location,
+                    openingTime: openingTime + ":00",
+                    closingTime: closingTime + ":00",
+                    ...(phoneNumber ? { phoneNumber } : { phoneNumber: null }),
+                    ...(diningRestriction && { diningRestriction }),
+                    tables: tempTables,
                 });
+                const config = {
+                    method: "post",
+                    url: `${API}/restaurants`,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: body,
+                };
+    
+                //post new restaurant and navigate back to restaurants page
+                axios(config)
+                    .then((response) => {
+                        console.log(JSON.stringify(response.data));
+                        navigate("/restaurants");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                //if we are editing a restaurant check to see which fields to patch
+                
+            }
+
         }
     };
 
     return (
         <Container fluid className="formContainer mb-4">
             <Form>
+                {/* RESTAURANT NAME INPUT  */}
                 <Form.Group className="mb-3 mt-3">
                     <Form.Label>Name</Form.Label>
                     <FormControl
@@ -258,10 +320,13 @@ export const NewRestaurant = () => {
                         {errors.name}
                     </Form.Control.Feedback>
                 </Form.Group>
+
+                {/* CUISINE INPUT  */}
                 <Form.Group className="mb-3 mt-3">
                     <Form.Label>Cuisine</Form.Label>
                     <FormControl
                         type="text"
+                        value={form.cuisine}
                         placeholder="Enter Cuisine Type"
                         onChange={(e) => setField("cuisine", e.target.value)}
                         isInvalid={!!errors.cuisine}
@@ -270,12 +335,15 @@ export const NewRestaurant = () => {
                         {errors.cuisine}
                     </Form.Control.Feedback>
                 </Form.Group>
+
+                {/* DESCRIPTION INPUT  */}
                 <Form.Group className="mb-3">
                     <Form.Label>Description</Form.Label>
                     <FormControl
                         as="textarea"
                         rows="4"
                         placeholder="Restaurant Description"
+                        value={form.description}
                         onChange={(e) =>
                             setField("description", e.target.value)
                         }
@@ -285,10 +353,13 @@ export const NewRestaurant = () => {
                         {errors.description}
                     </Form.Control.Feedback>
                 </Form.Group>
+
+                {/* PRICE INPUT  */}
                 <Form.Group>
                     <Form.Label>Price</Form.Label>
                     <Form.Select
                         isInvalid={!!errors.price}
+                        value={form.price}
                         onChange={(e) => setField("price", e.target.value)}
                     >
                         <option disabled selected></option>
@@ -301,10 +372,13 @@ export const NewRestaurant = () => {
                         {errors.price}
                     </Form.Control.Feedback>
                 </Form.Group>
+
+                {/* LOCATION INPUT  */}
                 <Form.Group>
                     <Form.Label>Location</Form.Label>
                     <FormControl
                         type="text"
+                        value={form.location}
                         placeholder="Location"
                         onChange={(e) => setField("location", e.target.value)}
                         isInvalid={!!errors.location}
@@ -313,12 +387,15 @@ export const NewRestaurant = () => {
                         {errors.location}
                     </Form.Control.Feedback>
                 </Form.Group>
+
+                {/* OPEN / CLOSE TIMES INPUT  */}
                 <Row>
                     <Col>
                         <Form.Group>
                             <Form.Label>Opening Time</Form.Label>
                             <FormControl
                                 type="time"
+                                value={form.openingTime}
                                 onChange={(e) =>
                                     setField("openingTime", e.target.value)
                                 }
@@ -334,6 +411,7 @@ export const NewRestaurant = () => {
                             <Form.Label>Closing Time</Form.Label>
                             <FormControl
                                 type="time"
+                                value={form.closingTime}
                                 onChange={(e) =>
                                     setField("closingTime", e.target.value)
                                 }
@@ -345,9 +423,12 @@ export const NewRestaurant = () => {
                         </Form.Group>
                     </Col>
                 </Row>
+
+                {/* PHONE NUMBER INPUT  */}
                 <Form.Group>
                     <Form.Label>Phone Number</Form.Label>
                     <FormControl
+                        value={form.phoneNumber}
                         type="tel"
                         pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                         placeholder="Phone Number"
@@ -360,9 +441,12 @@ export const NewRestaurant = () => {
                         {errors.phoneNumber}
                     </Form.Control.Feedback>
                 </Form.Group>
+
+                {/* DINING RESTRICTION INPUT  */}
                 <Form.Group>
                     <Form.Label>Dining Restrictions (optional)</Form.Label>
                     <Form.Select
+                        value={form.diningRestriction}
                         onChange={(e) =>
                             setField("diningRestriction", e.target.value)
                         }
@@ -372,12 +456,15 @@ export const NewRestaurant = () => {
                         <option value="Delivery Only">Delivery Only</option>
                     </Form.Select>
                 </Form.Group>
+
+                {/* TABLES INPUT  */}
                 <Form.Group className="mt-2">
                     <Form.Label>Tables (optional)</Form.Label>
                     <Row>
                         <Col>
                             <Form.Label>2-Person</Form.Label>
                             <FormControl
+                                value={form.twoPerson}
                                 type="number"
                                 onChange={(e) =>
                                     setField("twoPerson", e.target.value)
@@ -391,6 +478,7 @@ export const NewRestaurant = () => {
                         <Col>
                             <Form.Label>4-Person</Form.Label>
                             <FormControl
+                                value={form.fourPerson}
                                 type="number"
                                 min="0"
                                 onChange={(e) =>
@@ -405,6 +493,7 @@ export const NewRestaurant = () => {
                         <Col>
                             <Form.Label>8-Person</Form.Label>
                             <FormControl
+                                value={form.eightPerson}
                                 type="number"
                                 min="0"
                                 onChange={(e) =>
@@ -418,13 +507,15 @@ export const NewRestaurant = () => {
                         </Col>
                     </Row>
                 </Form.Group>
+
+                {/* SUBMIT  */}
                 <Form.Group className="mt-3 text-center">
                     <Button
                         variant="outline-success w-100"
                         type="submit"
                         onClick={handleSubmit}
                     >
-                        Submit
+                        {editMode? "Submit Edit" :"Submit"}
                     </Button>
                 </Form.Group>
             </Form>

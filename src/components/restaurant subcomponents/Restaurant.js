@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useOutletContext } from "react-router-dom";
+import { useParams, useOutletContext, useNavigate } from "react-router-dom";
 import { Card, Row, Col, Tabs, Tab, Container, Button } from "react-bootstrap";
 import axios from "axios";
 
@@ -27,6 +27,8 @@ export const Restaurant = ({ restaurants }) => {
 
     // handleClose function to close modal passed from restaurants component
     const handleClose = useOutletContext();
+
+    const navigate = useNavigate();
 
     /**
      * search through all restaurant to find restaurant that matches
@@ -64,7 +66,9 @@ export const Restaurant = ({ restaurants }) => {
     };
 
     //handle edit click
-    const handleEditClick = (e) => {};
+    const handleEditClick = () => {
+        navigate(`/newRestaurant/${id}`);
+    };
 
     /**
      * return a single card for the restaurant user clicked on

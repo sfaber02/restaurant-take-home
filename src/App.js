@@ -112,8 +112,13 @@ export const App = () => {
                         </Route>
                         <Route
                             path="/newRestaurant"
-                            element={<NewRestaurant />}
-                        />
+                            element={<NewRestaurant restaurants={restaurants} />}
+                        >
+                            <Route path=":id" element={<NewRestaurant restaurants={restaurants} />}></Route>
+                        </Route>
+
+
+
                         {/* <Route
                             path="/newReservation"
                             element={<NewReservation />}
