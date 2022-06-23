@@ -7,7 +7,7 @@ import { ReservationTab } from "./ReservationTab";
 
 import "../../styles/restaurant.css";
 
-const {phoneNumberFormatter} =  require('../../helper-functions/helpers.js');
+import {phoneNumberFormatter} from '../../helper-functions/helpers.js';
 
 const API = process.env.REACT_APP_API_URL;
 

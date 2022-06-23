@@ -3,10 +3,10 @@ import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 
 import { NewReservation } from "./NewReservation";
 
-const {
+import {
     timeFormatter,
     phoneNumberFormatter,
-} = require("../../helper-functions/helpers");
+} from "../../helper-functions/helpers";
 
 export const ReservationTab = ({ id, current }) => {
     return (

@@ -10,12 +10,12 @@ import {
     Col,
 } from "react-bootstrap";
 
-const {
+import {
     phoneNumberValidator,
     dateTimeToIso,
     emailValidator,
     getTodaysDate,
-} = require("../../helper-functions/helpers.js");
+} from "../../helper-functions/helpers.js";
 
 const API = process.env.REACT_APP_API_URL;
 

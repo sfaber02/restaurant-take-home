@@ -13,9 +13,7 @@ import {
 
 import "../styles/newRestaurant.css";
 
-const {
-    phoneNumberValidator,
-} = require("../helper-functions/helpers.js");
+import { phoneNumberValidator } from "../helper-functions/helpers.js";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -29,7 +27,7 @@ export const NewRestaurant = ({ restaurants }) => {
 
     //initialize form state to empty values
     const [form, setForm] = useState(() => {
-        return ({
+        return {
             name: "",
             cuisine: "",
             description: "",
@@ -42,15 +40,15 @@ export const NewRestaurant = ({ restaurants }) => {
             twoPerson: "",
             fourPerson: "",
             eightPerson: "",
-        })
+        };
     });
 
     //state to hold errors from from bad user inputs
     const [errors, setErrors] = useState({});
-    
+
     //state for edit / new restaurant mode
     const [editMode, setEditMode] = useState(false);
-    
+
     // ref to hold original restaurant info for editing
     const originalRestaurantData = useRef();
 
@@ -545,10 +543,6 @@ export const NewRestaurant = ({ restaurants }) => {
     );
 };
 
-
-
-
-
 /**
  * compares the current inputs to the original state and outputs
  * an object with just the changes for patching
@@ -558,14 +552,12 @@ export const NewRestaurant = ({ restaurants }) => {
  * @param {object} tables object of current table inputs
  */
 const objectComparer = (inputs, original, tables) => {
-
     //if we are editing a restaurant check to see which fields to patch
     let patchOb = {};
 
     //compare form state to originalRestaurantDate ref
     //if form state is different add to patch ob
     for (let key in inputs) {
-
         //skip the tables twoPerson, fourPerson, eightPerson Objects but check all other objects
         if (!(key.slice(key.length - 3) === "son")) {
             if (inputs[key] !== original[key]) {
@@ -579,9 +571,7 @@ const objectComparer = (inputs, original, tables) => {
     if (tables) {
         //loop through tables object to find differences
         for (let key in tables) {
-            if (
-                tables[key] !== original.tables[key]
-            ) {
+            if (tables[key] !== original.tables[key]) {
                 console.log(patchOb);
                 if (!patchOb["tables"]) {
                     patchOb["tables"] = {};
@@ -593,5 +583,5 @@ const objectComparer = (inputs, original, tables) => {
         }
     }
 
-    return patchOb
+    return patchOb;
 };

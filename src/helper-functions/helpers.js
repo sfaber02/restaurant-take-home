@@ -66,9 +66,10 @@ const getTodaysDate = () => {
     return `${year}-${month}-${day}`;
 };
 
-module.exports = { 
-    timeFormatter, 
-    phoneNumberFormatter, 
+
+export {
+    timeFormatter,
+    phoneNumberFormatter,
     phoneNumberValidator,
     dateTimeToIso,
     emailValidator,
