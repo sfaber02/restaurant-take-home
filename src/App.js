@@ -17,9 +17,6 @@ import { Home } from "./components/Home";
 import { Restaurants } from "./components/Restaurants";
 import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
-import { NewReservation } from "./components/restaurant subcomponents/NewReservation";
-import { Reservations } from "./components/Reservations";
-import { Reservation } from "./components/Reservation";
 import { Error } from "./components/Error";
 
 const API = process.env.REACT_APP_API_URL;

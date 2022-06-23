@@ -558,19 +558,17 @@ export const NewRestaurant = ({ restaurants }) => {
  * @param {object} tables object of current table inputs
  */
 const objectComparer = (inputs, original, tables) => {
-    console.log("1");
+
     //if we are editing a restaurant check to see which fields to patch
     let patchOb = {};
 
     //compare form state to originalRestaurantDate ref
     //if form state is different add to patch ob
     for (let key in inputs) {
-        console.log("2");
+
         //skip the tables twoPerson, fourPerson, eightPerson Objects but check all other objects
         if (!(key.slice(key.length - 3) === "son")) {
-            console.log("3");
             if (inputs[key] !== original[key]) {
-                console.log("4");
                 patchOb[key] = inputs[key];
             }
         }
@@ -581,20 +579,14 @@ const objectComparer = (inputs, original, tables) => {
     if (tables) {
         //loop through tables object to find differences
         for (let key in tables) {
-            console.log(
-                tables[key],
-                original.tables[key]
-            );
             if (
                 tables[key] !== original.tables[key]
             ) {
                 console.log(patchOb);
                 if (!patchOb["tables"]) {
-                    console.log("5");
                     patchOb["tables"] = {};
                     patchOb.tables[key] = tables[key];
                 } else {
-                    console.log("6");
                     patchOb["tables"][key] = tables[key];
                 }
             }
