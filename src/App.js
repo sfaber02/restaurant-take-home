@@ -13,7 +13,7 @@ import smallGraphics from "./assets/Graphics/Small/smallGraphics";
  * Compnonent imports for Routes
  */
 import { Navigation } from "./components/Navigation";
-// import { Home } from "./components/Home";
+import { Home } from "./components/Home";
 import { Restaurants } from "./components/Restaurants";
 import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
@@ -88,12 +88,7 @@ export const App = () => {
                     <Routes>
                         <Route
                             path="/"
-                            element={
-                                <Restaurants
-                                    restaurants={restaurants}
-                                    query={query}
-                                />
-                            }
+                            element={<Home restaurants={restaurants} />}
                         />
                         <Route
                             path="restaurants"
@@ -101,6 +96,7 @@ export const App = () => {
                                 <Restaurants
                                     restaurants={restaurants}
                                     query={query}
+                                
                                 />
                             }
                         >
@@ -113,17 +109,12 @@ export const App = () => {
                         </Route>
                         <Route
                             path="/newRestaurant"
-                            element={
-                                <NewRestaurant restaurants={restaurants} />
-                            }
+                            element={<NewRestaurant restaurants={restaurants} />}
                         >
-                            <Route
-                                path=":id"
-                                element={
-                                    <NewRestaurant restaurants={restaurants} />
-                                }
-                            ></Route>
+                            <Route path=":id" element={<NewRestaurant restaurants={restaurants} />}></Route>
                         </Route>
+
+
 
                         {/* <Route
                             path="/newReservation"
