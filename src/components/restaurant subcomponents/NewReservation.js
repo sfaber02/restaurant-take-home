@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -23,8 +22,6 @@ const API = process.env.REACT_APP_API_URL;
 export const NewReservation = ({ current, id }) => {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
-
-    const navigate = useNavigate();
 
     //update form state as user inputs information
     const setField = (field, value) => {

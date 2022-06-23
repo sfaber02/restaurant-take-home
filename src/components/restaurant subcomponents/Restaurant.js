@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useOutletContext, useNavigate } from "react-router-dom";
-import { Card, Row, Col, Tabs, Tab, Container, Button } from "react-bootstrap";
+import { Card, Row, Col, Tabs, Tab, Button } from "react-bootstrap";
 import axios from "axios";
 
 import { ReservationTab } from "./ReservationTab";
@@ -36,7 +36,7 @@ export const Restaurant = ({ restaurants }) => {
      */
     useEffect(() => {
         setCurrent(restaurants.filter((e) => e.id === id)[0]);
-    }, [id]);
+    }, [id, restaurants]);
 
     //delete click handler
     const handleDeleteClick = (e) => {

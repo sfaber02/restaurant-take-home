@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { Modal, Button, Container, Row, Col, CloseButton } from "react-bootstrap";
+import { Modal, Container, Row, Col} from "react-bootstrap";
 import axios from "axios";
 
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
@@ -89,7 +89,7 @@ export const Restaurants = ({ restaurants, query }) => {
         } else {
             setDisplayList(restaurants);
         }
-    }, [query]);
+    }, [query, restaurants]);
 
     /**
      * Create a hash table of all filterable fields and their counts
@@ -156,7 +156,7 @@ export const Restaurants = ({ restaurants, query }) => {
                 );
             })
         }
-    }, [filter])
+    }, [filter, restaurants]);
 
     return (
         <>

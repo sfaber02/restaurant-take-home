@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Form, Container, Button } from "react-bootstrap";
-import { Navigate } from "react-router-dom";
+
 
 export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
 

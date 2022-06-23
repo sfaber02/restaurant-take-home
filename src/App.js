@@ -52,7 +52,7 @@ export const App = () => {
                 setLoading(false);
             })
             .catch((err) => navigate("/error"));
-    }, []);
+    }, [navigate]);
 
     const handleSearch = (query) => {
         setQuery(query);
