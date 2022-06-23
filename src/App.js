@@ -114,10 +114,10 @@ export const App = () => {
                             path="/newRestaurant"
                             element={<NewRestaurant />}
                         />
-                        <Route
+                        {/* <Route
                             path="/newReservation"
                             element={<NewReservation />}
-                        />
+                        /> */}
                         {/* <Route path="/reservations" element={<Reservations />}>
                             <Route path=":id" element={<Reservation />} />
                         </Route> */}

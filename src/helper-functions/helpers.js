@@ -46,10 +46,31 @@ const phoneNumberValidator = (phone) => {
     return nums.length === 10 ? nums : false;
 }
 
+const emailValidator = (email) => {
+    let regEx = /^\S+@\S+\.\S+$/;
+    return regEx.test(email) ? true : false;
+}
 
+
+const dateTimeToIso = (date, time) => new Date(`${date} ${time}`).toISOString();  
+
+//get todays date in correct format to set min values in date picker
+const getTodaysDate = () => {
+    const today = new Date();
+    const day = today.getDate();
+    let month = today.getMonth() + 1;
+    const year = today.getFullYear();
+
+    if (month < 10) month = "0" + month;
+
+    return `${year}-${month}-${day}`;
+};
 
 module.exports = { 
     timeFormatter, 
     phoneNumberFormatter, 
     phoneNumberValidator,
+    dateTimeToIso,
+    emailValidator,
+    getTodaysDate,
 };

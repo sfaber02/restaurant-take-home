@@ -3,7 +3,7 @@ import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 
 import { NewReservation } from "./NewReservation";
 
-import { timeFormatter, phoneNumberFormatter } from "../../helper-functions/helpers";
+const { timeFormatter, phoneNumberFormatter } = require("../../helper-functions/helpers");
 
 export const ReservationTab = ({ id, current }) => {
     console.log(current);
@@ -67,7 +67,7 @@ export const ReservationTab = ({ id, current }) => {
                     </Card>
                 </Tab>
                 <Tab eventKey="makeRes" title="Make a Reservation">
-                    <NewReservation current={current} />
+                    <NewReservation current={current} id={id} />
                 </Tab>
             </Tabs>
         </>

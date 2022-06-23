@@ -11,11 +11,16 @@ import {
     Col,
 } from "react-bootstrap";
 
-const { phoneNumberValidator } = require("../../helper-functions/helpers.js");
+const {
+    phoneNumberValidator,
+    dateTimeToIso,
+    emailValidator,
+    getTodaysDate,
+} = require("../../helper-functions/helpers.js");
 
 const API = process.env.REACT_APP_API_URL;
 
-export const NewReservation = ({ current }) => {
+export const NewReservation = ({ current, id }) => {
     const [form, setForm] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -41,8 +46,15 @@ export const NewReservation = ({ current }) => {
     };
 
     const findErrors = () => {
-        const { firstName, lastName, phoneNumber, email, time, numGuests } =
-            form;
+        const {
+            firstName,
+            lastName,
+            phoneNumber,
+            email,
+            time,
+            date,
+            numGuests,
+        } = form;
 
         console.log(firstName, lastName, phoneNumber, email, time, numGuests);
 
@@ -84,10 +96,21 @@ export const NewReservation = ({ current }) => {
         } else if (numGuests <= 0) {
             newErrors.numGuests = "Guests be greater than 0!";
         }
-        
+
         //email errors
+        if (email && !emailValidator(email)) {
+            newErrors.email = "Invalid Email!"
+        }
 
+        //time errors
+        if (!time) {
+            newErrors.time = "Cannot be blank!";
+        }
 
+        //date erros
+        if (!date) {
+            newErrors.date = "Cannot be blank!";
+        }
 
         return newErrors;
     };
@@ -100,10 +123,45 @@ export const NewReservation = ({ current }) => {
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            const { firstName, lastName, phoneNumber, email, time, numGuests } =
-                form;
+            const {
+                firstName,
+                lastName,
+                phoneNumber,
+                email,
+                date,
+                time,
+                numGuests,
+            } = form;
 
-            
+            //convert date / time into ISO string
+            const isoString = dateTimeToIso(date, time);
+
+            const data = JSON.stringify({
+                firstName,
+                lastName,
+                phoneNumber,
+                email,
+                time: isoString,
+                numGuests,
+                restaurantId: id,
+            });
+
+            const config = {
+                method: "post",
+                url: `${API}/reservations`,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                data: data,
+            };
+
+            axios(config)
+                .then((response) => {
+                    console.log(JSON.stringify(response.data));
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
     };
 
@@ -248,14 +306,4 @@ export const NewReservation = ({ current }) => {
     );
 };
 
-//get todays date in correct format to set min values in date picker
-const getTodaysDate = () => {
-    const today = new Date();
-    const day = today.getDate();
-    let month = today.getMonth() + 1;
-    const year = today.getFullYear();
 
-    if (month < 10) month = "0" + month;
-
-    return `${year}-${month}-${day}`;
-};
