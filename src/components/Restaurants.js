@@ -149,13 +149,18 @@ export const Restaurants = ({ restaurants, query }) => {
 
     // filter display list based on user's filter selection
     useEffect(() => {
+        console.log("1");
         if (filter && displayList) {
-            setDisplayList(prev => {
-                return (
-                    prev.filter(e => e[filter.type] === filter.filter ? true : false)
+            setDisplayList((prev) => {
+                return prev.filter((e) =>
+                    e[filter.type] === filter.filter ? true : false
                 );
-            })
+            });
         }
+        //disabled dependency warning because react is demanding I add displaylist to
+        //the dependency array causing an infinite loop...I think???
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [filter, restaurants]);
 
     return (
