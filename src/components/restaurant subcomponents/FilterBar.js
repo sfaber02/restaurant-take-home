@@ -56,7 +56,8 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
             // sticky="top"
             className="border"
         >
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
+            {/* <Navbar.Collapse id="responsive-navbar-nav"> */}
             <Container>
                 {filters && filters.cuisine.length > 0 && (
                     <Form.Select
@@ -127,8 +128,8 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                     </Form.Select>
                 )}
                 {filters && <Button onClick={handleReset}>Reset</Button>}
-                {/* <Navbar.Collapse id="responsive-navbar-nav"></Navbar.Collapse> */}
             </Container>
+                {/* </Navbar.Collapse> */}
         </Navbar>
     );
 };

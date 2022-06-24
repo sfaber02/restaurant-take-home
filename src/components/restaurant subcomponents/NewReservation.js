@@ -15,7 +15,6 @@ import {
     phoneNumberFormatter,
     dateTimeToIso,
     phoneNumberExtractor,
-    timeFormatter,
     emailValidator,
     getTodaysDate,
 } from "../../helper-functions/helpers.js";
@@ -37,7 +36,7 @@ export const NewReservation = ({
             email: "",
             time: "",
             date: "",
-            numGuest: "",
+            numGuests: "",
         };
     });
     const [errors, setErrors] = useState({});

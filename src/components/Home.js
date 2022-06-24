@@ -34,7 +34,7 @@ export const Home = ({ restaurants }) => {
                                 alt="Second slide"
                             />
                             <Carousel.Caption>
-                                <h3>Butt slide label</h3>
+                                <h3>Slide label</h3>
                                 <p>
                                     Lorem ipsum dolor sit amet, consectetur
                                     adipiscing elit.
