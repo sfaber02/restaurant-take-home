@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
 
 import { NewReservation } from "./NewReservation";
@@ -8,16 +8,32 @@ import {
     phoneNumberFormatter,
 } from "../../helper-functions/helpers";
 
-export const ReservationTab = ({ id, current }) => {
+export const ReservationTab = ({ id, currentRestaurant }) => {
+    const [key, setKey] = useState("current");
+    const [currentReservation, setCurrentReservation] = useState("");
+
+    const handleEditClick = (e) => {
+        setCurrentReservation(
+            currentRestaurant.reservations[Number(e.target.id)]
+        );
+        setKey("makeRes");
+    };
+
     return (
         <>
-            <Tabs>
+            <Tabs
+                activeKey={key}
+                onSelect={(k) => {
+                    setKey(k);
+                    setCurrentReservation("");
+                }}
+            >
                 {/* VIEW CURRENT RESERVATION TABS */}
-                <Tab eventKey="current" title="Current Reservations">
+                <Tab eventKey="current" title="Reservations">
                     <Card>
                         <Card.Body>
-                            {current.reservations[0] ? (
-                                current.reservations.map((e) => {
+                            {currentRestaurant.reservations[0] ? (
+                                currentRestaurant.reservations.map((e, i) => {
                                     return (
                                         <Card
                                             key={e.id}
@@ -52,7 +68,11 @@ export const ReservationTab = ({ id, current }) => {
                                                     </Card.Text>
                                                 </Col>
                                             </Row>
-                                            <Button className="mt-4">
+                                            <Button
+                                                className="mt-4"
+                                                id={i}
+                                                onClick={handleEditClick}
+                                            >
                                                 Edit
                                             </Button>
                                         </Card>
@@ -64,10 +84,18 @@ export const ReservationTab = ({ id, current }) => {
                         </Card.Body>
                     </Card>
                 </Tab>
-                <Tab eventKey="makeRes" title="Make a Reservation">
-                    <NewReservation current={current} id={id} />
+                <Tab
+                    eventKey="makeRes"
+                    title="Make a Reservation"
+                    className="m-0 p-0"
+                >
+                    <NewReservation
+                        currentRestaurant={currentRestaurant}
+                        id={id}
+                        currentReservation={currentReservation}
+                    />
                 </Tab>
             </Tabs>
-        </>
+        </>                     
     );
 };

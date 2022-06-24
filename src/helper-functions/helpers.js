@@ -25,12 +25,21 @@ const timeFormatter = (time) => {
  * @param {string} a string of 10 digits
  * @returns a human readable formatted phone # string
  */
-const phoneNumberFormatter = (phone) => {
+const phoneNumberFormatter = phone => {
     return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
 };
 
+//removes everything but digits from phone number
+const phoneNumberExtractor = phone => {
+    let digits = '';
+    for (let char of phone) {
+        if (/[0-9]/.test(char)) digits += char;
+    }
+    return digits;
+}
 
-const phoneNumberValidator = (phone) => {
+
+const phoneNumberValidator = phone => {
     
     //if no phone number inputted
     if (!phone) return false;
@@ -51,8 +60,16 @@ const emailValidator = (email) => {
     return regEx.test(email) ? true : false;
 }
 
-
-const dateTimeToIso = (date, time) => new Date(`${date} ${time}`).toISOString();  
+/**
+ * Takes in the time and date from form inputs and converts them 
+ * into ISO format for backend.
+ * I know there's a more legit way to do this, but I couldn't get it working
+ * @param {string} date 
+ * @param {string} time 
+ * @returns ISO time/date string 
+ */
+// const dateTimeToIso = (date, time) => `${date}T${time}:00.000Z`;
+const dateTimeToIso = (date, time) => new Date(`${date} ${time}`).toISOString();
 
 //get todays date in correct format to set min values in date picker
 const getTodaysDate = () => {
@@ -71,6 +88,7 @@ export {
     timeFormatter,
     phoneNumberFormatter,
     phoneNumberValidator,
+    phoneNumberExtractor,
     dateTimeToIso,
     emailValidator,
     getTodaysDate,

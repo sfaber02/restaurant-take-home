@@ -139,7 +139,7 @@ export const Restaurant = ({ restaurants }) => {
                             </Tab>
                             {/* RESERVATIONS TAB  */}
                             <Tab eventKey="reservations" title="Reservations">
-                                <ReservationTab id={id} current={current} />
+                                <ReservationTab id={id} currentRestaurant={current} />
                             </Tab>
                             {/* ADMIN TAB */}
                             <Tab eventKey="admin" title="Admin">

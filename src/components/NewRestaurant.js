@@ -299,8 +299,6 @@ export const NewRestaurant = ({ restaurants }) => {
                     tempTables
                 );
 
-                console.log(patchOb);
-
                 const data = JSON.stringify(patchOb);
 
                 var config = {

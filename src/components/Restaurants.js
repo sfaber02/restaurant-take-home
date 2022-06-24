@@ -149,7 +149,6 @@ export const Restaurants = ({ restaurants, query }) => {
 
     // filter display list based on user's filter selection
     useEffect(() => {
-        console.log("1");
         if (filter && displayList) {
             setDisplayList((prev) => {
                 return prev.filter((e) =>

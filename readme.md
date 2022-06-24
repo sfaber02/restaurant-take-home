@@ -48,6 +48,18 @@ Restaurant Data Structur for New Restaurant Form Object
 }
 ```
 
+Reservation Data Structure for new reservation Form Object
+```
+{
+    firstName,
+    lastName,
+    phoneNumber,
+    email,
+    time,
+    date,
+    numGuests
+}
+```
 
 ### TODO
 - all reservation stuff
@@ -64,5 +76,6 @@ Restaurant Data Structur for New Restaurant Form Object
 - add validation for reservations so reservation can't be made if no tables are open
 - refactor hours formmater into helper function
 
-
-```
+### BUGS
+- add validation for blank email in new reservation
+- updating is not working because of date/time iso timestamp format something or other!! ARGH

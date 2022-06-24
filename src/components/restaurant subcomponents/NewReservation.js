@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import {
@@ -12,16 +12,57 @@ import {
 
 import {
     phoneNumberValidator,
+    phoneNumberFormatter,
     dateTimeToIso,
+    phoneNumberExtractor,
+    timeFormatter,
     emailValidator,
     getTodaysDate,
 } from "../../helper-functions/helpers.js";
 
 const API = process.env.REACT_APP_API_URL;
 
-export const NewReservation = ({ current, id }) => {
-    const [form, setForm] = useState({});
+export const NewReservation = ({
+    currentRestaurant,
+    id,
+    currentReservation,
+}) => {
+    const [form, setForm] = useState(() => {
+        return {
+            firstName: "",
+            lastName: "",
+            phoneNumber: "",
+            email: "",
+            time: "",
+            date: "",
+            numGuest: "",
+        };
+    });
     const [errors, setErrors] = useState({});
+    const [editMode, setEditMode] = useState(false);
+
+    //Auto populate form if edit resrvation button was hit
+    useEffect(() => {
+        if (currentReservation) {
+            //set edit mode if we landed here via the edit button on a reservation
+            setEditMode(true);
+
+            //destructure current reservation fields to populate form
+            const { firstName, lastName, phoneNumber, email, time, numGuests } =
+                currentReservation;
+
+            //set form to current reservation info
+            setForm({
+                firstName,
+                lastName,
+                phoneNumber: phoneNumberFormatter(phoneNumber),
+                email,
+                time: time.split("T")[1],
+                date: time.split("T")[0],
+                numGuests,
+            });
+        }
+    }, [currentReservation]);
 
     //update form state as user inputs information
     const setField = (field, value) => {
@@ -94,7 +135,7 @@ export const NewReservation = ({ current, id }) => {
 
         //email errors
         if (email && !emailValidator(email)) {
-            newErrors.email = "Invalid Email!"
+            newErrors.email = "Invalid Email!";
         }
 
         //time errors
@@ -130,32 +171,59 @@ export const NewReservation = ({ current, id }) => {
             //convert date / time into ISO string
             const isoString = dateTimeToIso(date, time);
 
-            const data = JSON.stringify({
-                firstName,
-                lastName,
-                phoneNumber,
-                email,
-                time: isoString,
-                numGuests,
-                restaurantId: id,
-            });
-
-            const config = {
-                method: "post",
-                url: `${API}/reservations`,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                data: data,
-            };
-
-            axios(config)
-                .then((response) => {
-                    console.log(JSON.stringify(response.data));
-                })
-                .catch((error) => {
-                    console.log(error);
+            //if not in edit post a new reservation
+            if (!editMode) {
+                const data = JSON.stringify({
+                    firstName,
+                    lastName,
+                    phoneNumber,
+                    email,
+                    time: isoString,
+                    numGuests,
+                    restaurantId: id,
                 });
+
+                const config = {
+                    method: "post",
+                    url: `${API}/reservations`,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: data,
+                };
+
+                axios(config)
+                    .then((response) => {
+                        console.log(JSON.stringify(response.data));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                // patch an existing reservation
+
+                //compare original state of reservation to newly inputted fields from form
+                const patchOb = ObjectComparer(form, currentReservation);
+
+                const data = JSON.stringify(patchOb);
+
+                var config = {
+                    method: "patch",
+                    url: `${API}/reservations/${currentReservation.id}`,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: data,
+                };
+
+                axios(config)
+                    .then((response) => {
+                        console.log(JSON.stringify(response.data));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
         }
     };
 
@@ -172,6 +240,7 @@ export const NewReservation = ({ current, id }) => {
                             <FormControl
                                 type="text"
                                 placeholder="First Name"
+                                value={form.firstName}
                                 onChange={(e) =>
                                     setField("firstName", e.target.value)
                                 }
@@ -190,6 +259,7 @@ export const NewReservation = ({ current, id }) => {
                             </Form.Label>
                             <FormControl
                                 type="text"
+                                value={form.lastName}
                                 placeholder="Last Name"
                                 onChange={(e) =>
                                     setField("lastName", e.target.value)
@@ -211,6 +281,7 @@ export const NewReservation = ({ current, id }) => {
                                 Phone Number
                             </Form.Label>
                             <FormControl
+                                value={form.phoneNumber}
                                 type="tel"
                                 pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                                 placeholder="Phone Number"
@@ -230,6 +301,7 @@ export const NewReservation = ({ current, id }) => {
                             <Form.Label className="mb-0 mt-1">Email</Form.Label>
                             <FormControl
                                 type="email"
+                                value={form.email}
                                 placeholder="Email(optional)"
                                 onChange={(e) =>
                                     setField("email", e.target.value)
@@ -249,6 +321,7 @@ export const NewReservation = ({ current, id }) => {
                         Number of Guests
                     </Form.Label>
                     <FormControl
+                        value={form.numGuests}
                         type="number"
                         placeholder="Number of Guests"
                         onChange={(e) => setField("numGuests", e.target.value)}
@@ -263,6 +336,7 @@ export const NewReservation = ({ current, id }) => {
                 <Form.Group>
                     <Form.Label>Time</Form.Label>
                     <FormControl
+                        value={form.time}
                         type="time"
                         onChange={(e) => setField("time", e.target.value)}
                         isInvalid={!!errors.time}
@@ -276,6 +350,7 @@ export const NewReservation = ({ current, id }) => {
                 <Form.Group>
                     <Form.Label>Date</Form.Label>
                     <FormControl
+                        value={form.date}
                         type="date"
                         min={getTodaysDate()}
                         onChange={(e) => setField("date", e.target.value)}
@@ -301,3 +376,48 @@ export const NewReservation = ({ current, id }) => {
 };
 
 
+/**
+ *
+ * @param {object} inputs from form
+ * @param {object} original state of reservation before edits
+ * @returns {object} containing only the key/ values that need to be patched
+ */
+const ObjectComparer = (inputs, original) => {
+    let patchOb = {};
+    //make a copy of inputs so as not to modify user inputs in form
+    let inputOb = {...inputs};
+
+    //convert date / time into ISO string and consildate date/time into just time key
+    const isoString = dateTimeToIso(inputs.date, inputs.time);
+    delete inputOb.date;
+    inputOb.time = isoString;
+
+
+    //convert phoneNumber into just digits
+    if (inputOb.phoneNumber) {
+        inputOb.phoneNumber = phoneNumberExtractor(inputOb.phoneNumber);
+    }
+
+    //compare each value in inputs object to their original state 
+    for (let key in inputOb) {
+        //for some reason time comes back from the backend without the last ".000Z" on it
+        // so I'm slicing that off of my iso string for this comparison
+        if (key === "time") {
+            let truncatedTime = inputOb.time.slice(0, inputOb.time.length - 8);
+            if (truncatedTime !== original.time) {
+                patchOb.time = isoString;
+            }  
+        } else {
+            if (inputOb[key] !== original[key]) {
+                console.log (inputOb[key], original[key])
+                patchOb[key] = inputOb[key];
+            }
+        }
+    }
+    console.log (patchOb);
+    return patchOb;
+};
+
+
+//2022-07-05T17:00:00.000Z
+//2022-06-27T21:40:00.000Z
