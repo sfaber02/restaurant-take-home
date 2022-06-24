@@ -27,6 +27,8 @@ export const NewReservation = ({
     id,
     currentReservation,
 }) => {
+
+    console.log (currentReservation);
     const [form, setForm] = useState(() => {
         return {
             firstName: "",
@@ -204,6 +206,8 @@ export const NewReservation = ({
 
                 //compare original state of reservation to newly inputted fields from form
                 const patchOb = ObjectComparer(form, currentReservation);
+
+                console.log (patchOb);
 
                 const data = JSON.stringify(patchOb);
 

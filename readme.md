@@ -79,3 +79,5 @@ Reservation Data Structure for new reservation Form Object
 ### BUGS
 - add validation for blank email in new reservation
 - updating is not working because of date/time iso timestamp format something or other!! ARGH
+- time function is converting times to UTC not local time
+

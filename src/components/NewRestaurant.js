@@ -581,5 +581,10 @@ const objectComparer = (inputs, original, tables) => {
         }
     }
 
+    //add seconds onto time to match backend requirements
+    if (patchOb.openingTime) patchOb.openingTime += ":00";
+    if (patchOb.closingTime) patchOb.closingTime += ":00";
+
+
     return patchOb;
 };
