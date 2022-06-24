@@ -141,53 +141,53 @@ export const NewRestaurant = ({ restaurants }) => {
 
         //name errors
         if (!name || name === "") {
-            newErrors.name = "Cannot be blank!";
+            newErrors.name = "Cannot be blank.";
         } else if (name.length > 50) {
-            newErrors.name = "Name is too long!";
+            newErrors.name = "Name is too long.";
         }
 
         //cuisine errors
         if (!cuisine || cuisine === "") {
-            newErrors.cuisine = "Cannot be blank!";
+            newErrors.cuisine = "Cannot be blank.";
         } else if (name.length > 50) {
-            newErrors.cuisine = "Cuisine type is too long!";
+            newErrors.cuisine = "Cuisine type is too long.";
         }
 
         //description errors
         if (!description || description === "") {
-            newErrors.description = "Cannot be blank!";
+            newErrors.description = "Cannot be blank.";
         } else if (description.length > 1500) {
             newErrors.description =
-                "Character limit exceded! 1500 chararacters max";
+                "Character limit exceded! 1500 chararacters max.";
         }
 
         //price errors
         if (!price) {
-            newErrors.price = "Must choose a price";
+            newErrors.price = "Must choose a price.";
         }
 
         //location errors
         if (!location || location === "") {
-            newErrors.location = "Cannot be blank!";
+            newErrors.location = "Cannot be blank.";
         } else if (location.length > 75) {
-            newErrors.location = "Location is too long!";
+            newErrors.location = "Location is too long.";
         }
 
         // open / close time errors
         if (!openingTime) {
-            newErrors.openingTime = "Cannot be blank!";
+            newErrors.openingTime = "Cannot be blank.";
         }
         if (!closingTime) {
-            newErrors.closingTime = "Cannot be blank!";
+            newErrors.closingTime = "Cannot be blank.";
         }
 
         //phone number errors
         if (!phoneNumber || phoneNumber === "") {
-            newErrors.phoneNumber = "Cannot be blank!";
+            newErrors.phoneNumber = "Cannot be blank.";
         } else {
             let phone = phoneNumberValidator(phoneNumber);
             if (!phone) {
-                newErrors.phoneNumber = "Must be a 10-digit phone number!";
+                newErrors.phoneNumber = "Must be a 10-digit phone number.";
             } else {
                 //if phone number is legit set form state to valid phone number format for post
                 setForm((prev) => {

@@ -100,23 +100,23 @@ export const NewReservation = ({
 
         //name errors
         if (!firstName || firstName === "") {
-            newErrors.firstName = "Cannot be blank!";
+            newErrors.firstName = "Cannot be blank.";
         } else if (firstName.length > 50) {
-            newErrors.firstName = "Name is too long!";
+            newErrors.firstName = "Name is too long.";
         }
         if (!lastName || lastName === "") {
-            newErrors.lastName = "Cannot be blank!";
+            newErrors.lastName = "Cannot be blank.";
         } else if (lastName.length > 50) {
-            newErrors.lastName = "Name is too long!";
+            newErrors.lastName = "Name is too long.";
         }
 
         //phone number errors
         if (!phoneNumber || phoneNumber === "") {
-            newErrors.phoneNumber = "Cannot be blank!";
+            newErrors.phoneNumber = "Cannot be blank.";
         } else {
             let result = phoneNumberValidator(phoneNumber);
             if (!result) {
-                newErrors.phoneNumber = "Invalid Phone Number";
+                newErrors.phoneNumber = "Invalid Phone Number.";
             } else {
                 //if phone number is legit set form state to valid phone number format for post
                 setForm((prev) => {
@@ -130,24 +130,24 @@ export const NewReservation = ({
 
         //number of guests errors
         if (!numGuests || numGuests === "") {
-            newErrors.numGuests = "Cannot be Blank!";
+            newErrors.numGuests = "Cannot be Blank.";
         } else if (numGuests <= 0) {
-            newErrors.numGuests = "Guests be greater than 0!";
+            newErrors.numGuests = "Guests be greater than 0.";
         }
 
         //email errors
         if (email && !emailValidator(email)) {
-            newErrors.email = "Invalid Email!";
+            newErrors.email = "Invalid Email.";
         }
 
         //time errors
         if (!time) {
-            newErrors.time = "Cannot be blank!";
+            newErrors.time = "Cannot be blank.";
         }
 
         //date erros
         if (!date) {
-            newErrors.date = "Cannot be blank!";
+            newErrors.date = "Cannot be blank.";
         }
 
         return newErrors;
