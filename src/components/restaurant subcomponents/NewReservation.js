@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import {
@@ -27,7 +28,8 @@ export const NewReservation = ({
     currentReservation,
 }) => {
 
-    console.log (currentReservation);
+    const navigate = useNavigate();
+
     const [form, setForm] = useState(() => {
         return {
             firstName: "",
@@ -41,6 +43,7 @@ export const NewReservation = ({
     });
     const [errors, setErrors] = useState({});
     const [editMode, setEditMode] = useState(false);
+    const [message, setMessage] = useState('');
 
     //Auto populate form if edit resrvation button was hit
     useEffect(() => {
@@ -135,7 +138,9 @@ export const NewReservation = ({
         }
 
         //email errors
-        if (email && !emailValidator(email)) {
+        if (!email) {
+            newErrors.email = "Cannot be blank."
+        } else if (!emailValidator(email)) {
             newErrors.email = "Invalid Email.";
         }
 
@@ -196,6 +201,7 @@ export const NewReservation = ({
                 axios(config)
                     .then((response) => {
                         console.log(JSON.stringify(response.data));
+                        setMessage('New Resevation Created!');
                     })
                     .catch((error) => {
                         console.log(error);
@@ -221,6 +227,7 @@ export const NewReservation = ({
 
                 axios(config)
                     .then((response) => {
+                        setMessage('Reservation Updated!');
                         console.log(JSON.stringify(response.data));
                     })
                     .catch((error) => {
@@ -232,148 +239,153 @@ export const NewReservation = ({
 
     return (
         <Container fluid className="formContainer mb-4">
-            <Form>
-                {/* FIRST NAME INPUT  */}
-                <Row xs={1} md={2}>
-                    <Col>
-                        <Form.Group className="mb-0 mt-1">
-                            <Form.Label className="mb-0 mt-1">
-                                First Name
-                            </Form.Label>
-                            <FormControl
-                                type="text"
-                                placeholder="First Name"
-                                value={form.firstName}
-                                onChange={(e) =>
-                                    setField("firstName", e.target.value)
-                                }
-                                isInvalid={!!errors.firstName}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.firstName}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        {/* LAST NAME INPUT  */}
-                        <Form.Group className="mb-0 mt-1">
-                            <Form.Label className="mb-0 mt-1">
-                                Last Name
-                            </Form.Label>
-                            <FormControl
-                                type="text"
-                                value={form.lastName}
-                                placeholder="Last Name"
-                                onChange={(e) =>
-                                    setField("lastName", e.target.value)
-                                }
-                                isInvalid={!!errors.lastName}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.lastName}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
+            {message ? (message) : (
+                <Form>
+                    {/* FIRST NAME INPUT  */}
+                    <Row xs={1} md={2}>
+                        <Col>
+                            <Form.Group className="mb-0 mt-1">
+                                <Form.Label className="mb-0 mt-1">
+                                    First Name
+                                </Form.Label>
+                                <FormControl
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={form.firstName}
+                                    onChange={(e) =>
+                                        setField("firstName", e.target.value)
+                                    }
+                                    isInvalid={!!errors.firstName}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.firstName}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            {/* LAST NAME INPUT  */}
+                            <Form.Group className="mb-0 mt-1">
+                                <Form.Label className="mb-0 mt-1">
+                                    Last Name
+                                </Form.Label>
+                                <FormControl
+                                    type="text"
+                                    value={form.lastName}
+                                    placeholder="Last Name"
+                                    onChange={(e) =>
+                                        setField("lastName", e.target.value)
+                                    }
+                                    isInvalid={!!errors.lastName}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.lastName}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+    
+                    <Row xs={1} md={2}>
+                        <Col>
+                            {/* PHONE INPUT  */}
+                            <Form.Group>
+                                <Form.Label className="mb-0 mt-1">
+                                    Phone Number
+                                </Form.Label>
+                                <FormControl
+                                    value={form.phoneNumber}
+                                    type="tel"
+                                    pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                                    placeholder="Phone Number"
+                                    onChange={(e) =>
+                                        setField("phoneNumber", e.target.value)
+                                    }
+                                    isInvalid={!!errors.phoneNumber}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.phoneNumber}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                        <Col>
+                            {/* EMAIL INPUT  */}
+                            <Form.Group>
+                                <Form.Label className="mb-0 mt-1">Email</Form.Label>
+                                <FormControl
+                                    type="email"
+                                    value={form.email}
+                                    placeholder="Email(optional)"
+                                    onChange={(e) =>
+                                        setField("email", e.target.value)
+                                    }
+                                    isInvalid={!!errors.email}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.email}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+    
+                    {/* NUMBER OF GUEST INPUT  */}
+                    <Form.Group>
+                        <Form.Label className="mb-0 mt-1">
+                            Number of Guests
+                        </Form.Label>
+                        <FormControl
+                            value={form.numGuests}
+                            type="number"
+                            placeholder="Number of Guests"
+                            onChange={(e) => setField("numGuests", e.target.value)}
+                            isInvalid={!!errors.numGuests}
+                        ></FormControl>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.numGuests}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+    
+                    {/* RESERVATION TIME INPUT  */}
+                    <Form.Group>
+                        <Form.Label>Time</Form.Label>
+                        <FormControl
+                            value={form.time}
+                            type="time"
+                            onChange={(e) => setField("time", e.target.value)}
+                            isInvalid={!!errors.time}
+                        ></FormControl>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.time}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+    
+                    {/* DATE INPUT  */}
+                    <Form.Group>
+                        <Form.Label>Date</Form.Label>
+                        <FormControl
+                            value={form.date}
+                            type="date"
+                            min={getTodaysDate()}
+                            onChange={(e) => setField("date", e.target.value)}
+                            isInvalid={!!errors.date}
+                        ></FormControl>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.date}
+                        </Form.Control.Feedback>
+                    </Form.Group>
+    
+                    <Form.Group className="mt-3 text-center">
+                        <Button
+                            variant="outline-success w-100"
+                            type="submit"
+                            onClick={handleSubmit}
+                        >
+                            Submit
+                        </Button>
+                    </Form.Group>
+                </Form>
 
-                <Row xs={1} md={2}>
-                    <Col>
-                        {/* PHONE INPUT  */}
-                        <Form.Group>
-                            <Form.Label className="mb-0 mt-1">
-                                Phone Number
-                            </Form.Label>
-                            <FormControl
-                                value={form.phoneNumber}
-                                type="tel"
-                                pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-                                placeholder="Phone Number"
-                                onChange={(e) =>
-                                    setField("phoneNumber", e.target.value)
-                                }
-                                isInvalid={!!errors.phoneNumber}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.phoneNumber}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                    <Col>
-                        {/* EMAIL INPUT  */}
-                        <Form.Group>
-                            <Form.Label className="mb-0 mt-1">Email</Form.Label>
-                            <FormControl
-                                type="email"
-                                value={form.email}
-                                placeholder="Email(optional)"
-                                onChange={(e) =>
-                                    setField("email", e.target.value)
-                                }
-                                isInvalid={!!errors.email}
-                            />
-                            <Form.Control.Feedback type="invalid">
-                                {errors.email}
-                            </Form.Control.Feedback>
-                        </Form.Group>
-                    </Col>
-                </Row>
-
-                {/* NUMBER OF GUEST INPUT  */}
-                <Form.Group>
-                    <Form.Label className="mb-0 mt-1">
-                        Number of Guests
-                    </Form.Label>
-                    <FormControl
-                        value={form.numGuests}
-                        type="number"
-                        placeholder="Number of Guests"
-                        onChange={(e) => setField("numGuests", e.target.value)}
-                        isInvalid={!!errors.numGuests}
-                    ></FormControl>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.numGuests}
-                    </Form.Control.Feedback>
-                </Form.Group>
-
-                {/* RESERVATION TIME INPUT  */}
-                <Form.Group>
-                    <Form.Label>Time</Form.Label>
-                    <FormControl
-                        value={form.time}
-                        type="time"
-                        onChange={(e) => setField("time", e.target.value)}
-                        isInvalid={!!errors.time}
-                    ></FormControl>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.time}
-                    </Form.Control.Feedback>
-                </Form.Group>
-
-                {/* DATE INPUT  */}
-                <Form.Group>
-                    <Form.Label>Date</Form.Label>
-                    <FormControl
-                        value={form.date}
-                        type="date"
-                        min={getTodaysDate()}
-                        onChange={(e) => setField("date", e.target.value)}
-                        isInvalid={!!errors.date}
-                    ></FormControl>
-                    <Form.Control.Feedback type="invalid">
-                        {errors.date}
-                    </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mt-3 text-center">
-                    <Button
-                        variant="outline-success w-100"
-                        type="submit"
-                        onClick={handleSubmit}
-                    >
-                        Submit
-                    </Button>
-                </Form.Group>
-            </Form>
+                )
+                
+            }
         </Container>
     );
 };
