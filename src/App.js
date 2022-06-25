@@ -19,6 +19,8 @@ import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
 import { Error } from "./components/Error";
 
+import "./styles/app.css";
+
 const API = process.env.REACT_APP_API_URL;
 
 export const App = () => {
@@ -61,8 +63,8 @@ export const App = () => {
     };
 
     const triggerRefetch = () => {
-        setReFetch(p => -p);
-    }
+        setReFetch((p) => -p);
+    };
 
     /**
      * Renders loading animation if fetch is still happening
@@ -72,7 +74,7 @@ export const App = () => {
     return (
         <>
             {loading ? (
-                <Container className="d-flex justify-content-center">
+                <Container className="loadingContainer vh-100 d-flex justify-content-center align-items-center">
                     <Spinner animation="grow" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
@@ -106,7 +108,10 @@ export const App = () => {
                             <Route
                                 path=":id"
                                 element={
-                                    <Restaurant restaurants={restaurants} triggerRefetch={triggerRefetch} />
+                                    <Restaurant
+                                        restaurants={restaurants}
+                                        triggerRefetch={triggerRefetch}
+                                    />
                                 }
                             />
                         </Route>

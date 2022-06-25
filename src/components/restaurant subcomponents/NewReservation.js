@@ -243,6 +243,7 @@ export const NewReservation = ({
                 axios(config)
                     .then((response) => {
                         setMessage('Reservation Updated!');
+                        triggerRefetch();
                         console.log(JSON.stringify(response.data));
                     })
                     .catch((error) => {
