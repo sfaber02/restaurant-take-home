@@ -75,9 +75,11 @@ Reservation Data Structure for new reservation Form Object
 - add validation for reservation time reservations cannot be made outside of open hours
 - add validation for reservations so reservation can't be made if no tables are open
 - refactor hours formmater into helper function
+- create a mechanic to trigger a re fetch of all restaurants 
 
 ### BUGS
 - add validation for blank email in new reservation
 - updating is not working because of date/time iso timestamp format something or other!! ARGH
 - time function is converting times to UTC not local time
-
+- phone number validation is no longer matching what is required by backend
+- 

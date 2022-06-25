@@ -17,7 +17,7 @@ const API = process.env.REACT_APP_API_URL;
  * @returns a card to be displayed in the modal for when the user clicks
  * on a restaurant in the restaurants component
  */
-export const Restaurant = ({ restaurants }) => {
+export const Restaurant = ({ restaurants, triggerRefetch }) => {
     //stores current restaurant to be displayed in card
     const [current, setCurrent] = useState(null);
     const [deleteWarning, setDeleteWarning] = useState(false);
@@ -53,6 +53,7 @@ export const Restaurant = ({ restaurants }) => {
         axios(config)
             .then((response) => {
                 console.log(JSON.stringify(response.data));
+                triggerRefetch();
                 handleClose();
             })
             .catch((error) => {
@@ -139,7 +140,7 @@ export const Restaurant = ({ restaurants }) => {
                             </Tab>
                             {/* RESERVATIONS TAB  */}
                             <Tab eventKey="reservations" title="Reservations">
-                                <ReservationTab id={id} currentRestaurant={current} />
+                                <ReservationTab id={id} currentRestaurant={current} triggerRefetch={triggerRefetch} />
                             </Tab>
                             {/* ADMIN TAB */}
                             <Tab eventKey="admin" title="Admin">

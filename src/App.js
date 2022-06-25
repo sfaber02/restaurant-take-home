@@ -22,13 +22,15 @@ import { Error } from "./components/Error";
 const API = process.env.REACT_APP_API_URL;
 
 export const App = () => {
-    /**
-     * States to store all restaurants from initial API call
-     * and to determine if api has completed yet
-     */
+    /** States to store all restaurants from initial data fetch */
     const [restaurants, setRestaurants] = useState(() => "");
+
+    /** State to display loading animation until intial fetch is complete */
     const [loading, setLoading] = useState(() => true);
+    /** State to store user input from search bar */
     const [query, setQuery] = useState("");
+    /** state that will trigger a refetch when changed  */
+    const [reFetch, setReFetch] = useState(-1);
 
     const navigate = useNavigate();
 
@@ -52,13 +54,15 @@ export const App = () => {
                 setLoading(false);
             })
             .catch((err) => navigate("/error"));
-    }, [navigate]);
+    }, [navigate, reFetch]);
 
     const handleSearch = (query) => {
         setQuery(query);
     };
 
-    
+    const triggerRefetch = () => {
+        setReFetch(p => -p);
+    }
 
     /**
      * Renders loading animation if fetch is still happening
@@ -96,25 +100,35 @@ export const App = () => {
                                 <Restaurants
                                     restaurants={restaurants}
                                     query={query}
-                                
                                 />
                             }
                         >
                             <Route
                                 path=":id"
                                 element={
-                                    <Restaurant restaurants={restaurants} />
+                                    <Restaurant restaurants={restaurants} triggerRefetch={triggerRefetch} />
                                 }
                             />
                         </Route>
                         <Route
                             path="/newRestaurant"
-                            element={<NewRestaurant restaurants={restaurants} />}
+                            element={
+                                <NewRestaurant
+                                    restaurants={restaurants}
+                                    triggerRefetch={triggerRefetch}
+                                />
+                            }
                         >
-                            <Route path=":id" element={<NewRestaurant restaurants={restaurants} />}></Route>
+                            <Route
+                                path=":id"
+                                element={
+                                    <NewRestaurant
+                                        restaurants={restaurants}
+                                        triggerRefetch={triggerRefetch}
+                                    />
+                                }
+                            ></Route>
                         </Route>
-
-
 
                         {/* <Route
                             path="/newReservation"

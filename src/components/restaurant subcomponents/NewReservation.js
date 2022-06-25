@@ -24,8 +24,11 @@ const API = process.env.REACT_APP_API_URL;
 
 export const NewReservation = ({
     currentRestaurant,
+    triggerRefetch,
     id,
     currentReservation,
+    setMessage, 
+    message
 }) => {
 
     const navigate = useNavigate();
@@ -43,7 +46,7 @@ export const NewReservation = ({
     });
     const [errors, setErrors] = useState({});
     const [editMode, setEditMode] = useState(false);
-    const [message, setMessage] = useState('');
+    
 
     //Auto populate form if edit resrvation button was hit
     useEffect(() => {
@@ -201,7 +204,19 @@ export const NewReservation = ({
                 axios(config)
                     .then((response) => {
                         console.log(JSON.stringify(response.data));
+                        triggerRefetch();
                         setMessage('New Resevation Created!');
+                        setForm(() => {
+                           return {
+                               firstName: "",
+                               lastName: "",
+                               phoneNumber: "",
+                               email: "",
+                               time: "",
+                               date: "",
+                               numGuests: "",
+                           };
+                        })
                     })
                     .catch((error) => {
                         console.log(error);

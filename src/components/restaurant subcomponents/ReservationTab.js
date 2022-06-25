@@ -8,9 +8,11 @@ import {
     phoneNumberFormatter,
 } from "../../helper-functions/helpers";
 
-export const ReservationTab = ({ id, currentRestaurant }) => {
+export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
     const [key, setKey] = useState("current");
     const [currentReservation, setCurrentReservation] = useState("");
+    /** message for new update reservation */
+    const [message, setMessage] = useState("");
 
     const handleEditClick = (e) => {
         setCurrentReservation(
@@ -26,6 +28,7 @@ export const ReservationTab = ({ id, currentRestaurant }) => {
                 onSelect={(k) => {
                     setKey(k);
                     setCurrentReservation("");
+                   setMessage('');
                 }}
             >
                 {/* VIEW CURRENT RESERVATION TABS */}
@@ -90,9 +93,12 @@ export const ReservationTab = ({ id, currentRestaurant }) => {
                     className="m-0 p-0"
                 >
                     <NewReservation
+                        triggerRefetch={triggerRefetch}
                         currentRestaurant={currentRestaurant}
                         id={id}
                         currentReservation={currentReservation}
+                        setMessage={setMessage}
+                        message={message}
                     />
                 </Tab>
             </Tabs>

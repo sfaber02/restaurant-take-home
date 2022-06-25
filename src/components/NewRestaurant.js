@@ -21,7 +21,7 @@ const API = process.env.REACT_APP_API_URL;
  * component to add or edit a restaurant
  * @returns a form to add/edit a restaurant
  */
-export const NewRestaurant = ({ restaurants }) => {
+export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
     //id from route if we landed here from the edit restaurant button
     const { id } = useParams();
 
@@ -286,6 +286,7 @@ export const NewRestaurant = ({ restaurants }) => {
                 axios(config)
                     .then((response) => {
                         console.log(JSON.stringify(response.data));
+                        triggerRefetch();
                         navigate("/restaurants");
                     })
                     .catch((error) => {
@@ -312,6 +313,8 @@ export const NewRestaurant = ({ restaurants }) => {
 
                 axios(config)
                     .then((response) => {
+                        triggerRefetch();
+                        navigate('/restaurants');
                         console.log(JSON.stringify(response.data));
                     })
                     .catch((error) => {
