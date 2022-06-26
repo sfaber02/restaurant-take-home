@@ -4,10 +4,11 @@ import axios from "axios";
 import { Container, Spinner } from "react-bootstrap";
 
 /**
- * bootstrap import and image import
+ * bootstrap css import, image import, css import
  */
 import "bootstrap/dist/css/bootstrap.min.css";
 import smallGraphics from "./assets/Graphics/Small/smallGraphics";
+import "./styles/app.css";
 
 /**
  * Compnonent imports for Routes
@@ -19,7 +20,6 @@ import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
 import { NewRestaurant } from "./components/NewRestaurant";
 import { Error } from "./components/Error";
 
-import "./styles/app.css";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -92,10 +92,12 @@ export const App = () => {
                 <main>
                     <Navigation handleSearch={handleSearch} />
                     <Routes>
+                    {/* HOME ROUTE FOR CAROUSEL  */}
                         <Route
                             path="/"
                             element={<Home restaurants={restaurants} />}
                         />
+                        {/* ROUTE FOR ALL RESTAURANTS VIEW  */}
                         <Route
                             path="restaurants"
                             element={
@@ -105,6 +107,7 @@ export const App = () => {
                                 />
                             }
                         >
+                            {/* NESTED ROUTE FOR INDIVIDUAL RESTAURANTS  */}
                             <Route
                                 path=":id"
                                 element={
@@ -115,6 +118,7 @@ export const App = () => {
                                 }
                             />
                         </Route>
+                        {/* NEW/ EDIT  RESTAURANT FORM ROUTE */}
                         <Route
                             path="/newRestaurant"
                             element={
@@ -124,6 +128,7 @@ export const App = () => {
                                 />
                             }
                         >
+                            {/* NESTED ROUTE FOR EDITING A RESTAURANT  */}
                             <Route
                                 path=":id"
                                 element={
@@ -134,14 +139,7 @@ export const App = () => {
                                 }
                             ></Route>
                         </Route>
-
-                        {/* <Route
-                            path="/newReservation"
-                            element={<NewReservation />}
-                        /> */}
-                        {/* <Route path="/reservations" element={<Reservations />}>
-                            <Route path=":id" element={<Reservation />} />
-                        </Route> */}
+                        {/* ROUTES TO ERROR PAGE  */}
                         <Route path="/error/:err" element={<Error />} />
                         <Route path="/error" element={<Error />} />
                     </Routes>

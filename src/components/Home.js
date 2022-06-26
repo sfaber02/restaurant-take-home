@@ -13,8 +13,8 @@ import "../styles/home.css";
  */
 export const Home = ({ restaurants }) => {
     return (
-        <Container className="border border-warning mw-100 p-5">
-            <Carousel fade >
+        <Container className="border border-warning min-vh-100 min-vw-100 p-0 m-0">
+            <Carousel fade className="">
                 {restaurants.map(e => {
                     return (
                         <Carousel.Item className="border border-danger" key={e.id}>
