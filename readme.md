@@ -30,21 +30,21 @@ Example Resaurant Data for backend
 }
 ```
 
-Restaurant Data Structur for New Restaurant Form Object
+Restaurant Data Structure for New Restaurant Form Object
 ```
 {
-     name:
-     cuisine
-     description:
-     price:
-     location:
-     openingTime
-     closingTime
-     phoneNumber
-     diningRestrictons
-     twoPerson
-     fourPerson
-     eightPerson
+     name: string
+     cuisine: string
+     description: string
+     price: $ || $$ || $$$ || $$$$
+     location: string
+     openingTime: ???
+     closingTime: ???
+     phoneNumber: ???
+     diningRestrictons: string -> Takeout Only || Delivery Only
+     twoPerson: int
+     fourPerson: int
+     eightPerson: int
 }
 ```
 
@@ -62,21 +62,19 @@ Reservation Data Structure for new reservation Form Object
 ```
 
 ### TODO
-- all reservation stuff
+- delete reservation
 - fix search
-- center loading animation
 - fix carousel giant image explosion
 - add redirect file
 - fix filtering so options don't disappear
-- new reservation form validation
 - add tables info somewhere
 - add validation for reservation time reservations cannot be made outside of open hours
 - add validation for reservations so reservation can't be made if no tables are open
 - refactor hours formmater into helper function
 - limit time inputs to 15 min intervals
+- add icons and titles to pages
 
 ### BUGS
-- add validation for blank email in new reservation
 - updating is not working because of date/time iso timestamp format something or other!! ARGH
 - time function is converting times to UTC not local time
 - phone number validation is no longer matching what is required by backend

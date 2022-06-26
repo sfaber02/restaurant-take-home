@@ -20,6 +20,9 @@ const API = process.env.REACT_APP_API_URL;
 export const Restaurant = ({ restaurants, triggerRefetch }) => {
     //stores current restaurant to be displayed in card
     const [current, setCurrent] = useState(null);
+    /** State to change delete button to second step of delete process
+     * essentially an "Are you sure you want to delete?" mechanic
+     */
     const [deleteWarning, setDeleteWarning] = useState(false);
 
     //id of restaurant from link clicked in restaurants component
