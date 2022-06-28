@@ -13,7 +13,7 @@ import {
 
 import "../styles/newRestaurant.css";
 
-import { phoneNumberValidator } from "../helper-functions/helpers.js";
+import { phoneNumberValidator, phoneNumberExtractor } from "../helper-functions/helpers.js";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -83,6 +83,8 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
                 tables,
             } = originalRestaurantData.current;
 
+            console.log (openingTime, closingTime);
+
             //set form to current restaurant data
             setForm({
                 name,
@@ -110,7 +112,7 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
             };
         });
 
-        // Check and see if errors exist, and remove them from the error object:
+        // Check and see if errors exist, and remove them from the error object as new input is entered:
         if (!!errors[field])
             setErrors((prev) => {
                 return {
@@ -240,6 +242,7 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
                 eightPerson,
             } = form;
 
+            console.log (phoneNumber);
             //generate a temp object for tables if any were inputted
             let tempTables;
             if (twoPerson || fourPerson || eightPerson) {
@@ -270,10 +273,11 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
                     location,
                     openingTime: openingTime + ":00",
                     closingTime: closingTime + ":00",
-                    ...(phoneNumber ? { phoneNumber } : { phoneNumber: null }),
-                    ...(diningRestriction && { diningRestriction }),
+                    phoneNumber: phoneNumberExtractor(phoneNumber),
+                    ...(!diningRestriction === "DEFAULT" ? { diningRestriction } : {diningRestriction: null}),
                     tables: tempTables,
                 });
+
                 const config = {
                     method: "post",
                     url: `${API}/restaurants`,
@@ -473,7 +477,7 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
                             setField("diningRestriction", e.target.value)
                         }
                     >
-                        <option disabled value="DEFAULT"></option>
+                        <option value="DEFAULT">None</option>
                         <option value="Takeout Only">Takeout Only</option>
                         <option value="Delivery Only">Delivery Only</option>
                     </Form.Select>

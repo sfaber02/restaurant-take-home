@@ -176,7 +176,7 @@ export const NewReservation = ({
                 time,
                 numGuests,
             } = form;
-
+            console.log(phoneNumber);
             //convert date / time into ISO string
             const isoString = dateTimeToIso(date, time);
 
@@ -185,7 +185,7 @@ export const NewReservation = ({
                 const data = JSON.stringify({
                     firstName,
                     lastName,
-                    phoneNumber,
+                    phoneNumber: phoneNumberExtractor(phoneNumber),
                     email,
                     time: isoString,
                     numGuests,
@@ -329,7 +329,7 @@ export const NewReservation = ({
                                 <FormControl
                                     type="email"
                                     value={form.email}
-                                    placeholder="Email(optional)"
+                                    placeholder="Email"
                                     onChange={(e) =>
                                         setField("email", e.target.value)
                                     }

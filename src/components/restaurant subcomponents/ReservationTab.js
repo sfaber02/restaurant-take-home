@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import { Card, Row, Col, Button, Tabs, Tab } from "react-bootstrap";
+import { Card, Tabs, Tab } from "react-bootstrap";
 import axios from "axios";
 
 
 import { NewReservation } from "./NewReservation";
 import { ReservationCard } from "./ReservationCard";
-
-import {
-    timeFormatter,
-    phoneNumberFormatter,
-} from "../../helper-functions/helpers";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -36,8 +31,8 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
         setKey("makeRes");
     };
 
+    /** handles second delete click for a reservation */
     const confirmCancelClick = (e) => {
-        console.log(currentRestaurant.reservations[Number(e.target.id)].id);
         const id = currentRestaurant.reservations[Number(e.target.id)].id;
 
         const config = {
@@ -76,6 +71,7 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
                                         <ReservationCard
                                             e={e}
                                             i={i}
+                                            key={i}
                                             handleEditClick={handleEditClick}
                                             confirmCancelClick={
                                                 confirmCancelClick

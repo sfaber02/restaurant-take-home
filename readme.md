@@ -73,9 +73,13 @@ Reservation Data Structure for new reservation Form Object
 - refactor hours formmater into helper function
 - limit time inputs to 15 min intervals
 - add icons and titles to pages
+- add a "none" option to dining restrictions
+- add info section to readme
+- 
+
 
 ### BUGS
 - updating is not working because of date/time iso timestamp format something or other!! ARGH
 - time function is converting times to UTC not local time
 - phone number validation is no longer matching what is required by backend
-- 
+- filter selections don't reset when reset button is clicked

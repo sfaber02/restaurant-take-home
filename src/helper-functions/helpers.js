@@ -3,18 +3,26 @@
  * @returns a human readable date/ time string
  */
 const timeFormatter = (time) => {
-    // extract date from time string
-    const tempDate = new Date(time);
-    const date = tempDate.toDateString();
+    console.log(time);
 
-    //extract hours from time string
-    time = time.split("T")[1];
-    let hours = time.split(":")[0];
+    //convert to time date object
+    const newDate = new Date(`${time}`);
+    // make array of just the date and time, omitting the GMT time and time zone info
+    let dateTime = newDate.toString().split(" ").splice(0, 5);
+
+    // extract date from date time and format into human readable string
+    let date = dateTime.splice(0, 4);
+    date[2] += ",";
+    date = date.join(" ");
+
+    // extract hours from time string and convert to 12-hr format
+    // also determine AM/ PM
+    let hours = dateTime.join("").split(":")[0];
     const amPm = hours > 12 ? "PM" : "AM";
     hours = hours > 12 ? hours - 12 : hours;
 
     //extract minutes from time string
-    let minutes = time.split(":")[1];
+    let minutes = dateTime.join("").split(":")[1];
 
     return `${date} ${hours}:${minutes}${amPm}`;
 };
@@ -29,7 +37,11 @@ const phoneNumberFormatter = phone => {
     return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
 };
 
-//removes everything but digits from phone number
+/**
+ * takes a phone number in any format and extracts the digits 
+ * @param {string} phone 
+ * @returns string of 10 digits 0-9 
+ */
 const phoneNumberExtractor = phone => {
     let digits = '';
     for (let char of phone) {
@@ -38,7 +50,12 @@ const phoneNumberExtractor = phone => {
     return digits;
 }
 
-
+/**
+ * takes in a string and determines
+ * if there are 10 valid phone number digits in it
+ * @param {string} phone 
+ * @returns {boolean} true/ false if phone # is valid
+ */
 const phoneNumberValidator = phone => {
     
     //if no phone number inputted
@@ -55,6 +72,11 @@ const phoneNumberValidator = phone => {
     return nums.length === 10 ? nums : false;
 }
 
+/**
+ * checks if email is in the format string@string.string
+ * @param {string} email 
+ * @returns {boolean} true/ false if email is valid
+ */
 const emailValidator = (email) => {
     let regEx = /^\S+@\S+\.\S+$/;
     return regEx.test(email) ? true : false;
@@ -68,8 +90,27 @@ const emailValidator = (email) => {
  * @param {string} time 
  * @returns ISO time/date string 
  */
-// const dateTimeToIso = (date, time) => `${date}T${time}:00.000Z`;
-const dateTimeToIso = (date, time) => new Date(`${date} ${time}`).toISOString();
+const dateTimeToIso = (date, time) => `${date}T${time}:00.000Z`;
+// const dateTimeToIso = (date, time) => {
+//     console.log (date, time);
+//     time = time.split(':');
+//     const hour = time[0];
+//     const min = time[1];
+
+//     hour = hour <= 3 ? hour + 18 : hour - 4;
+
+
+
+//     console.log(hour, min);
+
+
+
+
+//     const dat =  new Date(`${date} ${time}`)
+//     console.log (dat);
+
+//     // return dat;
+// }
 
 //get todays date in correct format to set min values in date picker
 const getTodaysDate = () => {
