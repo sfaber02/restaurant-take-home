@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import {
     timeFormatter,
@@ -54,33 +54,39 @@ export const ReservationCard = ({
                         Edit
                     </Button>
                 </Col>
-                <Col>
+                <Col className="">
                     {!deleteWarning ? (
                         <Button
-                            className="mt-4"
+                            className="mt-4 w-100"
                             variant="warning"
                             id={i}
                             onClick={handleCancelClick}
                         >
-                            Cancel Reservation
+                            Cancel
                         </Button>
                     ) : (
                         <>
-                            <Button
-                                className="mt-4"
-                                variant="danger"
-                                id={i}
-                                onClick={confirmCancelClick}
-                            >
-                                Are You Sure?
-                            </Button>
-                            <Button
-                                className="mt-4"
-                                variant="success"
-                                onClick={() => setDeleteWarning(false)}
-                            >
-                                Go Back
-                            </Button>
+                            <Row xs={2}>
+                                <Col>
+                                    <Button
+                                        className="mt-4"
+                                        variant="danger"
+                                        id={i}
+                                        onClick={confirmCancelClick}
+                                    >
+                                        Are You Sure?
+                                    </Button>
+                                </Col>
+                                <Col>
+                                    <Button
+                                        className="mt-4"
+                                        variant="success"
+                                        onClick={() => setDeleteWarning(false)}
+                                    >
+                                        Go Back
+                                    </Button>
+                                </Col>
+                            </Row>
                         </>
                     )}
                 </Col>

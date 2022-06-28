@@ -254,6 +254,7 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
                         ? { eightPersonTables: Number(eightPerson) }
                         : { eightPersonTables: 0 }),
                 };
+                console.log (tempTables);
             } else {
                 tempTables = null;
             }
@@ -566,22 +567,10 @@ const objectComparer = (inputs, original, tables) => {
             }
         }
     }
-    console.log(patchOb);
 
-    //check if any table counts have been inputted
+    //check if any table counts have been inputted - if so add tables object into patchOb
     if (tables) {
-        //loop through tables object to find differences
-        for (let key in tables) {
-            if (tables[key] !== original.tables[key]) {
-                console.log(patchOb);
-                if (!patchOb["tables"]) {
-                    patchOb["tables"] = {};
-                    patchOb.tables[key] = tables[key];
-                } else {
-                    patchOb["tables"][key] = tables[key];
-                }
-            }
-        }
+        patchOb.tables = tables;
     }
 
     //add seconds onto time to match backend requirements
