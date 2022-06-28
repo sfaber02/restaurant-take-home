@@ -434,7 +434,6 @@ const ObjectComparer = (inputs, original) => {
             }  
         } else {
             if (inputOb[key] !== original[key]) {
-                console.log (inputOb[key], original[key])
                 patchOb[key] = inputOb[key];
             }
         }

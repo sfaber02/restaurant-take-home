@@ -1,6 +1,18 @@
-/* .carousel {
-  width:50%;
-  height:70%;
-} */
+.carousel {
+    padding: 0px;
+    margin: 0px;
+    height: calc(100vh - 68px);
+    width: 100vw;
+}
 
+.carouselImg {
+    height: calc(100vh - 68px);
+    width: 100vw;
+    object-fit: cover;
+}
 
+.carouselCaption {
+  background: rgba(0,0,0,0.3);
+  border-radius: 10px;
+  /* padding-bottom: 5px; */
+}

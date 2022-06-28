@@ -78,3 +78,6 @@ Reservation Data Structure for new reservation Form Object
 - add validation for reservation time reservations cannot be made outside of open hours
 - add validation for reservations so reservation can't be made if no tables are open
 - limit time inputs to 15 min intervals
+
+
+

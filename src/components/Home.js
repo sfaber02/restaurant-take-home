@@ -17,13 +17,14 @@ export const Home = ({ restaurants }) => {
         navigate(`/restaurants/${id}`);
     };
 
+    //className="border border-warning min-vh-100 min-vw-100 p-0 m-0"
+    // className="d-block w-100 carouselImg border border-success"
     return (
-        <Container className="border border-warning min-vh-100 min-vw-100 p-0 m-0">
-            <Carousel fade className="">
+        <Container className="m-0 p-0">
+            <Carousel fade className="carousel">
                 {restaurants.map((e) => {
                     return (
                         <Carousel.Item
-                            className="border border-danger"
                             key={e.id}
                             id={e.id}
                             onClick={() => {
@@ -31,11 +32,7 @@ export const Home = ({ restaurants }) => {
                             }}
                         >
                             <img
-                                style={{
-                                    height: "100vh",
-                                    objectFit: "cover",
-                                }}
-                                className="d-block w-100 carouselImg border border-success"
+                            className="carouselImg"
                                 src={
                                     bigGraphics[
                                         Math.floor(
@@ -45,9 +42,9 @@ export const Home = ({ restaurants }) => {
                                 }
                                 alt="Second slide"
                             />
-                            <Carousel.Caption className="bg-dark mb-5">
+                            <Carousel.Caption className="carouselCaption">
                                 <h3>{e.name}</h3>
-                                <p>{e.description.split(".")[0] + "."}</p>
+                                <p className="p-2">{e.description.split(".")[0] + "."}</p>
                             </Carousel.Caption>
                         </Carousel.Item>
                     );
