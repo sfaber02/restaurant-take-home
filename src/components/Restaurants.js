@@ -20,8 +20,12 @@ import "../styles/restaurants.css";
 export const Restaurants = ({ restaurants, query }) => {
     /**
      * show - state to display modal of more detailed restaurant info
+     * modalTitle - state to store the title for modal
      * displayList - state which stores current list of restaurants to be displayed based
-     *  on search/filters
+     *              on search/filters
+     * filterHash -  state to store an object of possible filter selections
+     *              will rehash on each filter selection
+     * filters - state to store an array of the currently selected filters from filter bar
      */
     const [show, setShow] = useState(false);
     const [modalTitle, setModalTitle] = useState();
@@ -43,7 +47,11 @@ export const Restaurants = ({ restaurants, query }) => {
         navigate("/restaurants");
     };
 
-    //responds to filter selections made in filter bar
+    /**
+     * 
+     * @param {string} filter - the actual filter that was selected 
+     * @param {string} type - the type of filter (ex - "cuisine" or "price")
+     */
     const handleFilter = (filter, type) => {
        setFilters((prev) => {
         return [...prev, {filter, type}];
@@ -153,7 +161,6 @@ export const Restaurants = ({ restaurants, query }) => {
     useEffect(() => {
         if (filters.length > 0 && displayList) {
             for (let filter of filters) {
-                console.log (filter);
                 setDisplayList((prev) => {
                     return prev.filter((e) => e[filter.type] === filter.filter ? true : false);
                 })

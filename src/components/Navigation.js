@@ -39,6 +39,7 @@ export const Navigation = ({handleSearch}) => {
             className="border"
         >
             <Container>
+                <Navbar.Brand>Restauranticus</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto my-2 my-lg-0">
