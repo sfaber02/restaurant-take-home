@@ -2,9 +2,7 @@
  * @param {string} iso time string
  * @returns a human readable date/ time string
  */
-const timeFormatter = (time) => {
-    console.log(time);
-
+const timeFormatter = (time) => { 
     //convert to time date object
     const newDate = new Date(`${time}`);
     // make array of just the date and time, omitting the GMT time and time zone info
@@ -85,12 +83,15 @@ const emailValidator = (email) => {
 /**
  * Takes in the time and date from form inputs and converts them 
  * into ISO format for backend.
- * I know there's a more legit way to do this, but I couldn't get it working
  * @param {string} date 
  * @param {string} time 
  * @returns ISO time/date string 
  */
-const dateTimeToIso = (date, time) => `${date}T${time}:00.000Z`;
+const dateTimeToTimeStamp = (date, time) => `${date} ${time}`;
+
+
+
+// const dateTimeToIso = (date, time) => new Date(`${date} ${time}`).toISOString();
 // const dateTimeToIso = (date, time) => {
 //     console.log (date, time);
 //     time = time.split(':');
@@ -130,7 +131,7 @@ export {
     phoneNumberFormatter,
     phoneNumberValidator,
     phoneNumberExtractor,
-    dateTimeToIso,
+    dateTimeToTimeStamp,
     emailValidator,
     getTodaysDate,
 };

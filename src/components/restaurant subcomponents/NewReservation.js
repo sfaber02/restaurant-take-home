@@ -14,7 +14,7 @@ import {
 import {
     phoneNumberValidator,
     phoneNumberFormatter,
-    dateTimeToIso,
+    dateTimeToTimeStamp,
     phoneNumberExtractor,
     emailValidator,
     getTodaysDate,
@@ -176,9 +176,9 @@ export const NewReservation = ({
                 time,
                 numGuests,
             } = form;
-            console.log(phoneNumber);
+
             //convert date / time into ISO string
-            const isoString = dateTimeToIso(date, time);
+            const isoString = dateTimeToTimeStamp(date, time);
 
             //if not in edit post a new reservation
             if (!editMode) {
@@ -227,8 +227,6 @@ export const NewReservation = ({
                 //compare original state of reservation to newly inputted fields from form
                 const patchOb = ObjectComparer(form, currentReservation);
 
-                console.log (patchOb);
-
                 const data = JSON.stringify(patchOb);
 
                 var config = {
@@ -244,7 +242,6 @@ export const NewReservation = ({
                     .then((response) => {
                         setMessage('Reservation Updated!');
                         triggerRefetch();
-                        console.log(JSON.stringify(response.data));
                     })
                     .catch((error) => {
                         console.log(error);
@@ -419,7 +416,7 @@ const ObjectComparer = (inputs, original) => {
     let inputOb = {...inputs};
 
     //convert date / time into ISO string and consildate date/time into just time key
-    const isoString = dateTimeToIso(inputs.date, inputs.time);
+    const isoString = dateTimeToTimeStamp(inputs.date, inputs.time);
     delete inputOb.date;
     inputOb.time = isoString;
 
@@ -445,10 +442,6 @@ const ObjectComparer = (inputs, original) => {
             }
         }
     }
-    console.log (patchOb);
     return patchOb;
 };
 
-
-//2022-07-05T17:00:00.000Z
-//2022-06-27T21:40:00.000Z
