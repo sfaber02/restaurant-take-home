@@ -549,6 +549,10 @@ export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
     );
 };
 
+
+
+
+
 /**
  * compares the current inputs to the original state and outputs
  * an object with just the changes for patching

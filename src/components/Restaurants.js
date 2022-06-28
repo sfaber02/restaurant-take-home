@@ -27,7 +27,7 @@ export const Restaurants = ({ restaurants, query }) => {
     const [modalTitle, setModalTitle] = useState();
     const [displayList, setDisplayList] = useState();
     const [filterHash, setFilterHash] = useState();
-    const [filter, setFilter] = useState({});
+    const [filters, setFilters] = useState([]);
 
     const navigate = useNavigate();
 
@@ -45,12 +45,14 @@ export const Restaurants = ({ restaurants, query }) => {
 
     //responds to filter selections made in filter bar
     const handleFilter = (filter, type) => {
-       setFilter({filter, type});
+       setFilters((prev) => {
+        return [...prev, {filter, type}];
+       })
     };
 
     //resets filter bar when reset button is clicked
     const handleReset = () => {
-        setFilter('');
+        setFilters([]);
         setDisplayList(restaurants);
     }
 
@@ -149,18 +151,20 @@ export const Restaurants = ({ restaurants, query }) => {
 
     // filter display list based on user's filter selection
     useEffect(() => {
-        if (filter && displayList) {
-            setDisplayList((prev) => {
-                return prev.filter((e) =>
-                    e[filter.type] === filter.filter ? true : false
-                );
-            });
+        if (filters.length > 0 && displayList) {
+            for (let filter of filters) {
+                console.log (filter);
+                setDisplayList((prev) => {
+                    return prev.filter((e) => e[filter.type] === filter.filter ? true : false);
+                })
+            }   
         }
+
+
         //disabled dependency warning because react is demanding I add displaylist to
         //the dependency array causing an infinite loop...I think???
-        
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter, restaurants]);
+    }, [filters, restaurants]);
 
     return (
         <>

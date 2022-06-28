@@ -83,3 +83,4 @@ Reservation Data Structure for new reservation Form Object
 - time function is converting times to UTC not local time
 - phone number validation is no longer matching what is required by backend
 - filter selections don't reset when reset button is clicked
+- edit reservation form stays populated if you click edit but don't edit a reservation and back to the all reservations view then back to make a reservation.

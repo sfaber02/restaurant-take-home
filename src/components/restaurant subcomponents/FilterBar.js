@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { Navbar, Form, Container, Button } from "react-bootstrap";
 
-
-export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
-
+export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
+    /**
+     * filters -  stores all the current available filter options
+     * filterState - stores all current filter selections
+     */
     const [filters, setFilters] = useState();
+    const [filterState, setFilterState] = useState(() => {
+        return {
+            cuisine: "DEFAULT",
+            location: "DEFAULT",
+            price: "DEFAULT",
+            restrictions: "DEFAULT",
+        };
+    });
 
     /**
      * take hash created in restaurants and create iterable objects
@@ -48,39 +58,30 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
     //responds to changes made in the filter bar selections
     const handleChange = (e) => handleFilter(e.target.value, e.target.id);
 
+    const setField = (field, value) => {
+        setFilterState((prev) => {
+            return {
+                ...prev,
+                [field]: value,
+            };
+        });
+    };
+
     return (
-        <Navbar
-            bg="dark"
-            variant="light"
-            expand="lg"
-            // sticky="top"
-            className="border"
-        >
+        <Navbar bg="dark" variant="light" expand="lg" className="border">
             {/* <Navbar.Toggle aria-controls="responsive-navbar-nav" /> */}
             {/* <Navbar.Collapse id="responsive-navbar-nav"> */}
             <Container>
-                {filters && filters.cuisine.length > 0 && (
-                    <Form.Select
-                        onChange={handleChange}
-                        id="cuisine"
-                        defaultValue={"DEFAULT"}
-                    >
-                        <option disabled value="DEFAULT">
-                            Cuisine
-                        </option>
-                        {filters.cuisine.map((e) => (
-                            <option
-                                key={`${e[0]}${e[1]}`}
-                                value={e[0]}
-                            >{`${e[0]}(${e[1]})`}</option>
-                        ))}
-                    </Form.Select>
-                )}
+
+                {/* LOCATION FILTERS  */}
                 {filters && filters.location.length > 0 && (
                     <Form.Select
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            handleChange(e);
+                            setField("location", e.target.value);
+                        }}
+                        value={filterState.location}
                         id="location"
-                        defaultValue={"DEFAULT"}
                     >
                         <option disabled value="DEFAULT">
                             Location
@@ -93,11 +94,39 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                         ))}
                     </Form.Select>
                 )}
+                
+                {/* CUISINE FILTERS  */}
+                {filters && filters.cuisine.length > 0 && (
+                    <Form.Select
+                        onChange={(e) => {
+                            handleChange(e);
+                            setField("cuisine", e.target.value);
+                        }}
+                        value={filterState.cuisine}
+                        id="cuisine"
+                    >
+                        <option disabled value="DEFAULT">
+                            Cuisine
+                        </option>
+                        {filters.cuisine.map((e) => (
+                            <option
+                                key={`${e[0]}${e[1]}`}
+                                value={e[0]}
+                            >{`${e[0]}(${e[1]})`}</option>
+                        ))}
+                    </Form.Select>
+                )}
+
+
+                {/* PRICE FILTERS  */}
                 {filters && filters.price.length > 0 && (
                     <Form.Select
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            handleChange(e);
+                            setField("price", e.target.value);
+                        }}
+                        value={filterState.price}
                         id="price"
-                        defaultValue={"DEFAULT"}
                     >
                         <option disabled value="DEFAULT">
                             Price
@@ -110,11 +139,16 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                         ))}
                     </Form.Select>
                 )}
+
+                {/* DINING RESTRICTION FILTER  */}
                 {filters && filters.diningRestriction.length > 0 && (
                     <Form.Select
-                        onChange={handleChange}
+                        onChange={(e) => {
+                            handleChange(e);
+                            setField("restrictions", e.target.value);
+                        }}
+                        value={filterState.restrictions}
                         id="diningRestriction"
-                        defaultValue={"DEFAULT"}
                     >
                         <option disabled value="DEFAULT">
                             Restrictions
@@ -127,9 +161,27 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset}) => {
                         ))}
                     </Form.Select>
                 )}
-                {filters && <Button onClick={handleReset}>Reset</Button>}
+
+                {/* RESET BUTTON  */}
+                {filters && (
+                    <Button className=""
+                        onClick={() => {
+                            handleReset();
+                            setFilterState(() => {
+                                return {
+                                    cuisine: "DEFAULT",
+                                    location: "DEFAULT",
+                                    price: "DEFAULT",
+                                    restrictions: "DEFAULT",
+                                };
+                            });
+                        }}
+                    >
+                        Reset
+                    </Button>
+                )}
             </Container>
-                {/* </Navbar.Collapse> */}
+            {/* </Navbar.Collapse> */}
         </Navbar>
     );
 };
