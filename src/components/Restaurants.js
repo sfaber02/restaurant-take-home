@@ -136,19 +136,7 @@ export const Restaurants = ({ restaurants, query }) => {
                 let { cuisine, location, price, diningRestriction } =
                     restaurant;
 
-                // //hash cuisine
-                // let found = false;
-                // for (let c of tempHash.cuisine) {
-                //     if (c[cuisine]) {
-                //         c[cuisine]++;
-                //         found = true;
-                //     }
-                // }
-                // if (!found) {
-                //     tempHash.cuisine.push({cuisine: 1});
-                // }
-
-
+                // hash cuisine
                 if (!tempHash.cuisine[cuisine]) {
                     tempHash.cuisine[cuisine] = 1;
                 } else {
@@ -194,7 +182,6 @@ export const Restaurants = ({ restaurants, query }) => {
                 })
             }   
         }
-
 
         //disabled dependency warning because react is demanding I add displaylist to
         //the dependency array causing an infinite loop...I think???
