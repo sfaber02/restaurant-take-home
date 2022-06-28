@@ -5,6 +5,8 @@ import {
     phoneNumberFormatter,
 } from "../../helper-functions/helpers";
 
+import "../../styles/reservationCard.css";
+
 export const ReservationCard = ({
     e,
     i,
@@ -48,16 +50,16 @@ export const ReservationCard = ({
                     </Card.Text>
                 </Col>
             </Row>
-            <Row xs={3}>
-                <Col>
+            <Row xs={2} className="buttonContainer">
+                <Col className="editButtonContainer">
                     <Button className="mt-4" id={i} onClick={handleEditClick}>
                         Edit
                     </Button>
                 </Col>
-                <Col className="">
+                <Col className="cancelButtonContainer">
                     {!deleteWarning ? (
                         <Button
-                            className="mt-4 w-100"
+                            className="mt-4"
                             variant="warning"
                             id={i}
                             onClick={handleCancelClick}
@@ -66,27 +68,22 @@ export const ReservationCard = ({
                         </Button>
                     ) : (
                         <>
-                            <Row xs={2}>
-                                <Col>
-                                    <Button
-                                        className="mt-4"
-                                        variant="danger"
-                                        id={i}
-                                        onClick={confirmCancelClick}
-                                    >
-                                        Are You Sure?
-                                    </Button>
-                                </Col>
-                                <Col>
-                                    <Button
-                                        className="mt-4"
-                                        variant="success"
-                                        onClick={() => setDeleteWarning(false)}
-                                    >
-                                        Go Back
-                                    </Button>
-                                </Col>
-                            </Row>
+                            <Button
+                                className="mt-4 buttons"
+                                variant="danger"
+                                id={i}
+                                onClick={confirmCancelClick}
+                            >
+                                Delete?
+                            </Button>
+
+                            <Button
+                                className="mt-4 buttons"
+                                variant="success"
+                                onClick={() => setDeleteWarning(false)}
+                            >
+                                Back
+                            </Button>
                         </>
                     )}
                 </Col>

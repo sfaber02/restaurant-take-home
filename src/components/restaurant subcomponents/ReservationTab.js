@@ -6,6 +6,8 @@ import axios from "axios";
 import { NewReservation } from "./NewReservation";
 import { ReservationCard } from "./ReservationCard";
 
+import "../../styles/reservationCard.css"
+
 const API = process.env.REACT_APP_API_URL;
 
 export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
@@ -62,7 +64,7 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
                 }}
             >
                 {/* VIEW CURRENT RESERVATION TABS */}
-                <Tab eventKey="current" title="Reservations">
+                <Tab eventKey="current" title="Reservations" className="resTab">
                     <Card>
                         <Card.Body>
                             {currentRestaurant.reservations[0] ? (
@@ -88,7 +90,7 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
                 <Tab
                     eventKey="makeRes"
                     title="Make a Reservation"
-                    className="m-0 p-0"
+                    className="resTab"
                 >
                     <NewReservation
                         triggerRefetch={triggerRefetch}

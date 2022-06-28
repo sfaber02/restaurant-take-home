@@ -20,9 +20,9 @@ const API = process.env.REACT_APP_API_URL;
 export const Restaurant = ({ restaurants, triggerRefetch }) => {
     //stores current restaurant to be displayed in card
     const [current, setCurrent] = useState(null);
-    /** State to change delete button to second step of delete process
-     * essentially an "Are you sure you want to delete?" mechanic
-     */
+
+    // State to change delete button to second step of delete process
+    // essentially an "Are you sure you want to delete?" mechanic
     const [deleteWarning, setDeleteWarning] = useState(false);
 
     //id of restaurant from link clicked in restaurants component
@@ -143,37 +143,44 @@ export const Restaurant = ({ restaurants, triggerRefetch }) => {
                             </Tab>
                             {/* RESERVATIONS TAB  */}
                             <Tab eventKey="reservations" title="Reservations">
-                                <ReservationTab id={id} currentRestaurant={current} triggerRefetch={triggerRefetch} />
+                                <ReservationTab
+                                    id={id}
+                                    currentRestaurant={current}
+                                    triggerRefetch={triggerRefetch}
+                                />
                             </Tab>
                             {/* ADMIN TAB */}
                             <Tab eventKey="admin" title="Admin">
-                                <Row xs={2} md={2}>
-                                    <Col>
+                                <Row xs={2}>
+                                    <Col className="editButtonContainer">
                                         <Button onClick={handleEditClick}>
                                             Edit
                                         </Button>
                                     </Col>
-                                    <Col style={{ textAlign: "right" }}>
+                                    <Col className="deleteButtonContainer">
                                         {!deleteWarning ? (
                                             <Button
                                                 variant="warning"
                                                 onClick={handleDeleteClick}
+                                                className="buttons"
                                             >
                                                 Delete
                                             </Button>
                                         ) : (
                                             <>
                                                 <Button
-                                                    variant="success"
-                                                    onClick={goBackClick}
-                                                >
-                                                    Back
-                                                </Button>
-                                                <Button
                                                     variant="danger"
                                                     onClick={confirmDeleteClick}
+                                                    className="buttons"
                                                 >
-                                                    DELETE
+                                                    DELETE?
+                                                </Button>
+                                                <Button
+                                                    variant="success"
+                                                    onClick={goBackClick}
+                                                    className="buttons"
+                                                >
+                                                    Back
                                                 </Button>
                                             </>
                                         )}
