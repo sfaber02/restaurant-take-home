@@ -11,19 +11,25 @@ import "../styles/home.css";
  * @returns a carousel view of random restaurants
  */
 export const Home = ({ restaurants }) => {
-
     const navigate = useNavigate();
 
     const handleClick = (id) => {
         navigate(`/restaurants/${id}`);
-    }
+    };
 
     return (
         <Container className="border border-warning min-vh-100 min-vw-100 p-0 m-0">
             <Carousel fade className="">
-                {restaurants.map(e => {
+                {restaurants.map((e) => {
                     return (
-                        <Carousel.Item className="border border-danger" key={e.id} id={e.id} onClick={() => {handleClick(e.id)}}>
+                        <Carousel.Item
+                            className="border border-danger"
+                            key={e.id}
+                            id={e.id}
+                            onClick={() => {
+                                handleClick(e.id);
+                            }}
+                        >
                             <img
                                 style={{
                                     height: "100vh",
@@ -41,9 +47,7 @@ export const Home = ({ restaurants }) => {
                             />
                             <Carousel.Caption className="bg-dark mb-5">
                                 <h3>{e.name}</h3>
-                                <p>
-                                    {e.description.split('.')[0] + '.'}
-                                </p>
+                                <p>{e.description.split(".")[0] + "."}</p>
                             </Carousel.Caption>
                         </Carousel.Item>
                     );

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar, Container, Nav, Form, FormControl, Button } from "react-bootstrap";
 
 import '../styles/nav.css';
+import logo from "../assets/Graphics/logo";
 
 /**
  * navbar used to navigate to various parts of the webpage
@@ -39,6 +40,7 @@ export const Navigation = ({handleSearch}) => {
             className="border"
         >
             <Container>
+                <Navbar.Brand><img src={logo} /></Navbar.Brand>
                 <Navbar.Brand>Restauranticus</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">

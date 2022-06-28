@@ -62,18 +62,19 @@ Reservation Data Structure for new reservation Form Object
 ```
 
 ### TODO
-- fix carousel giant image explosion
-- add redirect file
-- fix filtering so options don't disappear
-- add tables info somewhere
-- add validation for reservation time reservations cannot be made outside of open hours
-- add validation for reservations so reservation can't be made if no tables are open
 - refactor hours formmater into helper function
-- limit time inputs to 15 min intervals
-- add icons and titles to pages
 - add info section to readme
-
-
+- finish documentation
+- generate jsdoc
+- style info div on home page
+- fix buttons on reservation tab in mobile view
 
 ### BUGS
 - edit reservation form stays populated if you click edit but don't edit a reservation and then go back to the all reservations view then back to make a reservation.
+
+
+### Future Features
+- add tables info somewhere
+- add validation for reservation time reservations cannot be made outside of open hours
+- add validation for reservations so reservation can't be made if no tables are open
+- limit time inputs to 15 min intervals

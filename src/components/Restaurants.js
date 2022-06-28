@@ -67,6 +67,8 @@ export const Restaurants = ({ restaurants, query }) => {
         setDisplayList(restaurants);
     }
 
+    // if user landed on restaurants page via home page carousel
+    // turn modal display on and set modal title to matching restaurant
     useEffect(() => {
         if (id) {
             for (let restaurant of restaurants) {
