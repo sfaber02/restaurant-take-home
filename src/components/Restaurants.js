@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { Modal, Container, Row, Col} from "react-bootstrap";
 import axios from "axios";
 
@@ -34,6 +34,9 @@ export const Restaurants = ({ restaurants, query }) => {
     const [filters, setFilters] = useState([]);
 
     const navigate = useNavigate();
+    const {id} = useParams();
+    
+
 
     /**
      * handlers to show/ hide modal
@@ -63,6 +66,17 @@ export const Restaurants = ({ restaurants, query }) => {
         setFilters([]);
         setDisplayList(restaurants);
     }
+
+    useEffect(() => {
+        if (id) {
+            for (let restaurant of restaurants) {
+                if (restaurant.id === id) {
+                    setModalTitle(restaurant.name);
+                }
+            }
+            setShow(true);
+        }
+    }, [id]);
 
     /**
      * runs on component load and when search query changes
