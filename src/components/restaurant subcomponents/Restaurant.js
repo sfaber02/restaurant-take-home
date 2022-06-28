@@ -7,7 +7,7 @@ import { ReservationTab } from "./ReservationTab";
 
 import "../../styles/restaurant.css";
 
-import {phoneNumberFormatter} from '../../helper-functions/helpers.js';
+import {phoneNumberFormatter, hoursFormatter} from '../../helper-functions/helpers.js';
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -196,19 +196,4 @@ export const Restaurant = ({ restaurants, triggerRefetch }) => {
 };
 
 
-//format open / close times for info section
-//ADD THIS TO HELPER FUNCTIONS
-const hoursFormatter = (open, close) => {
-    open = open.split(":");
-    close = close.split(":");
-    let openHours =
-        open[0] > 12
-            ? `${open[0] - 12}:${open[1]}PM`
-            : `${open[0]}:${open[1]}AM`;
-    let closeHours =
-        close[0] > 12
-            ? `${close[0] - 12}:${close[1]}PM`
-            : `${close[0]}:${close[1]}AM`;
 
-    return `${openHours} - ${closeHours}`;
-};

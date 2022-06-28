@@ -51,7 +51,7 @@ export const Restaurants = ({ restaurants, query }) => {
     };
 
     /**
-     * 
+     * Called from <FilterBar /> when a new filter is selected
      * @param {string} filter - the actual filter that was selected 
      * @param {string} type - the type of filter (ex - "cuisine" or "price")
      */
@@ -136,7 +136,19 @@ export const Restaurants = ({ restaurants, query }) => {
                 let { cuisine, location, price, diningRestriction } =
                     restaurant;
 
-                //hash cuisine
+                // //hash cuisine
+                // let found = false;
+                // for (let c of tempHash.cuisine) {
+                //     if (c[cuisine]) {
+                //         c[cuisine]++;
+                //         found = true;
+                //     }
+                // }
+                // if (!found) {
+                //     tempHash.cuisine.push({cuisine: 1});
+                // }
+
+
                 if (!tempHash.cuisine[cuisine]) {
                     tempHash.cuisine[cuisine] = 1;
                 } else {

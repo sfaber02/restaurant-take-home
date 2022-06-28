@@ -55,9 +55,19 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
         }
     }, [filterHash]);
 
-    //responds to changes made in the filter bar selections
+    /**
+     * handles changes made to filter select boxes,
+     * calls handleFilter() from <Restaurants />
+     * @param {object} event object
+     */
     const handleChange = (e) => handleFilter(e.target.value, e.target.id);
 
+    /**
+     * updates filterState which stores the current values of the filters
+     * mainly used to reset the filters to their defaults when reset is hit
+     * @param {string} field (ex. location, cuisine)
+     * @param {string} value (value of field)
+     */
     const setField = (field, value) => {
         setFilterState((prev) => {
             return {

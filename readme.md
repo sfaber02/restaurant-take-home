@@ -1,8 +1,18 @@
 # RESTAURANTICUS
-
+Restauranticus is an app that displays a filterable and searchable list of restaurants and information about them.  It also allows the user to create / edit reservations for a restaurant.
 
 ## Component Structure
-
+- App
+    - Navigation
+    - Restaurants
+        - FilterBar
+        - RestaurantCard
+        - Restaurant
+            - ReservationTab
+                - ReservationCard
+                - NewReservation
+    - NewRestaurant
+    - Error
 
 ## Data Structures
 Example Resaurant Data for backend
@@ -27,6 +37,20 @@ Example Resaurant Data for backend
     "reservations": [
         null
     ]
+}
+```
+Example Reservation Date for backend
+```
+{
+    "id": "71c2f6ca-6642-4c44-be41-2c4dbf0b679c",
+    "createdAt": "2022-06-28T04:55:42.795Z",
+    "firstName": "Georgie ",
+    "lastName": "Boi",
+    "phoneNumber": "1234567890",
+    "email": "shawn@gmail.com",
+    "time": "2022-07-08T13:00:00.000Z",
+    "numGuests": 2,
+    "restaurantId": "b7b87b25-2a2a-488a-a80e-5bb8b7c9532b"
 }
 ```
 
@@ -62,12 +86,8 @@ Reservation Data Structure for new reservation Form Object
 ```
 
 ### TODO
-- refactor hours formmater into helper function
-- add info section to readme
 - finish documentation
 - generate jsdoc
-- style info div on home page
-- fix buttons on reservation tab in mobile view
 
 ### BUGS
 - edit reservation form stays populated if you click edit but don't edit a reservation and then go back to the all reservations view then back to make a reservation.

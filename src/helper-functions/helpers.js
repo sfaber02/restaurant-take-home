@@ -91,29 +91,11 @@ const dateTimeToTimeStamp = (date, time) => `${date} ${time}`;
 
 
 
-// const dateTimeToIso = (date, time) => new Date(`${date} ${time}`).toISOString();
-// const dateTimeToIso = (date, time) => {
-//     console.log (date, time);
-//     time = time.split(':');
-//     const hour = time[0];
-//     const min = time[1];
-
-//     hour = hour <= 3 ? hour + 18 : hour - 4;
 
 
-
-//     console.log(hour, min);
-
-
-
-
-//     const dat =  new Date(`${date} ${time}`)
-//     console.log (dat);
-
-//     // return dat;
-// }
-
-//get todays date in correct format to set min values in date picker
+/**
+ * get todays date in correct format to set min values in date picker
+*/ 
 const getTodaysDate = () => {
     const today = new Date();
     const day = today.getDate();
@@ -125,6 +107,23 @@ const getTodaysDate = () => {
     return `${year}-${month}-${day}`;
 };
 
+//format open / close times for info section
+//ADD THIS TO HELPER FUNCTIONS
+const hoursFormatter = (open, close) => {
+    open = open.split(":");
+    close = close.split(":");
+    let openHours =
+        open[0] > 12
+            ? `${open[0] - 12}:${open[1]}PM`
+            : `${open[0]}:${open[1]}AM`;
+    let closeHours =
+        close[0] > 12
+            ? `${close[0] - 12}:${close[1]}PM`
+            : `${close[0]}:${close[1]}AM`;
+
+    return `${openHours} - ${closeHours}`;
+};
+
 
 export {
     timeFormatter,
@@ -134,4 +133,5 @@ export {
     dateTimeToTimeStamp,
     emailValidator,
     getTodaysDate,
+    hoursFormatter
 };

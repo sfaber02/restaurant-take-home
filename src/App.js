@@ -75,16 +75,16 @@ export const App = () => {
         <>
             {loading ? (
                 <Container className="loadingContainer vh-100 d-flex justify-content-center align-items-center">
-                    <Spinner animation="grow" role="status">
+                    <Spinner animation="grow" role="status" className="m-3">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
-                    <Spinner animation="grow" role="status">
+                    <Spinner animation="grow" role="status" className="m-3">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
-                    <Spinner animation="grow" role="status">
+                    <Spinner animation="grow" role="status" className="m-3">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
-                    <Spinner animation="grow" role="status">
+                    <Spinner animation="grow" role="status" className="m-3">
                         <span className="visually-hidden">Loading...</span>
                     </Spinner>
                 </Container>
@@ -92,7 +92,7 @@ export const App = () => {
                 <main>
                     <Navigation handleSearch={handleSearch} />
                     <Routes>
-                    {/* HOME ROUTE FOR CAROUSEL  */}
+                        {/* HOME ROUTE FOR CAROUSEL  */}
                         <Route
                             path="/"
                             element={<Home restaurants={restaurants} />}
