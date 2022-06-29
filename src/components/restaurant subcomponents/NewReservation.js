@@ -22,6 +22,14 @@ import {
 
 const API = process.env.REACT_APP_API_URL;
 
+/**
+ * form to create / edit a reservation
+ * @param {function} triggerRefetch function from <App /> 
+ * @param {number} id restaurant reservations are attached to, needed to post reservation
+ * @param {object} currentReservation info of current reservation, if blank we are "new reservation" mode
+ * @param {function} setMessage state setter from <ReservationTab /> 
+ * @param {string} message state from <ReservationTab /> 
+ */
 export const NewReservation = ({
     triggerRefetch,
     id,
@@ -29,12 +37,7 @@ export const NewReservation = ({
     setMessage, 
     message
 }) => {
-    /**
-     * form - state to hold current values of form
-     * errors - state to hold validation errors in form
-     * editMode - state to determine if we are creating a new reservation
-     *          or updating an existing reservation
-     */
+    // state to hold current values of form
     const [form, setForm] = useState(() => {
         return {
             firstName: "",
@@ -46,9 +49,10 @@ export const NewReservation = ({
             numGuests: "",
         };
     });
+    // state to hold validation errors in form
     const [errors, setErrors] = useState({});
+    // state to determine if we are creating a new reservation or updating an existing reservation
     const [editMode, setEditMode] = useState(false);
-    
 
     //Auto populate form if edit resrvation button was hit
     useEffect(() => {
@@ -145,7 +149,7 @@ export const NewReservation = ({
 
         //email errors
         if (!email) {
-            newErrors.email = "Cannot be blank."
+            newErrors.email = "Cannot be blank.";
         } else if (!emailValidator(email)) {
             newErrors.email = "Invalid Email.";
         }
@@ -168,7 +172,7 @@ export const NewReservation = ({
      * if editMode = true will compare input fields to ssaved reservation
      *              and generate a patch object
      * if editMode =  false - post a new reservation
-     * @param {object} event 
+     * @param {object} event
      */
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -217,18 +221,18 @@ export const NewReservation = ({
                     .then((response) => {
                         console.log(JSON.stringify(response.data));
                         triggerRefetch();
-                        setMessage('New Resevation Created!');
+                        setMessage("New Resevation Created!");
                         setForm(() => {
-                           return {
-                               firstName: "",
-                               lastName: "",
-                               phoneNumber: "",
-                               email: "",
-                               time: "",
-                               date: "",
-                               numGuests: "",
-                           };
-                        })
+                            return {
+                                firstName: "",
+                                lastName: "",
+                                phoneNumber: "",
+                                email: "",
+                                time: "",
+                                date: "",
+                                numGuests: "",
+                            };
+                        });
                     })
                     .catch((error) => {
                         console.log(error);
@@ -252,7 +256,7 @@ export const NewReservation = ({
 
                 axios(config)
                     .then((response) => {
-                        setMessage('Reservation Updated!');
+                        setMessage("Reservation Updated!");
                         triggerRefetch();
                     })
                     .catch((error) => {
@@ -264,7 +268,9 @@ export const NewReservation = ({
 
     return (
         <Container fluid className="formContainer mb-4">
-            {message ? (message) : (
+            {message ? (
+                message
+            ) : (
                 <Form>
                     {/* FIRST NAME INPUT  */}
                     <Row xs={1} md={2}>
@@ -308,7 +314,7 @@ export const NewReservation = ({
                             </Form.Group>
                         </Col>
                     </Row>
-    
+
                     <Row xs={1} md={2}>
                         <Col>
                             {/* PHONE INPUT  */}
@@ -334,7 +340,9 @@ export const NewReservation = ({
                         <Col>
                             {/* EMAIL INPUT  */}
                             <Form.Group>
-                                <Form.Label className="mb-0 mt-1">Email</Form.Label>
+                                <Form.Label className="mb-0 mt-1">
+                                    Email
+                                </Form.Label>
                                 <FormControl
                                     type="email"
                                     value={form.email}
@@ -350,7 +358,7 @@ export const NewReservation = ({
                             </Form.Group>
                         </Col>
                     </Row>
-    
+
                     {/* NUMBER OF GUEST INPUT  */}
                     <Form.Group>
                         <Form.Label className="mb-0 mt-1">
@@ -360,14 +368,16 @@ export const NewReservation = ({
                             value={form.numGuests}
                             type="number"
                             placeholder="Number of Guests"
-                            onChange={(e) => setField("numGuests", e.target.value)}
+                            onChange={(e) =>
+                                setField("numGuests", e.target.value)
+                            }
                             isInvalid={!!errors.numGuests}
                         ></FormControl>
                         <Form.Control.Feedback type="invalid">
                             {errors.numGuests}
                         </Form.Control.Feedback>
                     </Form.Group>
-    
+
                     {/* RESERVATION TIME INPUT  */}
                     <Form.Group>
                         <Form.Label>Time</Form.Label>
@@ -381,7 +391,7 @@ export const NewReservation = ({
                             {errors.time}
                         </Form.Control.Feedback>
                     </Form.Group>
-    
+
                     {/* DATE INPUT  */}
                     <Form.Group>
                         <Form.Label>Date</Form.Label>
@@ -396,7 +406,7 @@ export const NewReservation = ({
                             {errors.date}
                         </Form.Control.Feedback>
                     </Form.Group>
-    
+
                     <Form.Group className="mt-3 text-center">
                         <Button
                             variant="outline-success w-100"
@@ -407,10 +417,7 @@ export const NewReservation = ({
                         </Button>
                     </Form.Group>
                 </Form>
-
-                )
-                
-            }
+            )}
         </Container>
     );
 };

@@ -10,6 +10,12 @@ import "../../styles/reservationCard.css"
 
 const API = process.env.REACT_APP_API_URL;
 
+/**
+ * component that displays two tabs -  all reservations and the edit/ make a reservation form
+ * @param {number} id of current reservation
+ * @param {object} currentRestaurant current restaurant info
+ * @param {function} triggerRefetch function from <App />
+ */
 export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
     /** state for current tab  */
     const [key, setKey] = useState("current");

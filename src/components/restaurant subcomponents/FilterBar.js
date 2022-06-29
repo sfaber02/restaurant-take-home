@@ -2,6 +2,14 @@ import React, { useState } from "react";
 import { Navbar, Form, Container, Button, Row, Col } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
+
+/**
+ * a navbar of select elements to filter restaurants view based on various fields
+ * @param {object} filterHash state from <App /> determines what filters are available based on display list
+ * @param {function} handleFilter function from <App /> sets current filter in <App /> triggering a new displaylist and filterHash 
+ * @param {function} handleReset function from <App /> to reset filters 
+ * @returns 
+ */
 export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
     /**
      * filters -  stores all the current available filter options

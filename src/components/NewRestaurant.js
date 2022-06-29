@@ -19,6 +19,8 @@ const API = process.env.REACT_APP_API_URL;
 
 /**
  * component to add or edit a restaurant
+ * @param {object} restaurants array of all restaurants
+ * @param {function} triggerRefetch function from <App />
  * @returns a form to add/edit a restaurant
  */
 export const NewRestaurant = ({ restaurants, triggerRefetch }) => {

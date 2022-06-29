@@ -6,11 +6,10 @@ import { Card, Row, Col } from "react-bootstrap";
 import "../../styles/restaurantCard.css";
 
 /**
- * 
- * @param {object} info for a single restaurant 
- * @param {object} function from restaurants component to trigger modal display 
- * @returns a single restaurant card with limited info to be displayed
+ * a single restaurant card with limited info to be displayed
  * in the all restaurants view
+ * @param {object} info for a single restaurant 
+ * @param {object} handleShow function from restaurants component to trigger modal display 
  */
 export const RestaurantCard = ({ info, handleShow }) => {
     const { id, name, description, price, location, cuisine, graphic } = info;

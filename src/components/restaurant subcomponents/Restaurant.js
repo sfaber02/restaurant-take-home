@@ -12,10 +12,10 @@ import {phoneNumberFormatter, hoursFormatter} from '../../helper-functions/helpe
 const API = process.env.REACT_APP_API_URL;
 
 /**
- *
- * @param {array} all restaurant info
- * @returns a card to be displayed in the modal for when the user clicks
+ * a card to be displayed in the modal for when the user clicks
  * on a restaurant in the restaurants component
+ * @param {array} restaurants all restaurant info from fetch in <App />
+ * @param {function} triggerRefetch function from <App />
  */
 export const Restaurant = ({ restaurants, triggerRefetch }) => {
     //stores current restaurant to be displayed in card

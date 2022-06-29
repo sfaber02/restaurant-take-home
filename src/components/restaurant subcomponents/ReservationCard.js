@@ -7,7 +7,13 @@ import {
 
 import "../../styles/reservationCard.css";
 
-
+/**
+ * a single reservation card to be displayed in the list of reservations
+ * @param {object} reservationInfo info on current reservation passed from <ReservationTab /> 
+ * @param {number} reservationIndex index of current reservation - used to link reservation to it's correct element in array
+ * @param {function} handleEditClick click handler for edit button passed from <ReservationTab />  
+ * @param {function} confirmCancelClick click handler for second click of cancel reservation button, passed from <ReservationTab />  
+ */
 export const ReservationCard = ({
     reservationInfo,
     reservationIndex,
@@ -54,7 +60,7 @@ export const ReservationCard = ({
             </Row>
             <Row xs={2} className="buttonContainer">
                 <Col className="editButtonContainer">
-                    {/* calls handleEditClick from <RestaurantTab />  */}
+                    {/* calls handleEditClick from <ReservationTab />  */}
                     <Button className="mt-4" id={reservationIndex} onClick={handleEditClick}>
                         Edit
                     </Button>

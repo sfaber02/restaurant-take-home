@@ -1,6 +1,5 @@
 /**
- * Some nice foody filler images to kick it up a notch
- * BAM! (I'll see myself out...)
+ * Small graphics for restaurant cards
  */
 const smallGraphics = [
     require("./1.jpg"),

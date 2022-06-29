@@ -10,9 +10,9 @@ import { FilterBar } from "./restaurant subcomponents/FilterBar";
 import "../styles/restaurants.css";
 
 /**
- *
- * @param {array} array of all restaurants
- * @param {string} input from search
+ * component that displays a list of restaurant cards, changes based on filters or search results
+ * @param {array} restaurants array of all restaurants
+ * @param {string} query input from search
  * @returns a list of all restaurants if no search of filters are present
  * or a list of restaurants that match search and/ or filter
  *

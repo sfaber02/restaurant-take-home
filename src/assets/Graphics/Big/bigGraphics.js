@@ -1,6 +1,5 @@
 /**
- * Some nice foody filler images to kick it up a notch
- * BAM! (I'll see myself out...)
+ * Large Graphics for landing page carousel
  */
 const bigGraphics = [
     require("./1.jpg"),

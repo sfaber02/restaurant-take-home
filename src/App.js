@@ -23,6 +23,9 @@ import { Error } from "./components/Error";
 
 const API = process.env.REACT_APP_API_URL;
 
+/**
+ * Main app components, contains routes and fetch of restaurants from backend
+ */
 export const App = () => {
     /** States to store all restaurants from initial data fetch */
     const [restaurants, setRestaurants] = useState(() => "");

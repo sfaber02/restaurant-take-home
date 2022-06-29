@@ -6,8 +6,9 @@ import bigGraphics from "../assets/Graphics/Big/bigGraphics.js";
 import "../styles/home.css";
 
 /**
- * LANDING PAGE
- * @param {array} an array of restaurants
+ * LANDING PAGE - a carousel view of restaurants, clicking on a carousel entry will
+ * navigate user to that restaurants page
+ * @param {array} restaurants an array of restaurants
  * @returns a carousel view of random restaurants
  */
 export const Home = ({ restaurants }) => {

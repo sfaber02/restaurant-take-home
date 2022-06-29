@@ -8,6 +8,7 @@ import logo from "../assets/Graphics/logo.js";
 /**
  * navbar used to navigate to various parts of the webpage
  * also contains search bar to search for restaurant
+ * @param {function} handleSearch function from <App /> to trigger a new fetch with search params
  * @returns navBar
  */
 export const Navigation = ({handleSearch}) => {
