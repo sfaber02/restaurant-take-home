@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Navbar, Container, Nav, Form, FormControl, Button } from "react-bootstrap";
 
 import '../styles/nav.css';
-import logo from "../assets/Graphics/logo";
+import logo from "../assets/Graphics/logo.js";
 
 /**
  * navbar used to navigate to various parts of the webpage
