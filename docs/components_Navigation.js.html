@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/Navigation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/Navigation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Navbar, Container, Nav, Form, FormControl, Button } from "react-bootstrap";
+
+import '../styles/nav.css';
+import logo from "../assets/Graphics/logo.js";
+
+/**
+ * navbar used to navigate to various parts of the webpage
+ * also contains search bar to search for restaurant
+ * @param {function} handleSearch function from &lt;App /> to trigger a new fetch with search params
+ * @returns navBar
+ */
+export const Navigation = ({handleSearch}) => {
+    const navigate = useNavigate();
+
+    /** handles submit event on search form */
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // call handleSearch function in &lt;App /> 
+        handleSearch(e.target[0].value);
+        e.target[0].value = '';
+        navigate("/restaurants");
+    }
+
+    /** handles click event on search button */
+    const handleClick = (e) => {
+        e.preventDefault();
+        handleSearch(e.target.form[0].value);
+        e.target.form[0].value = '';
+        navigate('/restaurants');
+    }
+
+    return (
+        &lt;Navbar
+            bg="light"
+            variant="light"
+            expand="lg"
+            sticky="top"
+            className="border"
+        >
+            &lt;Container>
+                &lt;Navbar.Brand>&lt;img src={logo} alt="Restauranticus Logo" />&lt;/Navbar.Brand>
+                &lt;Navbar.Brand>Restauranticus&lt;/Navbar.Brand>
+                &lt;Navbar.Toggle aria-controls="responsive-navbar-nav"/>
+                &lt;Navbar.Collapse id="responsive-navbar-nav">
+                    &lt;Nav className="me-auto my-2 my-lg-0">
+                        &lt;Nav.Link
+                            onClick={() => navigate("/")}
+                            className="text-dark"
+                        >
+                            Home
+                        &lt;/Nav.Link>
+                        &lt;Nav.Link
+                            onClick={() => {
+                                handleSearch('');
+                                navigate("/restaurants")
+                            }}
+                            className="text-dark"
+                        >
+                            Restaurants
+                        &lt;/Nav.Link>
+                        &lt;Nav.Link
+                            onClick={() => navigate("/newRestaurant")}
+                            className="text-dark"
+                        >
+                            New Restaurant
+                        &lt;/Nav.Link>
+                    &lt;/Nav>
+                    &lt;Form className="d-flex" onSubmit={handleSubmit}>
+                        &lt;FormControl
+                            type="search"
+                            placeholder="Search Restaurants"
+                            className="me-2"
+                            aria-label="Search"
+                        />
+                        &lt;Button variant="outline-success" onClick={handleClick}>Search&lt;/Button>
+                    &lt;/Form>
+                &lt;/Navbar.Collapse>
+            &lt;/Container>
+        &lt;/Navbar>
+    );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

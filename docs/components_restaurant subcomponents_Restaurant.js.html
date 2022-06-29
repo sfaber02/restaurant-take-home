@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/restaurant subcomponents/Restaurant.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/restaurant subcomponents/Restaurant.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { useParams, useOutletContext, useNavigate } from "react-router-dom";
+import { Card, Row, Col, Tabs, Tab, Button } from "react-bootstrap";
+import axios from "axios";
+
+import { ReservationTab } from "./ReservationTab";
+
+import "../../styles/restaurant.css";
+
+import {phoneNumberFormatter, hoursFormatter} from '../../helper-functions/helpers.js';
+
+const API = process.env.REACT_APP_API_URL;
+
+/**
+ * a card to be displayed in the modal for when the user clicks
+ * on a restaurant in the restaurants component
+ * @param {array} restaurants all restaurant info from fetch in &lt;App />
+ * @param {function} triggerRefetch function from &lt;App />
+ */
+export const Restaurant = ({ restaurants, triggerRefetch }) => {
+    //stores current restaurant to be displayed in card
+    const [current, setCurrent] = useState(null);
+
+    // State to change delete button to second step of delete process
+    // essentially an "Are you sure you want to delete?" mechanic
+    const [deleteWarning, setDeleteWarning] = useState(false);
+
+    //id of restaurant from link clicked in restaurants component
+    const { id } = useParams();
+
+    // handleClose function to close modal passed from restaurants component
+    const handleClose = useOutletContext();
+
+    const navigate = useNavigate();
+
+    /**
+     * search through all restaurant to find restaurant that matches
+     * id from route params, set current state accordingly
+     */
+    useEffect(() => {
+        setCurrent(restaurants.filter((e) => e.id === id)[0]);
+    }, [id, restaurants]);
+
+    //delete click handler
+    const handleDeleteClick = (e) => {
+        setDeleteWarning(true);
+    };
+
+    //second delete click to perform actual delete operation
+    const confirmDeleteClick = () => {
+        const config = {
+            method: "delete",
+            url: `${API}/restaurants/${id}`,
+        };
+
+        axios(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data));
+                triggerRefetch();
+                handleClose();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    //cancel delete
+    const goBackClick = () => {
+        setDeleteWarning(false);
+    };
+
+    //handle edit click
+    const handleEditClick = () => {
+        navigate(`/newRestaurant/${id}`);
+    };
+
+    /**
+     * return a single card for the restaurant user clicked on
+     * which displays all info about that restaurantn in a modal as well as
+     * links to close the modal or make a reservation
+     */
+    return (
+        &lt;>
+            {current &amp;&amp; (
+                &lt;Card id={current.id}>
+                    &lt;Card.Body>
+                        &lt;Card.Img
+                            variant="top"
+                            className="p-0 m-0"
+                            src={current.graphic}
+                        />
+                        &lt;Tabs
+                            defaultActiveKey="info"
+                            id="uncontrolled-tab-example"
+                            className="mb-3"
+                        >
+                            {/* INFO TAB */}
+                            &lt;Tab eventKey="info" title="Info">
+                                &lt;Row xs={1} md={2}>
+                                    &lt;Col>
+                                        &lt;Card.Text>
+                                            &lt;strong>Phone: &lt;/strong>
+                                            {phoneNumberFormatter(
+                                                current.phoneNumber
+                                            )}
+                                        &lt;/Card.Text>
+                                    &lt;/Col>
+                                    &lt;Col>
+                                        &lt;Card.Text>
+                                            &lt;strong>Hours: &lt;/strong>
+                                            {hoursFormatter(
+                                                current.openingTime,
+                                                current.closingTime
+                                            )}
+                                        &lt;/Card.Text>
+                                    &lt;/Col>
+                                &lt;/Row>
+                                &lt;Row xs={1} md={2}>
+                                    &lt;Col>
+                                        &lt;Card.Text>
+                                            &lt;strong>Location: &lt;/strong>
+                                            {current.location}
+                                        &lt;/Card.Text>
+                                    &lt;/Col>
+                                    &lt;Col>
+                                        &lt;Card.Text>
+                                            &lt;strong>Cuisine: &lt;/strong>
+                                            {current.cuisine}
+                                        &lt;/Card.Text>
+                                    &lt;/Col>
+                                &lt;/Row>
+                                {current.diningRestriction &amp;&amp; (
+                                    &lt;Card.Text>
+                                        &lt;strong>Restrictions: {"   "}&lt;/strong>
+                                        {current.diningRestriction}
+                                    &lt;/Card.Text>
+                                )}
+                                &lt;Card.Footer className="border border-secondary">
+                                    &lt;Card.Text className="cardText">
+                                        {current.description}
+                                    &lt;/Card.Text>
+                                &lt;/Card.Footer>
+                            &lt;/Tab>
+                            {/* RESERVATIONS TAB  */}
+                            &lt;Tab eventKey="reservations" title="Reservations">
+                                &lt;ReservationTab
+                                    id={id}
+                                    currentRestaurant={current}
+                                    triggerRefetch={triggerRefetch}
+                                />
+                            &lt;/Tab>
+                            {/* ADMIN TAB */}
+                            &lt;Tab eventKey="admin" title="Admin">
+                                &lt;Row xs={2}>
+                                    &lt;Col className="editButtonContainer">
+                                        &lt;Button onClick={handleEditClick}>
+                                            Edit
+                                        &lt;/Button>
+                                    &lt;/Col>
+                                    &lt;Col className="deleteButtonContainer">
+                                        {!deleteWarning ? (
+                                            &lt;Button
+                                                variant="warning"
+                                                onClick={handleDeleteClick}
+                                                className="buttons"
+                                            >
+                                                Delete
+                                            &lt;/Button>
+                                        ) : (
+                                            &lt;>
+                                                &lt;Button
+                                                    variant="danger"
+                                                    onClick={confirmDeleteClick}
+                                                    className="buttons"
+                                                >
+                                                    DELETE?
+                                                &lt;/Button>
+                                                &lt;Button
+                                                    variant="success"
+                                                    onClick={goBackClick}
+                                                    className="buttons"
+                                                >
+                                                    Back
+                                                &lt;/Button>
+                                            &lt;/>
+                                        )}
+                                    &lt;/Col>
+                                &lt;/Row>
+                            &lt;/Tab>
+                        &lt;/Tabs>
+                    &lt;/Card.Body>
+                &lt;/Card>
+            )}
+        &lt;/>
+    );
+};
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

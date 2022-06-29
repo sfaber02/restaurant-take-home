@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/restaurant subcomponents/ReservationCard.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/restaurant subcomponents/ReservationCard.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Card, Row, Col, Button } from "react-bootstrap";
+import {
+    timeFormatter,
+    phoneNumberFormatter,
+} from "../../helper-functions/helpers";
+
+import "../../styles/reservationCard.css";
+
+/**
+ * a single reservation card to be displayed in the list of reservations
+ * @param {object} reservationInfo info on current reservation passed from &lt;ReservationTab /> 
+ * @param {number} reservationIndex index of current reservation - used to link reservation to it's correct element in array
+ * @param {function} handleEditClick click handler for edit button passed from &lt;ReservationTab />  
+ * @param {function} confirmCancelClick click handler for second click of cancel reservation button, passed from &lt;ReservationTab />  
+ */
+export const ReservationCard = ({
+    reservationInfo,
+    reservationIndex,
+    handleEditClick,
+    confirmCancelClick,
+}) => {
+    /** State to change delete button to second step of delete process
+     * essentially an "Are you sure you want to delete?" mechanic **/
+    const [deleteWarning, setDeleteWarning] = useState(false);
+
+    // handles first click on "cancel" button - changes cancel to "Delete?" and "Back" buttons
+    const handleCancelClick = (reservationInfo) => {
+        setDeleteWarning(true);
+    };
+
+    return (
+        &lt;Card key={reservationInfo.id} className="border border-info mb-3 p-3">
+            &lt;Card.Header>
+                &lt;strong>Time:&lt;/strong>
+                {"  "}
+                {timeFormatter(reservationInfo.time)}
+            &lt;/Card.Header>
+            &lt;Card.Body>&lt;/Card.Body>
+            &lt;Card.Text>
+                &lt;strong>Name:&lt;/strong>
+                {"  "}
+                {`${reservationInfo.firstName} ${reservationInfo.lastName}`}
+            &lt;/Card.Text>
+            &lt;Row xs={1} md={2}>
+                &lt;Col>
+                    &lt;Card.Text>
+                        &lt;strong>Phone:&lt;/strong>
+                        {"  "}
+                        {phoneNumberFormatter(reservationInfo.phoneNumber)}
+                    &lt;/Card.Text>
+                &lt;/Col>
+                &lt;Col>
+                    &lt;Card.Text>
+                        &lt;strong>Guests:&lt;/strong>
+                        {"  "}
+                        {reservationInfo.numGuests}
+                    &lt;/Card.Text>
+                &lt;/Col>
+            &lt;/Row>
+            &lt;Row xs={2} className="buttonContainer">
+                &lt;Col className="editButtonContainer">
+                    {/* calls handleEditClick from &lt;ReservationTab />  */}
+                    &lt;Button className="mt-4" id={reservationIndex} onClick={handleEditClick}>
+                        Edit
+                    &lt;/Button>
+                &lt;/Col>
+                &lt;Col className="cancelButtonContainer">
+                    {!deleteWarning ? (
+                        &lt;Button
+                            className="mt-4"
+                            variant="warning"
+                            id={reservationIndex}
+                            onClick={handleCancelClick}
+                        >
+                            Cancel
+                        &lt;/Button>
+                    ) : (
+                        &lt;>
+                            &lt;Button
+                                className="mt-4 buttons"
+                                variant="danger"
+                                id={reservationIndex}
+                                // This is the delete reservation function in &lt;ReservationTab />
+                                onClick={confirmCancelClick}
+                            >
+                                Delete?
+                            &lt;/Button>
+
+                            &lt;Button
+                                className="mt-4 buttons"
+                                variant="success"
+                                onClick={() => setDeleteWarning(false)}
+                            >
+                                Back
+                            &lt;/Button>
+                        &lt;/>
+                    )}
+                &lt;/Col>
+            &lt;/Row>
+        &lt;/Card>
+    );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

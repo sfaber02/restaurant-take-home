@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/NewRestaurant.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/NewRestaurant.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
+import {
+    Form,
+    FormControl,
+    Button,
+    Container,
+    Row,
+    Col,
+} from "react-bootstrap";
+
+import "../styles/newRestaurant.css";
+
+import { phoneNumberValidator, phoneNumberExtractor } from "../helper-functions/helpers.js";
+
+const API = process.env.REACT_APP_API_URL;
+
+/**
+ * component to add or edit a restaurant
+ * @param {object} restaurants array of all restaurants
+ * @param {function} triggerRefetch function from &lt;App />
+ * @returns a form to add/edit a restaurant
+ */
+export const NewRestaurant = ({ restaurants, triggerRefetch }) => {
+    //id from route if we landed here from the edit restaurant button
+    const { id } = useParams();
+
+    //initialize form state to empty values
+    const [form, setForm] = useState(() => {
+        return {
+            name: "",
+            cuisine: "",
+            description: "",
+            price: "DEFAULT",
+            location: "",
+            openingTime: "",
+            closingTime: "",
+            phoneNumber: "",
+            diningRestriction: "DEFAULT",
+            twoPerson: "",
+            fourPerson: "",
+            eightPerson: "",
+        };
+    });
+
+    //state to hold errors from from bad user inputs
+    const [errors, setErrors] = useState({});
+
+    //state for edit / new restaurant mode
+    const [editMode, setEditMode] = useState(false);
+
+    // ref to hold original restaurant info for editing
+    const originalRestaurantData = useRef();
+
+    const navigate = useNavigate();
+
+    /**
+     * if there there is an id from landing on this page via the edit restaurant button
+     * prefill form with current restaurant info for editing
+     *
+     **/
+    useEffect(() => {
+        if (id) {
+            //set edit mode will change button text and post / patch verb  on submit
+            setEditMode(true);
+
+            //find current restaurant in all restaurants object and store as ref
+            originalRestaurantData.current = restaurants.filter(
+                (e) => e.id === id
+            )[0];
+
+            //destructure current restaurant data to be displayed in form
+            const {
+                name,
+                description,
+                phoneNumber,
+                openingTime,
+                closingTime,
+                location,
+                cuisine,
+                price,
+                diningRestriction,
+                tables,
+            } = originalRestaurantData.current;
+
+            console.log (openingTime, closingTime);
+
+            //set form to current restaurant data
+            setForm({
+                name,
+                cuisine,
+                description,
+                price,
+                location,
+                openingTime,
+                closingTime,
+                phoneNumber,
+                diningRestriction,
+                ...(tables &amp;&amp; { twoPerson: tables.twoPersonTables }),
+                ...(tables &amp;&amp; { fourPerson: tables.fourPersonTables }),
+                ...(tables &amp;&amp; { eightPerson: tables.eightPersonTables }),
+            });
+        }
+    }, [id, restaurants]);
+
+    //update form state as user inputs information
+    const setField = (field, value) => {
+        setForm((prev) => {
+            return {
+                ...prev,
+                [field]: value,
+            };
+        });
+
+        // Check and see if errors exist, and remove them from the error object as new input is entered:
+        if (!!errors[field])
+            setErrors((prev) => {
+                return {
+                    ...prev,
+                    [field]: null,
+                };
+            });
+    };
+
+    //on form submit check all fields for valid inputs
+    const findErrors = () => {
+        //destructure form input for validation
+        const {
+            name,
+            cuisine,
+            description,
+            price,
+            location,
+            openingTime,
+            closingTime,
+            phoneNumber,
+            twoPerson,
+            fourPerson,
+            eightPerson,
+        } = form;
+
+        const newErrors = {};
+
+        //name errors
+        if (!name || name === "") {
+            newErrors.name = "Cannot be blank.";
+        } else if (name.length > 50) {
+            newErrors.name = "Name is too long.";
+        }
+
+        //cuisine errors
+        if (!cuisine || cuisine === "") {
+            newErrors.cuisine = "Cannot be blank.";
+        } else if (name.length > 50) {
+            newErrors.cuisine = "Cuisine type is too long.";
+        }
+
+        //description errors
+        if (!description || description === "") {
+            newErrors.description = "Cannot be blank.";
+        } else if (description.length > 1500) {
+            newErrors.description =
+                "Character limit exceded! 1500 chararacters max.";
+        }
+
+        //price errors
+        if (!price) {
+            newErrors.price = "Must choose a price.";
+        }
+
+        //location errors
+        if (!location || location === "") {
+            newErrors.location = "Cannot be blank.";
+        } else if (location.length > 75) {
+            newErrors.location = "Location is too long.";
+        }
+
+        // open / close time errors
+        if (!openingTime) {
+            newErrors.openingTime = "Cannot be blank.";
+        }
+        if (!closingTime) {
+            newErrors.closingTime = "Cannot be blank.";
+        }
+
+        //phone number errors
+        if (!phoneNumber || phoneNumber === "") {
+            newErrors.phoneNumber = "Cannot be blank.";
+        } else {
+            let phone = phoneNumberValidator(phoneNumber);
+            if (!phone) {
+                newErrors.phoneNumber = "Must be a 10-digit phone number.";
+            } else {
+                //if phone number is legit set form state to valid phone number format for post
+                setForm((prev) => {
+                    return {
+                        ...prev,
+                        phoneNumber: phone.join(""),
+                    };
+                });
+            }
+        }
+
+        // table error checking
+        if (twoPerson &amp;&amp; twoPerson &lt; 0) {
+            newErrors.twoPerson = "Invalid # of tables";
+        }
+        if (fourPerson &amp;&amp; fourPerson &lt; 0) {
+            newErrors.fourPerson = "Invalid # of tables";
+        }
+        if (eightPerson &amp;&amp; eightPerson &lt; 0) {
+            newErrors.eightPerson = "Invalid # of tables";
+        }
+
+        return newErrors;
+    };
+
+    /** handles form submit **/
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        //check submission for errors
+        const newErrors = findErrors();
+
+        //if there are errors set error state
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+        } else {
+            //if form passed validation destructure form input
+            const {
+                name,
+                cuisine,
+                description,
+                price,
+                location,
+                openingTime,
+                closingTime,
+                phoneNumber,
+                diningRestriction,
+                twoPerson,
+                fourPerson,
+                eightPerson,
+            } = form;
+
+            console.log (phoneNumber);
+            //generate a temp object for tables if any were inputted
+            let tempTables;
+            if (twoPerson || fourPerson || eightPerson) {
+                tempTables = {
+                    ...(twoPerson
+                        ? { twoPersonTables: Number(twoPerson) }
+                        : { twoPersonTables: 0 }),
+                    ...(fourPerson
+                        ? { fourPersonTables: Number(fourPerson) }
+                        : { fourPersonTables: 0 }),
+                    ...(eightPerson
+                        ? { eightPersonTables: Number(eightPerson) }
+                        : { eightPersonTables: 0 }),
+                };
+                console.log (tempTables);
+            } else {
+                tempTables = null;
+            }
+
+            //if we are posting a new restaurant
+            if (!editMode) {
+                //stringify valid user inputs into body for post
+                const body = JSON.stringify({
+                    name,
+                    cuisine,
+                    description,
+                    price,
+                    location,
+                    openingTime: openingTime + ":00",
+                    closingTime: closingTime + ":00",
+                    phoneNumber: phoneNumberExtractor(phoneNumber),
+                    ...(!diningRestriction === "DEFAULT" ? { diningRestriction } : {diningRestriction: null}),
+                    tables: tempTables,
+                });
+
+                const config = {
+                    method: "post",
+                    url: `${API}/restaurants`,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: body,
+                };
+
+                //post new restaurant and navigate back to restaurants page
+                axios(config)
+                    .then((response) => {
+                        console.log(JSON.stringify(response.data));
+                        triggerRefetch();
+                        navigate("/restaurants");
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            } else {
+                //compare current inputs to original inputs for changes
+                const patchOb = objectComparer(
+                    form,
+                    originalRestaurantData.current,
+                    tempTables
+                );
+
+                const data = JSON.stringify(patchOb);
+
+                var config = {
+                    method: "patch",
+                    url: `${API}/restaurants/${id}`,
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    data: data,
+                };
+
+                axios(config)
+                    .then((response) => {
+                        triggerRefetch();
+                        navigate('/restaurants');
+                        console.log(JSON.stringify(response.data));
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+            }
+        }
+    };
+
+    return (
+        &lt;Container fluid className="formContainer mb-4">
+            &lt;Form>
+                {/* RESTAURANT NAME INPUT  */}
+                &lt;Form.Group className="mb-3 mt-3">
+                    &lt;Form.Label>Name&lt;/Form.Label>
+                    &lt;FormControl
+                        type="text"
+                        value={form.name}
+                        placeholder="Enter Restaurant Name"
+                        onChange={(e) => setField("name", e.target.value)}
+                        isInvalid={!!errors.name}
+                    />
+                    &lt;Form.Control.Feedback type="invalid">
+                        {errors.name}
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                {/* CUISINE INPUT  */}
+                &lt;Form.Group className="mb-3 mt-3">
+                    &lt;Form.Label>Cuisine&lt;/Form.Label>
+                    &lt;FormControl
+                        type="text"
+                        value={form.cuisine}
+                        placeholder="Enter Cuisine Type"
+                        onChange={(e) => setField("cuisine", e.target.value)}
+                        isInvalid={!!errors.cuisine}
+                    />
+                    &lt;Form.Control.Feedback type="invalid">
+                        {errors.cuisine}
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                {/* DESCRIPTION INPUT  */}
+                &lt;Form.Group className="mb-3">
+                    &lt;Form.Label>Description&lt;/Form.Label>
+                    &lt;FormControl
+                        as="textarea"
+                        rows="4"
+                        placeholder="Restaurant Description"
+                        value={form.description}
+                        onChange={(e) =>
+                            setField("description", e.target.value)
+                        }
+                        isInvalid={!!errors.description}
+                    />
+                    &lt;Form.Control.Feedback type="invalid">
+                        {errors.description}
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                {/* PRICE INPUT  */}
+                &lt;Form.Group>
+                    &lt;Form.Label>Price&lt;/Form.Label>
+                    &lt;Form.Select
+                        isInvalid={!!errors.price}
+                        value={form.price}
+                        onChange={(e) => setField("price", e.target.value)}
+                    >
+                        &lt;option disabled value="DEFAULT">&lt;/option>
+                        &lt;option value="$">$&lt;/option>
+                        &lt;option value="$$">$$&lt;/option>
+                        &lt;option value="$$$">$$$&lt;/option>
+                        &lt;option value="$$$$">$$$$&lt;/option>
+                    &lt;/Form.Select>
+                    &lt;Form.Control.Feedback type="invalid">
+                        {errors.price}
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                {/* LOCATION INPUT  */}
+                &lt;Form.Group>
+                    &lt;Form.Label>Location&lt;/Form.Label>
+                    &lt;FormControl
+                        type="text"
+                        value={form.location}
+                        placeholder="Location"
+                        onChange={(e) => setField("location", e.target.value)}
+                        isInvalid={!!errors.location}
+                    >&lt;/FormControl>
+                    &lt;Form.Control.Feedback type="invalid">
+                        {errors.location}
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                {/* OPEN / CLOSE TIMES INPUT  */}
+                &lt;Row>
+                    &lt;Col>
+                        &lt;Form.Group>
+                            &lt;Form.Label>Opening Time&lt;/Form.Label>
+                            &lt;FormControl
+                                type="time"
+                                value={form.openingTime}
+                                onChange={(e) =>
+                                    setField("openingTime", e.target.value)
+                                }
+                                isInvalid={!!errors.openingTime}
+                            >&lt;/FormControl>
+                            &lt;Form.Control.Feedback type="invalid">
+                                {errors.openingTime}
+                            &lt;/Form.Control.Feedback>
+                        &lt;/Form.Group>
+                    &lt;/Col>
+                    &lt;Col>
+                        &lt;Form.Group>
+                            &lt;Form.Label>Closing Time&lt;/Form.Label>
+                            &lt;FormControl
+                                type="time"
+                                value={form.closingTime}
+                                onChange={(e) =>
+                                    setField("closingTime", e.target.value)
+                                }
+                                isInvalid={!!errors.closingTime}
+                            >&lt;/FormControl>
+                            &lt;Form.Control.Feedback type="invalid">
+                                {errors.closingTime}
+                            &lt;/Form.Control.Feedback>
+                        &lt;/Form.Group>
+                    &lt;/Col>
+                &lt;/Row>
+
+                {/* PHONE NUMBER INPUT  */}
+                &lt;Form.Group>
+                    &lt;Form.Label>Phone Number&lt;/Form.Label>
+                    &lt;FormControl
+                        value={form.phoneNumber}
+                        type="tel"
+                        pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                        placeholder="Phone Number"
+                        onChange={(e) =>
+                            setField("phoneNumber", e.target.value)
+                        }
+                        isInvalid={!!errors.phoneNumber}
+                    />
+                    &lt;Form.Control.Feedback type="invalid">
+                        {errors.phoneNumber}
+                    &lt;/Form.Control.Feedback>
+                &lt;/Form.Group>
+
+                {/* DINING RESTRICTION INPUT  */}
+                &lt;Form.Group>
+                    &lt;Form.Label>Dining Restrictions (optional)&lt;/Form.Label>
+                    &lt;Form.Select
+                        value={form.diningRestriction}
+                        onChange={(e) =>
+                            setField("diningRestriction", e.target.value)
+                        }
+                    >
+                        &lt;option value="DEFAULT">None&lt;/option>
+                        &lt;option value="Takeout Only">Takeout Only&lt;/option>
+                        &lt;option value="Delivery Only">Delivery Only&lt;/option>
+                    &lt;/Form.Select>
+                &lt;/Form.Group>
+
+                {/* TABLES INPUT  */}
+                &lt;Form.Group className="mt-2">
+                    &lt;Form.Label>Tables (optional)&lt;/Form.Label>
+                    &lt;Row>
+                        &lt;Col>
+                            &lt;Form.Label>2-Person&lt;/Form.Label>
+                            &lt;FormControl
+                                value={form.twoPerson}
+                                type="number"
+                                onChange={(e) =>
+                                    setField("twoPerson", e.target.value)
+                                }
+                                isInvalid={!!errors.twoPerson}
+                            />
+                            &lt;Form.Control.Feedback type="invalid">
+                                {errors.twoPerson}
+                            &lt;/Form.Control.Feedback>
+                        &lt;/Col>
+                        &lt;Col>
+                            &lt;Form.Label>4-Person&lt;/Form.Label>
+                            &lt;FormControl
+                                value={form.fourPerson}
+                                type="number"
+                                min="0"
+                                onChange={(e) =>
+                                    setField("fourPerson", e.target.value)
+                                }
+                                isInvalid={!!errors.fourPerson}
+                            />
+                            &lt;Form.Control.Feedback type="invalid">
+                                {errors.fourPerson}
+                            &lt;/Form.Control.Feedback>
+                        &lt;/Col>
+                        &lt;Col>
+                            &lt;Form.Label>8-Person&lt;/Form.Label>
+                            &lt;FormControl
+                                value={form.eightPerson}
+                                type="number"
+                                min="0"
+                                onChange={(e) =>
+                                    setField("eightPerson", e.target.value)
+                                }
+                                isInvalid={!!errors.eightPerson}
+                            />
+                            &lt;Form.Control.Feedback type="invalid">
+                                {errors.eightPerson}
+                            &lt;/Form.Control.Feedback>
+                        &lt;/Col>
+                    &lt;/Row>
+                &lt;/Form.Group>
+
+                {/* SUBMIT  */}
+                &lt;Form.Group className="mt-3 text-center">
+                    &lt;Button
+                        variant="outline-success w-100"
+                        type="submit"
+                        onClick={handleSubmit}
+                    >
+                        {editMode ? "Submit Edit" : "Submit"}
+                    &lt;/Button>
+                &lt;/Form.Group>
+            &lt;/Form>
+        &lt;/Container>
+    );
+};
+
+
+
+
+
+/**
+ * compares the current inputs to the original state and outputs
+ * an object with just the changes for patching
+ *
+ * @param {object} inputs new state of inputs
+ * @param {object} original state of inputs
+ * @param {object} tables object of current table inputs
+ */
+const objectComparer = (inputs, original, tables) => {
+    //if we are editing a restaurant check to see which fields to patch
+    let patchOb = {};
+
+    //compare form state to originalRestaurantDate ref
+    //if form state is different add to patch ob
+    for (let key in inputs) {
+        //skip the tables twoPerson, fourPerson, eightPerson Objects but check all other objects
+        if (!(key.slice(key.length - 3) === "son")) {
+            if (inputs[key] !== original[key]) {
+                patchOb[key] = inputs[key];
+            }
+        }
+    }
+
+    //check if any table counts have been inputted - if so add tables object into patchOb
+    if (tables) {
+        patchOb.tables = tables;
+    }
+
+    //add seconds onto time to match backend requirements
+    if (patchOb.openingTime) patchOb.openingTime += ":00";
+    if (patchOb.closingTime) patchOb.closingTime += ":00";
+
+
+    return patchOb;
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

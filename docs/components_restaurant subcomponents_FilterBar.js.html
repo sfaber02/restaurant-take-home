@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/restaurant subcomponents/FilterBar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/restaurant subcomponents/FilterBar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Navbar, Form, Container, Button, Row, Col } from "react-bootstrap";
+import { v4 as uuidv4 } from "uuid";
+
+
+/**
+ * a navbar of select elements to filter restaurants view based on various fields
+ * @param {object} filterHash state from &lt;App /> determines what filters are available based on display list
+ * @param {function} handleFilter function from &lt;App /> sets current filter in &lt;App /> triggering a new displaylist and filterHash 
+ * @param {function} handleReset function from &lt;App /> to reset filters 
+ * @returns 
+ */
+export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
+    /**
+     * filters -  stores all the current available filter options
+     * filterState - stores all current filter selections
+     */
+    // const [filters, setFilters] = useState();
+    const [filterState, setFilterState] = useState(() => {
+        return {
+            cuisine: "DEFAULT",
+            location: "DEFAULT",
+            price: "DEFAULT",
+            restrictions: "DEFAULT",
+        };
+    });
+
+    /**
+     * handles changes made to filter select boxes,
+     * calls handleFilter() from &lt;Restaurants />
+     * @param {object} event object
+     */
+    const handleChange = (e) => handleFilter(e.target.value, e.target.id);
+
+    /**
+     * updates filterState which stores the current values of the filters
+     * mainly used to reset the filters to their defaults when reset is hit
+     * @param {string} field (ex. location, cuisine)
+     * @param {string} value (value of field)
+     */
+    const setField = (field, value) => {
+        setFilterState((prev) => {
+            return {
+                ...prev,
+                [field]: value,
+            };
+        });
+    };
+
+    return (
+        &lt;Navbar bg="light" variant="light" expand="lg" className="">
+            &lt;Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            &lt;Navbar.Collapse id="responsive-navbar-nav">
+                &lt;Navbar.Brand className="mx-2">Filters&lt;/Navbar.Brand>
+                &lt;Container className="border mt-2">
+                    &lt;Row xs={1} sm={1} md={1} lg={5}>
+                        &lt;Col className="my-1">
+                            {/* LOCATION FILTERS  */}
+                            {filterHash &amp;&amp;
+                                Object.keys(filterHash.location).length > 0 &amp;&amp; (
+                                    &lt;Form.Select
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setField(
+                                                "location",
+                                                e.target.value
+                                            );
+                                        }}
+                                        value={filterState.location}
+                                        id="location"
+                                    >
+                                        &lt;option disabled value="DEFAULT">
+                                            Location
+                                        &lt;/option>
+                                        {Object.keys(filterHash.location).map(
+                                            (key) => (
+                                                &lt;option
+                                                    value={key}
+                                                    key={uuidv4()}
+                                                >{`${key} (${filterHash.location[key]})`}&lt;/option>
+                                            )
+                                        )}
+                                    &lt;/Form.Select>
+                                )}
+                        &lt;/Col>
+                        &lt;Col className="my-1">
+                            {/* CUISINE FILTERS  */}
+                            {filterHash &amp;&amp;
+                                Object.keys(filterHash.cuisine).length > 0 &amp;&amp; (
+                                    &lt;Form.Select
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setField("cuisine", e.target.value);
+                                        }}
+                                        value={filterState.cuisine}
+                                        id="cuisine"
+                                    >
+                                        &lt;option disabled value="DEFAULT">
+                                            Cuisine
+                                        &lt;/option>
+                                        {Object.keys(filterHash.cuisine).map(
+                                            (key) => (
+                                                &lt;option
+                                                    value={key}
+                                                    key={uuidv4()}
+                                                >{`${key} (${filterHash.cuisine[key]})`}&lt;/option>
+                                            )
+                                        )}
+                                    &lt;/Form.Select>
+                                )}
+                        &lt;/Col>
+                        &lt;Col className="my-1">
+                            {/* PRICE FILTERS  */}
+                            {filterHash &amp;&amp; Object.keys(filterHash.price).length > 0 &amp;&amp; (
+                                &lt;Form.Select
+                                    onChange={(e) => {
+                                        handleChange(e);
+                                        setField("price", e.target.value);
+                                    }}
+                                    value={filterState.price}
+                                    id="price"
+                                >
+                                    &lt;option disabled value="DEFAULT">
+                                        Price
+                                    &lt;/option>
+                                    {Object.keys(filterHash.price).map((key) => (
+                                        &lt;option
+                                            value={key}
+                                            key={uuidv4()}
+                                        >{`${key} (${filterHash.price[key]})`}&lt;/option>
+                                    ))}
+                                &lt;/Form.Select>
+                            )}
+                        &lt;/Col>
+                        &lt;Col className="my-1">
+                            {/* DINING RESTRICTION FILTER  */}
+                            {filterHash &amp;&amp;
+                                Object.keys(filterHash.diningRestriction).length >
+                                    0 &amp;&amp; (
+                                    &lt;Form.Select
+                                        onChange={(e) => {
+                                            handleChange(e);
+                                            setField(
+                                                "restrictions",
+                                                e.target.value
+                                            );
+                                        }}
+                                        value={filterState.restrictions}
+                                        id="diningRestriction"
+                                    >
+                                        &lt;option disabled value="DEFAULT">
+                                            Restrictions
+                                        &lt;/option>
+                                        {Object.keys(filterHash.diningRestriction).map(
+                                            (key) => (
+                                                &lt;option
+                                                    value={key}
+                                                    key={uuidv4()}
+                                                >{`${key} (${filterHash.diningRestriction[key]})`}&lt;/option>
+                                            )
+                                        )}
+                                    &lt;/Form.Select>
+                                )}
+                        &lt;/Col>
+                        &lt;Col className="">
+                            {/* RESET BUTTON  */}
+                            {filterHash &amp;&amp; (
+                                &lt;Button
+                                    className="my-1 w-100"
+                                    onClick={() => {
+                                        handleReset();
+                                        setFilterState(() => {
+                                            return {
+                                                cuisine: "DEFAULT",
+                                                location: "DEFAULT",
+                                                price: "DEFAULT",
+                                                restrictions: "DEFAULT",
+                                            };
+                                        });
+                                    }}
+                                >
+                                    Reset
+                                &lt;/Button>
+                            )}
+                        &lt;/Col>
+                    &lt;/Row>
+                &lt;/Container>
+            &lt;/Navbar.Collapse>
+        &lt;/Navbar>
+    );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

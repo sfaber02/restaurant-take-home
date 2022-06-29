@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/restaurant subcomponents/ReservationTab.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/restaurant subcomponents/ReservationTab.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState } from "react";
+import { Card, Tabs, Tab } from "react-bootstrap";
+import axios from "axios";
+
+
+import { NewReservation } from "./NewReservation";
+import { ReservationCard } from "./ReservationCard";
+
+import "../../styles/reservationCard.css"
+
+const API = process.env.REACT_APP_API_URL;
+
+/**
+ * component that displays two tabs -  all reservations and the edit/ make a reservation form
+ * @param {number} id of current reservation
+ * @param {object} currentRestaurant current restaurant info
+ * @param {function} triggerRefetch function from &lt;App />
+ */
+export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
+    /** state for current tab  */
+    const [key, setKey] = useState("current");
+    /** state to store form info for reservation to be edited */
+    const [currentReservation, setCurrentReservation] = useState("");
+    /** message for new update reservation */
+    const [message, setMessage] = useState("");
+    
+
+    /**
+     * gets reservation id from button id of edit button in a card reservation
+     * and sets the currentReservation state to that reservation's info
+     * this will populate the reservation form with the info of the reservation
+     * to be edited.
+     * @param {object} event
+     */
+    const handleEditClick = (e) => {
+        setCurrentReservation(
+            currentRestaurant.reservations[Number(e.target.id)]
+        );
+        setKey("makeRes");
+    };
+
+    /** handles second delete click for a reservation in &lt;ReservationCard /> */
+    const confirmCancelClick = (e) => {
+        const id = currentRestaurant.reservations[Number(e.target.id)].id;
+
+        const config = {
+            method: "delete",
+            url: `${API}/reservations/${id}`,
+        };
+
+        axios(config)
+            .then((response) => {
+                console.log(JSON.stringify(response.data));
+                triggerRefetch();
+                // handleClose();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    return (
+        &lt;>
+            &lt;Tabs
+                activeKey={key}
+                onSelect={(k) => {
+                    setKey(k);
+                    setCurrentReservation("");
+                    setMessage("");
+                }}
+            >
+                {/* VIEW CURRENT RESERVATION TABS */}
+                &lt;Tab eventKey="current" title="Reservations" className="resTab">
+                    &lt;Card>
+                        &lt;Card.Body>
+                            {currentRestaurant.reservations[0] ? (
+                                currentRestaurant.reservations.map((e, i) => {
+                                    return (
+                                        &lt;ReservationCard
+                                            reservationInfo={e}
+                                            reservationIndex={i}
+                                            key={i}
+                                            handleEditClick={handleEditClick}
+                                            confirmCancelClick={
+                                                confirmCancelClick
+                                            }
+                                        />
+                                    );
+                                })
+                            ) : (
+                                &lt;Card.Text>No Reservations&lt;/Card.Text>
+                            )}
+                        &lt;/Card.Body>
+                    &lt;/Card>
+                &lt;/Tab>
+                &lt;Tab
+                    eventKey="makeRes"
+                    title="Make a Reservation"
+                    className="resTab"
+                >
+                    &lt;NewReservation
+                        triggerRefetch={triggerRefetch}
+                        currentRestaurant={currentRestaurant}
+                        id={id}
+                        currentReservation={currentReservation}
+                        setMessage={setMessage}
+                        message={message}
+                    />
+                &lt;/Tab>
+            &lt;/Tabs>
+        &lt;/>
+    );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

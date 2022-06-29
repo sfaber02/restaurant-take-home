@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: helper-functions/helpers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: helper-functions/helpers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {string} iso time string
+ * @returns a human readable date/ time string
+ */
+const timeFormatter = (time) => { 
+    //convert to time date object
+    const newDate = new Date(`${time}`);
+
+    // make array of just the date and time, omitting the GMT time and time zone info
+    let dateTime = newDate.toString().split(" ").splice(0, 5);
+
+    // extract date from date time and format into human readable string
+    let date = dateTime.splice(0, 4);
+    date[2] += ",";
+    date = date.join(" ");
+
+    // extract hours from time string and convert to 12-hr format
+    // also determine AM/ PM
+    let hours = dateTime.join("").split(":")[0];
+    const amPm = hours > 12 ? "PM" : "AM";
+    hours = hours > 12 ? hours - 12 : hours;
+
+    //extract minutes from time string
+    let minutes = dateTime.join("").split(":")[1];
+
+    return `${date} ${hours}:${minutes}${amPm}`;
+};
+
+
+/**
+ *
+ * @param {string} a string of 10 digits
+ * @returns a human readable formatted phone # string
+ */
+const phoneNumberFormatter = phone => {
+    return `(${phone[0]}${phone[1]}${phone[2]}) ${phone[3]}${phone[4]}${phone[5]}-${phone[6]}${phone[7]}${phone[8]}${phone[9]}`;
+};
+
+/**
+ * takes a phone number in any format and extracts the digits 
+ * @param {string} phone 
+ * @returns string of 10 digits 0-9 
+ */
+const phoneNumberExtractor = phone => {
+    let digits = '';
+    for (let char of phone) {
+        if (/[0-9]/.test(char)) digits += char;
+    }
+    return digits;
+}
+
+/**
+ * takes in a string and determines
+ * if there are 10 valid phone number digits in it
+ * @param {string} phone 
+ * @returns {boolean} true/ false if phone # is valid
+ */
+const phoneNumberValidator = phone => {
+    
+    //if no phone number inputted
+    if (!phone) return false;
+
+    //pull all digits out of user's input and check if there's 10 digits
+    let nums = [];
+    for (let c of phone) {
+        if (/[0-9]/.test(c)) {
+            nums.push(c);
+        }
+    }
+
+    return nums.length === 10 ? nums : false;
+}
+
+/**
+ * checks if email is in the format string@string.string
+ * @param {string} email 
+ * @returns {boolean} true/ false if email is valid
+ */
+const emailValidator = (email) => {
+    let regEx = /^\S+@\S+\.\S+$/;
+    return regEx.test(email) ? true : false;
+}
+
+/**
+ * Takes in the time and date from form inputs and converts them 
+ * into ISO format for backend.
+ * @param {string} date 
+ * @param {string} time 
+ * @returns ISO time/date string 
+ */
+const dateTimeToTimeStamp = (date, time) => `${date} ${time}`;
+
+/**
+ * get todays date in correct format to set min values in date picker
+*/ 
+const getTodaysDate = () => {
+    const today = new Date();
+    const day = today.getDate();
+    let month = today.getMonth() + 1;
+    const year = today.getFullYear();
+
+    if (month &lt; 10) month = "0" + month;
+
+    return `${year}-${month}-${day}`;
+};
+
+//format open / close times for info section
+const hoursFormatter = (open, close) => {
+    open = open.split(":");
+    close = close.split(":");
+    let openHours =
+        open[0] > 12
+            ? `${open[0] - 12}:${open[1]}PM`
+            : `${open[0]}:${open[1]}AM`;
+    let closeHours =
+        close[0] > 12
+            ? `${close[0] - 12}:${close[1]}PM`
+            : `${close[0]}:${close[1]}AM`;
+
+    return `${openHours} - ${closeHours}`;
+};
+
+
+export {
+    timeFormatter,
+    phoneNumberFormatter,
+    phoneNumberValidator,
+    phoneNumberExtractor,
+    dateTimeToTimeStamp,
+    emailValidator,
+    getTodaysDate,
+    hoursFormatter
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

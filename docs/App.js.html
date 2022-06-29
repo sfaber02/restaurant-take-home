@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: App.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: App.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { Container, Spinner } from "react-bootstrap";
+
+/**
+ * bootstrap css import, image import, css import
+ */
+import "bootstrap/dist/css/bootstrap.min.css";
+import smallGraphics from "./assets/Graphics/Small/smallGraphics";
+import "./styles/app.css";
+
+/**
+ * Compnonent imports for Routes
+ */
+import { Navigation } from "./components/Navigation";
+import { Home } from "./components/Home";
+import { Restaurants } from "./components/Restaurants";
+import { Restaurant } from "./components/restaurant subcomponents/Restaurant";
+import { NewRestaurant } from "./components/NewRestaurant";
+import { Error } from "./components/Error";
+
+
+const API = process.env.REACT_APP_API_URL;
+
+/**
+ * Main app components, contains routes and fetch of restaurants from backend
+ */
+export const App = () => {
+    /** States to store all restaurants from initial data fetch */
+    const [restaurants, setRestaurants] = useState(() => "");
+
+    /** State to display loading animation until intial fetch is complete */
+    const [loading, setLoading] = useState(() => true);
+    /** State to store user input from search bar */
+    const [query, setQuery] = useState("");
+    /** state that will trigger a refetch when changed  */
+    const [reFetch, setReFetch] = useState(-1);
+
+    const navigate = useNavigate();
+
+    /**
+     * Initial fetch done on page load, fetches all restaurant info from backend
+     * and assigns a static graphic to each restaurant
+     * then sets loading state to false and restaurant state to fetched data
+     */
+    useEffect(() => {
+        axios
+            .get(`${API}/restaurants`)
+            .then((response) => {
+                let tempData = response.data.restaurants;
+                let index = 0;
+                for (let restaurant of tempData) {
+                    if (index >= smallGraphics.length - 1) index = 0;
+                    restaurant.graphic = smallGraphics[index];
+                    index++;
+                }
+                setRestaurants(tempData);
+                setLoading(false);
+            })
+            .catch((err) => navigate("/error"));
+    }, [navigate, reFetch]);
+
+    // called from search submit in &lt;Navigation />
+    const handleSearch = (query) => {
+        setQuery(query);
+    };
+
+    /**
+     * called from various places to trigger a refetch of restaurant data
+     * after new/edit restaurant or new/edit reservation
+     */
+    const triggerRefetch = () => setReFetch((p) => -p);
+
+    /**
+     * Renders loading animation if fetch is still happening
+     * otherwise renders navbar and home route until user navigates
+     * to a different route
+     */
+    return (
+        &lt;>
+            {loading ? (
+                &lt;Container className="loadingContainer vh-100 d-flex justify-content-center align-items-center">
+                    &lt;Spinner animation="grow" role="status" className="m-3">
+                        &lt;span className="visually-hidden">Loading...&lt;/span>
+                    &lt;/Spinner>
+                    &lt;Spinner animation="grow" role="status" className="m-3">
+                        &lt;span className="visually-hidden">Loading...&lt;/span>
+                    &lt;/Spinner>
+                    &lt;Spinner animation="grow" role="status" className="m-3">
+                        &lt;span className="visually-hidden">Loading...&lt;/span>
+                    &lt;/Spinner>
+                    &lt;Spinner animation="grow" role="status" className="m-3">
+                        &lt;span className="visually-hidden">Loading...&lt;/span>
+                    &lt;/Spinner>
+                &lt;/Container>
+            ) : (
+                &lt;main>
+                    &lt;Navigation handleSearch={handleSearch} />
+                    &lt;Routes>
+                        {/* HOME ROUTE FOR CAROUSEL  */}
+                        &lt;Route
+                            path="/"
+                            element={&lt;Home restaurants={restaurants} />}
+                        />
+                        {/* ROUTE FOR ALL RESTAURANTS VIEW  */}
+                        &lt;Route
+                            path="restaurants"
+                            element={
+                                &lt;Restaurants
+                                    restaurants={restaurants}
+                                    query={query}
+                                />
+                            }
+                        >
+                            {/* NESTED ROUTE FOR INDIVIDUAL RESTAURANTS  */}
+                            &lt;Route
+                                path=":id"
+                                element={
+                                    &lt;Restaurant
+                                        restaurants={restaurants}
+                                        triggerRefetch={triggerRefetch}
+                                    />
+                                }
+                            />
+                        &lt;/Route>
+                        {/* NEW/ EDIT  RESTAURANT FORM ROUTE */}
+                        &lt;Route
+                            path="/newRestaurant"
+                            element={
+                                &lt;NewRestaurant
+                                    restaurants={restaurants}
+                                    triggerRefetch={triggerRefetch}
+                                />
+                            }
+                        >
+                            {/* NESTED ROUTE FOR EDITING A RESTAURANT  */}
+                            &lt;Route
+                                path=":id"
+                                element={
+                                    &lt;NewRestaurant
+                                        restaurants={restaurants}
+                                        triggerRefetch={triggerRefetch}
+                                    />
+                                }
+                            >&lt;/Route>
+                        &lt;/Route>
+                        {/* ROUTES TO ERROR PAGE  */}
+                        &lt;Route path="/error/:err" element={&lt;Error />} />
+                        &lt;Route path="/error" element={&lt;Error />} />
+                    &lt;/Routes>
+                &lt;/main>
+            )}
+        &lt;/>
+    );
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#App">App</a></li><li><a href="global.html#bigGraphics">bigGraphics</a></li><li><a href="global.html#dateTimeToTimeStamp">dateTimeToTimeStamp</a></li><li><a href="global.html#emailValidator">emailValidator</a></li><li><a href="global.html#Error">Error</a></li><li><a href="global.html#FilterBar">FilterBar</a></li><li><a href="global.html#getTodaysDate">getTodaysDate</a></li><li><a href="global.html#Home">Home</a></li><li><a href="global.html#Navigation">Navigation</a></li><li><a href="global.html#NewReservation">NewReservation</a></li><li><a href="global.html#NewRestaurant">NewRestaurant</a></li><li><a href="global.html#objectComparer">objectComparer</a></li><li><a href="global.html#ObjectComparer">ObjectComparer</a></li><li><a href="global.html#phoneNumberExtractor">phoneNumberExtractor</a></li><li><a href="global.html#phoneNumberFormatter">phoneNumberFormatter</a></li><li><a href="global.html#phoneNumberValidator">phoneNumberValidator</a></li><li><a href="global.html#ReservationCard">ReservationCard</a></li><li><a href="global.html#ReservationTab">ReservationTab</a></li><li><a href="global.html#Restaurant">Restaurant</a></li><li><a href="global.html#RestaurantCard">RestaurantCard</a></li><li><a href="global.html#Restaurants">Restaurants</a></li><li><a href="global.html#smallGraphics">smallGraphics</a></li><li><a href="global.html#timeFormatter">timeFormatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Jun 28 2022 22:31:51 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
