@@ -72,6 +72,8 @@ export const Restaurants = ({ restaurants, query }) => {
             }
             setShow(true);
         }
+        
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
     /**
