@@ -18,25 +18,19 @@ import "../styles/restaurants.css";
  *
  */
 export const Restaurants = ({ restaurants, query }) => {
-    /**
-     * show - state to display modal of more detailed restaurant info
-     * modalTitle - state to store the title for modal
-     * displayList - state which stores current list of restaurants to be displayed based
-     *              on search/filters
-     * filterHash -  state to store an object of possible filter selections
-     *              will rehash on each filter selection
-     * filters - state to store an array of the currently selected filters from filter bar
-     */
+    // state to display modal of more detailed restaurant info
     const [show, setShow] = useState(false);
+    // store the title for modal
     const [modalTitle, setModalTitle] = useState();
+    // stores current list of restaurants to be displayed based on search/filters
     const [displayList, setDisplayList] = useState();
+    //store an object of possible filter selections will rehash on each filter selection
     const [filterHash, setFilterHash] = useState();
+    //store an array of the currently selected filters from filter bar
     const [filters, setFilters] = useState([]);
 
     const navigate = useNavigate();
-    const {id} = useParams();
-    
-
+    const { id } = useParams();
 
     /**
      * handlers to show/ hide modal
@@ -44,7 +38,7 @@ export const Restaurants = ({ restaurants, query }) => {
     const handleShow = (info) => {
         setShow(true);
         setModalTitle(info.name);
-    }
+    };
     const handleClose = () => {
         setShow(false);
         navigate("/restaurants");
@@ -52,20 +46,20 @@ export const Restaurants = ({ restaurants, query }) => {
 
     /**
      * Called from <FilterBar /> when a new filter is selected
-     * @param {string} filter - the actual filter that was selected 
+     * @param {string} filter - the actual filter that was selected
      * @param {string} type - the type of filter (ex - "cuisine" or "price")
      */
     const handleFilter = (filter, type) => {
-       setFilters((prev) => {
-        return [...prev, {filter, type}];
-       })
+        setFilters((prev) => {
+            return [...prev, { filter, type }];
+        });
     };
 
     //resets filter bar when reset button is clicked
     const handleReset = () => {
         setFilters([]);
         setDisplayList(restaurants);
-    }
+    };
 
     // if user landed on restaurants page via home page carousel
     // turn modal display on and set modal title to matching restaurant
@@ -178,9 +172,11 @@ export const Restaurants = ({ restaurants, query }) => {
         if (filters.length > 0 && displayList) {
             for (let filter of filters) {
                 setDisplayList((prev) => {
-                    return prev.filter((e) => e[filter.type] === filter.filter ? true : false);
-                })
-            }   
+                    return prev.filter((e) =>
+                        e[filter.type] === filter.filter ? true : false
+                    );
+                });
+            }
         }
 
         //disabled dependency warning because react is demanding I add displaylist to

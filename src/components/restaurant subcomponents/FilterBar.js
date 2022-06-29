@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Navbar, Form, Container, Button, Row, Col } from "react-bootstrap";
 import { v4 as uuidv4 } from "uuid";
 
@@ -7,7 +7,7 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
      * filters -  stores all the current available filter options
      * filterState - stores all current filter selections
      */
-    const [filters, setFilters] = useState();
+    // const [filters, setFilters] = useState();
     const [filterState, setFilterState] = useState(() => {
         return {
             cuisine: "DEFAULT",
@@ -16,13 +16,6 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
             restrictions: "DEFAULT",
         };
     });
-
-    /**
-     * updates filters state when new filterhash is created in <Restaurants />
-     */
-    useEffect(() => {
-        setFilters(filterHash);
-    }, [filterHash]);
 
     /**
      * handles changes made to filter select boxes,
@@ -55,8 +48,8 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                     <Row xs={1} sm={1} md={1} lg={5}>
                         <Col className="my-1">
                             {/* LOCATION FILTERS  */}
-                            {filters &&
-                                Object.keys(filters.location).length > 0 && (
+                            {filterHash &&
+                                Object.keys(filterHash.location).length > 0 && (
                                     <Form.Select
                                         onChange={(e) => {
                                             handleChange(e);
@@ -71,12 +64,12 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                                         <option disabled value="DEFAULT">
                                             Location
                                         </option>
-                                        {Object.keys(filters.location).map(
+                                        {Object.keys(filterHash.location).map(
                                             (key) => (
                                                 <option
                                                     value={key}
                                                     key={uuidv4()}
-                                                >{`${key} (${filters.location[key]})`}</option>
+                                                >{`${key} (${filterHash.location[key]})`}</option>
                                             )
                                         )}
                                     </Form.Select>
@@ -84,8 +77,8 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                         </Col>
                         <Col className="my-1">
                             {/* CUISINE FILTERS  */}
-                            {filters &&
-                                Object.keys(filters.cuisine).length > 0 && (
+                            {filterHash &&
+                                Object.keys(filterHash.cuisine).length > 0 && (
                                     <Form.Select
                                         onChange={(e) => {
                                             handleChange(e);
@@ -97,12 +90,12 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                                         <option disabled value="DEFAULT">
                                             Cuisine
                                         </option>
-                                        {Object.keys(filters.cuisine).map(
+                                        {Object.keys(filterHash.cuisine).map(
                                             (key) => (
                                                 <option
                                                     value={key}
                                                     key={uuidv4()}
-                                                >{`${key} (${filters.cuisine[key]})`}</option>
+                                                >{`${key} (${filterHash.cuisine[key]})`}</option>
                                             )
                                         )}
                                     </Form.Select>
@@ -110,7 +103,7 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                         </Col>
                         <Col className="my-1">
                             {/* PRICE FILTERS  */}
-                            {filters && Object.keys(filters.price).length > 0 && (
+                            {filterHash && Object.keys(filterHash.price).length > 0 && (
                                 <Form.Select
                                     onChange={(e) => {
                                         handleChange(e);
@@ -122,19 +115,19 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                                     <option disabled value="DEFAULT">
                                         Price
                                     </option>
-                                    {Object.keys(filters.price).map((key) => (
+                                    {Object.keys(filterHash.price).map((key) => (
                                         <option
                                             value={key}
                                             key={uuidv4()}
-                                        >{`${key} (${filters.price[key]})`}</option>
+                                        >{`${key} (${filterHash.price[key]})`}</option>
                                     ))}
                                 </Form.Select>
                             )}
                         </Col>
                         <Col className="my-1">
                             {/* DINING RESTRICTION FILTER  */}
-                            {filters &&
-                                Object.keys(filters.diningRestriction).length >
+                            {filterHash &&
+                                Object.keys(filterHash.diningRestriction).length >
                                     0 && (
                                     <Form.Select
                                         onChange={(e) => {
@@ -150,12 +143,12 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                                         <option disabled value="DEFAULT">
                                             Restrictions
                                         </option>
-                                        {Object.keys(filters.diningRestriction).map(
+                                        {Object.keys(filterHash.diningRestriction).map(
                                             (key) => (
                                                 <option
                                                     value={key}
                                                     key={uuidv4()}
-                                                >{`${key} (${filters.diningRestriction[key]})`}</option>
+                                                >{`${key} (${filterHash.diningRestriction[key]})`}</option>
                                             )
                                         )}
                                     </Form.Select>
@@ -163,7 +156,7 @@ export const FilterBar = ({ filterHash, handleFilter, handleReset }) => {
                         </Col>
                         <Col className="">
                             {/* RESET BUTTON  */}
-                            {filters && (
+                            {filterHash && (
                                 <Button
                                     className="my-1 w-100"
                                     onClick={() => {

@@ -71,7 +71,6 @@ export const RestaurantCard = ({ info, handleShow }) => {
                         </Card.Text>
                     </Col>
                     <Col className="d-flex justify-content-end">
-                        {/* <Card.Text className="border border-warning"> */}
                             <Link
                                 to={`${id}`}
                                 state={info}
@@ -79,12 +78,9 @@ export const RestaurantCard = ({ info, handleShow }) => {
                             >
                                 More Info
                             </Link>
-                        {/* </Card.Text> */}
                     </Col>
                 </Row>
             </Card.Footer>
-
-            {/* <Card.Body className="border border-warning"></Card.Body> */}
         </Card>
     );
 };

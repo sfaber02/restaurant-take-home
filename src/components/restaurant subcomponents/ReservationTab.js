@@ -20,8 +20,8 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
     
 
     /**
-     * gets reservation id from button id of edit button a reservation
-     * and sets the currentReservation state that reservations info
+     * gets reservation id from button id of edit button in a card reservation
+     * and sets the currentReservation state to that reservation's info
      * this will populate the reservation form with the info of the reservation
      * to be edited.
      * @param {object} event
@@ -33,7 +33,7 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
         setKey("makeRes");
     };
 
-    /** handles second delete click for a reservation */
+    /** handles second delete click for a reservation in <ReservationCard /> */
     const confirmCancelClick = (e) => {
         const id = currentRestaurant.reservations[Number(e.target.id)].id;
 
@@ -71,8 +71,8 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
                                 currentRestaurant.reservations.map((e, i) => {
                                     return (
                                         <ReservationCard
-                                            e={e}
-                                            i={i}
+                                            reservationInfo={e}
+                                            reservationIndex={i}
                                             key={i}
                                             handleEditClick={handleEditClick}
                                             confirmCancelClick={

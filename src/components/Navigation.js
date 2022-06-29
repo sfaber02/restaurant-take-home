@@ -16,7 +16,7 @@ export const Navigation = ({handleSearch}) => {
     /** handles submit event on search form */
     const handleSubmit = (e) => {
         e.preventDefault();
-        // console.log(e.target[0].value);
+        // call handleSearch function in <App /> 
         handleSearch(e.target[0].value);
         e.target[0].value = '';
         navigate("/restaurants");
@@ -25,7 +25,6 @@ export const Navigation = ({handleSearch}) => {
     /** handles click event on search button */
     const handleClick = (e) => {
         e.preventDefault();
-        // console.log(e.target.form[0].value);
         handleSearch(e.target.form[0].value);
         e.target.form[0].value = '';
         navigate('/restaurants');

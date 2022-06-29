@@ -7,9 +7,10 @@ import {
 
 import "../../styles/reservationCard.css";
 
+
 export const ReservationCard = ({
-    e,
-    i,
+    reservationInfo,
+    reservationIndex,
     handleEditClick,
     confirmCancelClick,
 }) => {
@@ -17,42 +18,44 @@ export const ReservationCard = ({
      * essentially an "Are you sure you want to delete?" mechanic **/
     const [deleteWarning, setDeleteWarning] = useState(false);
 
-    const handleCancelClick = (e) => {
+    // handles first click on "cancel" button - changes cancel to "Delete?" and "Back" buttons
+    const handleCancelClick = (reservationInfo) => {
         setDeleteWarning(true);
     };
 
     return (
-        <Card key={e.id} className="border border-info mb-3 p-3">
+        <Card key={reservationInfo.id} className="border border-info mb-3 p-3">
             <Card.Header>
                 <strong>Time:</strong>
                 {"  "}
-                {timeFormatter(e.time)}
+                {timeFormatter(reservationInfo.time)}
             </Card.Header>
             <Card.Body></Card.Body>
             <Card.Text>
                 <strong>Name:</strong>
                 {"  "}
-                {`${e.firstName} ${e.lastName}`}
+                {`${reservationInfo.firstName} ${reservationInfo.lastName}`}
             </Card.Text>
             <Row xs={1} md={2}>
                 <Col>
                     <Card.Text>
                         <strong>Phone:</strong>
                         {"  "}
-                        {phoneNumberFormatter(e.phoneNumber)}
+                        {phoneNumberFormatter(reservationInfo.phoneNumber)}
                     </Card.Text>
                 </Col>
                 <Col>
                     <Card.Text>
                         <strong>Guests:</strong>
                         {"  "}
-                        {e.numGuests}
+                        {reservationInfo.numGuests}
                     </Card.Text>
                 </Col>
             </Row>
             <Row xs={2} className="buttonContainer">
                 <Col className="editButtonContainer">
-                    <Button className="mt-4" id={i} onClick={handleEditClick}>
+                    {/* calls handleEditClick from <RestaurantTab />  */}
+                    <Button className="mt-4" id={reservationIndex} onClick={handleEditClick}>
                         Edit
                     </Button>
                 </Col>
@@ -61,7 +64,7 @@ export const ReservationCard = ({
                         <Button
                             className="mt-4"
                             variant="warning"
-                            id={i}
+                            id={reservationIndex}
                             onClick={handleCancelClick}
                         >
                             Cancel
@@ -71,7 +74,8 @@ export const ReservationCard = ({
                             <Button
                                 className="mt-4 buttons"
                                 variant="danger"
-                                id={i}
+                                id={reservationIndex}
+                                // This is the delete reservation function in <ReservationTab />
                                 onClick={confirmCancelClick}
                             >
                                 Delete?

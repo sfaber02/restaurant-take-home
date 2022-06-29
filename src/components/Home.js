@@ -17,8 +17,6 @@ export const Home = ({ restaurants }) => {
         navigate(`/restaurants/${id}`);
     };
 
-    //className="border border-warning min-vh-100 min-vw-100 p-0 m-0"
-    // className="d-block w-100 carouselImg border border-success"
     return (
         <Container className="m-0 p-0">
             <Carousel fade className="carousel">

@@ -5,6 +5,7 @@
 const timeFormatter = (time) => { 
     //convert to time date object
     const newDate = new Date(`${time}`);
+
     // make array of just the date and time, omitting the GMT time and time zone info
     let dateTime = newDate.toString().split(" ").splice(0, 5);
 
@@ -89,10 +90,6 @@ const emailValidator = (email) => {
  */
 const dateTimeToTimeStamp = (date, time) => `${date} ${time}`;
 
-
-
-
-
 /**
  * get todays date in correct format to set min values in date picker
 */ 
@@ -108,7 +105,6 @@ const getTodaysDate = () => {
 };
 
 //format open / close times for info section
-//ADD THIS TO HELPER FUNCTIONS
 const hoursFormatter = (open, close) => {
     open = open.split(":");
     close = close.split(":");

@@ -58,13 +58,16 @@ export const App = () => {
             .catch((err) => navigate("/error"));
     }, [navigate, reFetch]);
 
+    // called from search submit in <Navigation />
     const handleSearch = (query) => {
         setQuery(query);
     };
 
-    const triggerRefetch = () => {
-        setReFetch((p) => -p);
-    };
+    /**
+     * called from various places to trigger a refetch of restaurant data
+     * after new/edit restaurant or new/edit reservation
+     */
+    const triggerRefetch = () => setReFetch((p) => -p);
 
     /**
      * Renders loading animation if fetch is still happening

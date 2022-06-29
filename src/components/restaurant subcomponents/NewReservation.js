@@ -10,6 +10,7 @@ import {
     Col,
 } from "react-bootstrap";
 
+// helper functions
 import {
     phoneNumberValidator,
     phoneNumberFormatter,
@@ -22,14 +23,18 @@ import {
 const API = process.env.REACT_APP_API_URL;
 
 export const NewReservation = ({
-    currentRestaurant,
     triggerRefetch,
     id,
     currentReservation,
     setMessage, 
     message
 }) => {
-
+    /**
+     * form - state to hold current values of form
+     * errors - state to hold validation errors in form
+     * editMode - state to determine if we are creating a new reservation
+     *          or updating an existing reservation
+     */
     const [form, setForm] = useState(() => {
         return {
             firstName: "",
@@ -87,6 +92,7 @@ export const NewReservation = ({
             });
     };
 
+    /** validates all from inputs, records invalid inputs into Errors state */
     const findErrors = () => {
         const {
             firstName,
@@ -157,13 +163,22 @@ export const NewReservation = ({
         return newErrors;
     };
 
+    /**
+     * handles submit / edit button click
+     * if editMode = true will compare input fields to ssaved reservation
+     *              and generate a patch object
+     * if editMode =  false - post a new reservation
+     * @param {object} event 
+     */
     const handleSubmit = (e) => {
         e.preventDefault();
         const newErrors = findErrors();
 
+        //check if validation errors exists
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
+            // destructure form inputs
             const {
                 firstName,
                 lastName,
