@@ -93,6 +93,7 @@ export const ReservationTab = ({ id, currentRestaurant, triggerRefetch }) => {
                         </Card.Body>
                     </Card>
                 </Tab>
+                {/* NEW / EDIT RESERVATION TAB  */}
                 <Tab
                     eventKey="makeRes"
                     title="Make a Reservation"

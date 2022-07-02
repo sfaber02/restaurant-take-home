@@ -74,6 +74,18 @@ export const NewReservation = ({
                 date: time.split("T")[0],
                 numGuests,
             });
+        } else {
+            setForm(() => {
+                return {
+                    firstName: "",
+                    lastName: "",
+                    phoneNumber: "",
+                    email: "",
+                    time: "",
+                    date: "",
+                    numGuests: "",
+                };
+            })
         }
     }, [currentReservation]);
 

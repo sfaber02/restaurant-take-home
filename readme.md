@@ -90,7 +90,7 @@ Reservation Data Structure for new reservation Form Object
 - generate jsdoc
 
 ### BUGS
-- edit reservation form stays populated if you click edit but don't edit a reservation and then go back to the all reservations view then back to make a reservation.
+- 
 
 
 ### Future Features
