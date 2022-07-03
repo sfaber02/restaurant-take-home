@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Row, Col, Button } from "react-bootstrap";
 import {
     timeFormatter,
@@ -24,13 +24,30 @@ export const ReservationCard = ({
      * essentially an "Are you sure you want to delete?" mechanic **/
     const [deleteWarning, setDeleteWarning] = useState(false);
 
+    const [borderColor, setBorderColor] = useState();
+
     // handles first click on "cancel" button - changes cancel to "Delete?" and "Back" buttons
     const handleCancelClick = (reservationInfo) => {
         setDeleteWarning(true);
     };
 
+    // applies a border color based on reservation time
+    useEffect(() => {
+        const date =  new Date(reservationInfo.time);
+        const now = new Date();
+        
+        if (date < now) {
+            setBorderColor("border border-2 border-danger"); // if date has passed set border to RED
+        } else if (date.getDay() === now.getDay()) {
+            setBorderColor("border border-2 border-success"); // if reservation is today set border to green
+        } else  {
+            setBorderColor("border border-2 border-primary"); // if reservation is for a future day set border to blue
+        }
+    }, [reservationInfo]);
+
+
     return (
-        <Card key={reservationInfo.id} className="border border-info mb-3 p-3">
+        <Card key={reservationInfo.id} className={`${borderColor} mb-3 p-3`}>
             <Card.Header>
                 <strong>Time:</strong>
                 {"  "}
