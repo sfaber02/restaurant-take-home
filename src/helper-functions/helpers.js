@@ -153,11 +153,10 @@ const militaryTimeToAmPm = (time) => {
     time = time.split(":");
     const hour = time[0];
     const min = time[1];
-    const amPm = hour < 12 ? "AM" : "PM";
 
     // midnight / noon cases
-    if (hour == 12) return `12:${min} PM`;
-    if (hour == 0) return `12:${min} AM`;
+    if (Number(hour) === 12) return `12:${min} PM`;
+    if (Number(hour) === 0) return `12:${min} AM`;
 
     // all other times
     return hour >= 13 ? `${hour - 12}:${min} PM` : `${hour}:${min} AM`;
