@@ -508,21 +508,21 @@ const ObjectComparer = (inputs, original) => {
  */
 const timePickerHours = (openingTime, closingTime) => {
     //determine time to start generating reservation times from
-    let openHour = openingTime.split(":")[0];
-    let openMin = openingTime.split(":")[1];
+    let openHour = Number(openingTime.split(":")[0]);
+    let openMin = Number(openingTime.split(":")[1]);
     let open;
     if (openMin > 0 && openMin <= 30) {
-        open = Number(openHour) + 0.5;
+        open = openHour + 0.5;
     } else if (openMin > 30) {
-        open = Number(openHour) + 1;
+        open = openHour + 1;
     } else {
-        open = Number(openHour);
+        open = openHour;
     }
 
     // determine last valid reservation time
-    let closeHour = closingTime.split(":")[0];
-    let closeMin = closingTime.split(":")[1];
-    let close = closeMin < 30 ? Number(closeHour) : Number(closeHour) + 0.5;
+    let closeHour = Number(closingTime.split(":")[0]);
+    let closeMin = Number(closingTime.split(":")[1]);
+    let close = closeMin < 30 ? closeHour : closeHour + 0.5;
     if (close < open) close += 24;
 
     // generate array of all valid registration times
