@@ -9,10 +9,10 @@ import "../../styles/reservationCard.css";
 
 /**
  * a single reservation card to be displayed in the list of reservations
- * @param {object} reservationInfo info on current reservation passed from <ReservationTab /> 
+ * @param {object} reservationInfo info on current reservation passed from <ReservationTab />
  * @param {number} reservationIndex index of current reservation - used to link reservation to it's correct element in array
- * @param {function} handleEditClick click handler for edit button passed from <ReservationTab />  
- * @param {function} confirmCancelClick click handler for second click of cancel reservation button, passed from <ReservationTab />  
+ * @param {function} handleEditClick click handler for edit button passed from <ReservationTab />
+ * @param {function} confirmCancelClick click handler for second click of cancel reservation button, passed from <ReservationTab />
  */
 export const ReservationCard = ({
     reservationInfo,
@@ -33,18 +33,21 @@ export const ReservationCard = ({
 
     // applies a border color based on reservation time
     useEffect(() => {
-        const date =  new Date(reservationInfo.time);
+        const date = new Date(reservationInfo.time);
         const now = new Date();
-        
+
         if (date < now) {
             setBorderColor("border border-2 border-danger"); // if date has passed set border to RED
-        } else if (date.getDay() === now.getDay()) {
+        } else if (
+            date.getDate() === now.getDate() &&
+            date.getMonth() === now.getMonth() &&
+            date.getFullYear() === now.getFullYear()
+        ) {
             setBorderColor("border border-2 border-success"); // if reservation is today set border to green
-        } else  {
+        } else {
             setBorderColor("border border-2 border-primary"); // if reservation is for a future day set border to blue
         }
     }, [reservationInfo]);
-
 
     return (
         <Card key={reservationInfo.id} className={`${borderColor} mb-3 p-3`}>
@@ -78,7 +81,11 @@ export const ReservationCard = ({
             <Row xs={2} className="buttonContainer">
                 <Col className="editButtonContainer">
                     {/* calls handleEditClick from <ReservationTab />  */}
-                    <Button className="mt-4" id={reservationIndex} onClick={handleEditClick}>
+                    <Button
+                        className="mt-4"
+                        id={reservationIndex}
+                        onClick={handleEditClick}
+                    >
                         Edit
                     </Button>
                 </Col>

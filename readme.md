@@ -92,7 +92,6 @@ Reservation Data Structure for new reservation Form Object
 ### BUGS
 - 
 
-
 ### Future Features
 - add tables info somewhere
 - add validation for reservation time reservations cannot be made outside of open hours
