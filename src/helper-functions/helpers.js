@@ -56,7 +56,6 @@ const phoneNumberExtractor = phone => {
  * @returns {boolean} true/ false if phone # is valid
  */
 const phoneNumberValidator = phone => {
-    
     //if no phone number inputted
     if (!phone) return false;
 
@@ -120,6 +119,50 @@ const hoursFormatter = (open, close) => {
     return `${openHours} - ${closeHours}`;
 };
 
+/**
+ * converts 12 hr to 24 hr time
+ * @param {string} time in the format "hh:mm AM/PM"
+ * @returns string in 24 hour time format
+ */
+const amPmTo24Hour = (time) => {
+    const pm = time.split(" ")[1] === "PM" ? true : false;
+
+    // the noon / midnight cases
+    if (time.split(":")[0] === "12") {
+        return pm
+            ? time.split(" ").slice(0, 1)
+            : `00:${time.split(":")[1].split(" ")[0]}`;
+    }
+
+    // all the other times
+    return pm
+        ? `${Number(time.split(":")[0]) + 12}:${
+              time.split(":")[1].split(" ")[0]
+          }`
+        : time.split(":")[0] < 10
+        ? `0${time.split(" ")[0]}`
+        : time.split(" ")[0];
+};
+
+/**
+ * converts 24 hr to 12 hr time
+ * @param {string} time in 24hr format must be "hh:mm:..."
+ * @returns string of 12 hour time
+ */
+const militaryTimeToAmPm = (time) => {
+    time = time.split(":");
+    const hour = time[0];
+    const min = time[1];
+    const amPm = hour < 12 ? "AM" : "PM";
+
+    // midnight / noon cases
+    if (hour == 12) return `12:${min} PM`;
+    if (hour == 0) return `12:${min} AM`;
+
+    // all other times
+    return hour >= 13 ? `${hour - 12}:${min} PM` : `${hour}:${min} AM`;
+};
+
 
 export {
     timeFormatter,
@@ -129,5 +172,7 @@ export {
     dateTimeToTimeStamp,
     emailValidator,
     getTodaysDate,
-    hoursFormatter
+    hoursFormatter,
+    amPmTo24Hour,
+    militaryTimeToAmPm,
 };

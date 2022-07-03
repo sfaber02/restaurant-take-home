@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from "uuid";
 
 import {
     Form,
@@ -18,24 +19,27 @@ import {
     phoneNumberExtractor,
     emailValidator,
     getTodaysDate,
+    amPmTo24Hour,
+    militaryTimeToAmPm,
 } from "../../helper-functions/helpers.js";
 
 const API = process.env.REACT_APP_API_URL;
 
 /**
  * form to create / edit a reservation
- * @param {function} triggerRefetch function from <App /> 
+ * @param {function} triggerRefetch function from <App />
  * @param {number} id restaurant reservations are attached to, needed to post reservation
  * @param {object} currentReservation info of current reservation, if blank we are "new reservation" mode
- * @param {function} setMessage state setter from <ReservationTab /> 
- * @param {string} message state from <ReservationTab /> 
+ * @param {function} setMessage state setter from <ReservationTab />
+ * @param {string} message state from <ReservationTab />
  */
 export const NewReservation = ({
     triggerRefetch,
     id,
     currentReservation,
-    setMessage, 
-    message
+    currentRestaurant,
+    setMessage,
+    message,
 }) => {
     // state to hold current values of form
     const [form, setForm] = useState(() => {
@@ -44,7 +48,7 @@ export const NewReservation = ({
             lastName: "",
             phoneNumber: "",
             email: "",
-            time: "",
+            time: "DEFAULT",
             date: "",
             numGuests: "",
         };
@@ -81,11 +85,11 @@ export const NewReservation = ({
                     lastName: "",
                     phoneNumber: "",
                     email: "",
-                    time: "",
+                    time: "DEFAULT",
                     date: "",
                     numGuests: "",
                 };
-            })
+            });
         }
     }, [currentReservation]);
 
@@ -167,7 +171,7 @@ export const NewReservation = ({
         }
 
         //time errors
-        if (!time) {
+        if (!time || time === "DEFAULT") {
             newErrors.time = "Cannot be blank.";
         }
 
@@ -391,14 +395,37 @@ export const NewReservation = ({
                     </Form.Group>
 
                     {/* RESERVATION TIME INPUT  */}
-                    <Form.Group>
-                        <Form.Label>Time</Form.Label>
-                        <FormControl
-                            value={form.time}
-                            type="time"
-                            onChange={(e) => setField("time", e.target.value)}
+                    <Form.Group className="mt-1">
+                        <Form.Label>
+                            Time{" ("}
+                            {militaryTimeToAmPm(
+                                currentRestaurant.openingTime
+                            )}{" "}
+                            -{" "}
+                            {militaryTimeToAmPm(currentRestaurant.closingTime)}
+                            {")"}
+                        </Form.Label>
+                        <Form.Select
                             isInvalid={!!errors.time}
-                        ></FormControl>
+                            value={militaryTimeToAmPm(form.time)}
+                            onChange={(e) =>
+                                setField("time", amPmTo24Hour(e.target.value))
+                            }
+                        >
+                            <option value="DEFAULT" key={uuidv4()}>
+                                Select Time
+                            </option>
+                            {timePickerHours(
+                                currentRestaurant.openingTime,
+                                currentRestaurant.closingTime
+                            ).map((e) => {
+                                return (
+                                    <option value={e} key={uuidv4()}>
+                                        {e}
+                                    </option>
+                                );
+                            })}
+                        </Form.Select>
                         <Form.Control.Feedback type="invalid">
                             {errors.time}
                         </Form.Control.Feedback>
@@ -434,7 +461,6 @@ export const NewReservation = ({
     );
 };
 
-
 /**
  *
  * @param {object} inputs from form
@@ -444,20 +470,19 @@ export const NewReservation = ({
 const ObjectComparer = (inputs, original) => {
     let patchOb = {};
     //make a copy of inputs so as not to modify user inputs in form
-    let inputOb = {...inputs};
+    let inputOb = { ...inputs };
 
     //convert date / time into ISO string and consildate date/time into just time key
     const isoString = dateTimeToTimeStamp(inputs.date, inputs.time);
     delete inputOb.date;
     inputOb.time = isoString;
 
-
     //convert phoneNumber into just digits
     if (inputOb.phoneNumber) {
         inputOb.phoneNumber = phoneNumberExtractor(inputOb.phoneNumber);
     }
 
-    //compare each value in inputs object to their original state 
+    //compare each value in inputs object to their original state
     for (let key in inputOb) {
         //for some reason time comes back from the backend without the last ".000Z" on it
         // so I'm slicing that off of my iso string for this comparison
@@ -465,7 +490,7 @@ const ObjectComparer = (inputs, original) => {
             let truncatedTime = inputOb.time.slice(0, inputOb.time.length - 8);
             if (truncatedTime !== original.time) {
                 patchOb.time = isoString;
-            }  
+            }
         } else {
             if (inputOb[key] !== original[key]) {
                 patchOb[key] = inputOb[key];
@@ -475,3 +500,67 @@ const ObjectComparer = (inputs, original) => {
     return patchOb;
 };
 
+/**
+ * generates an array of all 30 min reservations times between open / closing times
+ * @param {string} openingTime restaurant opening time in format "hh:mm:ss 24hr format"
+ * @param {string} closingTime restaurant closing time in format "hh:mm:ss 24hr format"
+ * @returns an array of all possible reservation times
+ */
+const timePickerHours = (openingTime, closingTime) => {
+    //determine time to start generating reservation times from
+    let openHour = openingTime.split(":")[0];
+    let openMin = openingTime.split(":")[1];
+    let open;
+    if (openMin > 0 && openMin <= 30) {
+        open = Number(openHour) + 0.5;
+    } else if (openMin > 30) {
+        open = Number(openHour) + 1;
+    } else {
+        open = Number(openHour);
+    }
+
+    // determine last valid reservation time
+    let closeHour = closingTime.split(":")[0];
+    let closeMin = closingTime.split(":")[1];
+    let close = closeMin < 30 ? Number(closeHour) : Number(closeHour) + 0.5;
+    if (close < open) close += 24;
+
+    // generate array of all valid registration times
+    let reservationTimes = [];
+    for (let time = open; time <= close; time += 0.5) {
+        if (time <= 11.5) {
+            // 12:00 AM to 11:30 AM
+            reservationTimes.push(
+                time % 1 === 0 ? `${time}:00 AM` : `${Math.floor(time)}:30 AM`
+            );
+        } else if (time >= 12 && time < 13) {
+            // 12:00 PM and 12:30PM
+            reservationTimes.push(
+                time % 1 === 0 ? `${time}:00 PM` : `${Math.floor(time)}:30 PM`
+            );
+        } else if (time >= 13 && time <= 23.5) {
+            // 1:00 PM to 11:30 PM
+            reservationTimes.push(
+                time % 1 === 0
+                    ? `${time - 12}:00 PM`
+                    : `${Math.floor(time) - 12}:30 PM`
+            );
+        } else if (time >= 24 && time < 25) {
+            // 12:00 AM and 12:30 AM (closing times)
+            reservationTimes.push(
+                time % 1 === 0
+                    ? `${time - 12}:00 AM`
+                    : `${Math.floor(time) - 12}:30 AM`
+            );
+        } else {
+            // 1:00 AM and after (closing times)
+            reservationTimes.push(
+                time % 1 === 0
+                    ? `${time - 24}:00 AM`
+                    : `${Math.floor(time) - 24}:30 AM`
+            );
+        }
+    }
+
+    return reservationTimes;
+};
