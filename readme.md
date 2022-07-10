@@ -14,6 +14,37 @@ Restauranticus is an app that displays a filterable and searchable list of resta
     - NewRestaurant
     - Error
 
+## Components
+- <App />
+    - contains all routes
+    - perfroms intital fetch of all restaurants and passes data down to other components
+    - Handles query from box and passes search params to <Restaurants />
+- <Navigation />
+    - Has links to navigate to varius parts of the page
+    - also contains search box
+- <FilterBar />
+    - contains select boxes with filterable fields
+    - When a filter is selected a rehash / refilter of displayList is triggered in <Restaurants />
+- <Restaurants />
+    - Main component of the app
+    - Displays whatever is in the displayList state as cards
+- <RestaurantCard />
+    - recieves a restaurants info from <Restaurants /> and creates a card 
+    - if a card is click a navigate() is called to restaurants/:id which will open the modal of that restaurant and display detailed info and functions
+- <Restaurant /> 
+    -  A more detailed card that gets displayed in a modal when a specific restaurant is selected.
+    - Recieves an id from useParams() and finds the matching restaurant
+    - Contains tab for reservations and also for edit/ delete restauarant
+- <ReservationTab /> 
+    - Contains the sub tabs for viewing reservations and new/edit  reservation form
+- <ReservationCard />
+    - Generates a card for an individual reservation with edit/ delete buttons
+- <NewReservation />
+    - contains the form to update / edit a reservation
+- <NewRestaurant />
+    - contains the form to update / edit a restaurant
+
+
 ## Data Structures
 Example Resaurant Data for backend
 
