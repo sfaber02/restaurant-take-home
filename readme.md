@@ -121,7 +121,8 @@ Reservation Data Structure for new reservation Form Object
 - generate jsdoc
 
 ### BUGS
-- 
+- new reservation won't work if a patch was done first and the modal isn't closed and re-opened (still seeing an id?)
+
 
 ### Future Features
 - add tables info somewhere
