@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { Modal, Container, Row, Col} from "react-bootstrap";
+import { Modal, Container, Row, Col } from "react-bootstrap";
 import axios from "axios";
 
 import { RestaurantCard } from "./restaurant subcomponents/RestaurantCard";
 import { FilterBar } from "./restaurant subcomponents/FilterBar";
-
 
 import "../styles/restaurants.css";
 
@@ -17,7 +16,7 @@ import "../styles/restaurants.css";
  * or a list of restaurants that match search and/ or filter
  *
  */
-export const Restaurants = ({ restaurants, query }) => {
+export const Restaurants = ({ restaurants, top3, query }) => {
     // state to display modal of more detailed restaurant info
     const [show, setShow] = useState(false);
     // store the title for modal
@@ -72,7 +71,7 @@ export const Restaurants = ({ restaurants, query }) => {
             }
             setShow(true);
         }
-        
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id]);
 
@@ -195,6 +194,21 @@ export const Restaurants = ({ restaurants, query }) => {
                         handleFilter={handleFilter}
                         handleReset={handleReset}
                     />
+                    <Container className="border border-warning">
+                        <h3>Top 3</h3>
+                        <Row xs={1} md={2} lg={3} className="g-0">
+                            {top3.map((e) => (
+                                <Col className="p-1" key={e.id}>
+                                    <RestaurantCard
+                                        key={e.id}
+                                        info={e}
+                                        handleShow={handleShow}
+                                        handleClose={handleClose}
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                    </Container>
                     <Row xs={1} md={2} lg={3} className="g-0">
                         {displayList.map((e) => (
                             <Col className="p-1" key={e.id}>

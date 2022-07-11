@@ -36,6 +36,8 @@ export const App = () => {
     const [query, setQuery] = useState("");
     /** state that will trigger a refetch when changed  */
     const [reFetch, setReFetch] = useState(-1);
+    /** state to store top 3 most popular restaurants */
+    const [top3, setTop3] = useState([]);
 
     const navigate = useNavigate();
 
@@ -57,6 +59,13 @@ export const App = () => {
                 }
                 setRestaurants(tempData);
                 setLoading(false);
+
+                //find top 3 restaurants
+                setTop3(() => {
+                    return [...tempData].sort((a, b) => b.reservations.length - a.reservations.length).slice(0, 3);
+                })
+
+
             })
             .catch((err) => navigate("/error"));
     }, [navigate, reFetch]);
@@ -65,6 +74,8 @@ export const App = () => {
     const handleSearch = (query) => {
         setQuery(query);
     };
+
+    
 
     /**
      * called from various places to trigger a refetch of restaurant data
@@ -109,6 +120,7 @@ export const App = () => {
                             element={
                                 <Restaurants
                                     restaurants={restaurants}
+                                    top3={top3}
                                     query={query}
                                 />
                             }
