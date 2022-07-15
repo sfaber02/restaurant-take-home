@@ -25,6 +25,7 @@ export const ReservationCard = ({
     const [deleteWarning, setDeleteWarning] = useState(false);
 
     const [borderColor, setBorderColor] = useState();
+    const [textColor, setTextColor] = useState('');
 
     // handles first click on "cancel" button - changes cancel to "Delete?" and "Back" buttons
     const handleCancelClick = (reservationInfo) => {
@@ -47,11 +48,19 @@ export const ReservationCard = ({
         } else {
             setBorderColor("border border-2 border-primary"); // if reservation is for a future day set border to blue
         }
+
+        const hours = date.getHours();
+        if (hours >= 11 && hours <= 15) {
+            setTextColor("lunch");
+        } else if (hours >= 17 && hours <= 21) {
+            setTextColor("dinner");
+        }
+
     }, [reservationInfo]);
 
     return (
         <Card key={reservationInfo.id} className={`${borderColor} mb-3 p-3`}>
-            <Card.Header>
+            <Card.Header className={textColor}>
                 <strong>Time:</strong>
                 {"  "}
                 {timeFormatter(reservationInfo.time)}
